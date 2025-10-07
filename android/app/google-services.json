@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "459211142809",
+    "project_id": "moneycare-f7e6b",
+    "storage_bucket": "moneycare-f7e6b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:459211142809:android:498ecae46eee1eb3a62a08",
+        "android_client_info": {
+          "package_name": "com.example.doan_cn"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHWPPMK73VrGLMN3_WC9z6c-cdMgZ0kl0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
