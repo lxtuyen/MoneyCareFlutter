@@ -100,7 +100,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         context.push('/');
         break;
       case 1:
-        context.push('/transactions');
+        context.push('/transaction');
         break;
       case 2:
         context.push('/statistics');

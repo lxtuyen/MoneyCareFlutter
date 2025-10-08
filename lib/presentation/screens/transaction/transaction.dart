@@ -10,6 +10,6 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder(child: Text("ád"),);
+    return Container(color: Colors.blueAccent);
   }
 }
