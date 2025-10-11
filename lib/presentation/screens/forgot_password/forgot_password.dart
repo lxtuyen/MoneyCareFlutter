@@ -3,19 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class ForgotPasswordScreen extends StatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
-  bool _isObscure = true;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,17 +27,28 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 80),
-                const Text(
-                  "Đăng nhập",
-                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+
+                // Tiêu đề
+                RichText(
+                  text: const TextSpan(
+                    style: TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                    children: [TextSpan(text: 'Quên mật khẩu ')],
+                  ),
                 ),
 
                 const SizedBox(height: 10),
                 const Text(
-                  "Vui lòng đăng nhập với Google của bạn.",
-                  style: TextStyle(fontSize: 15, color: Colors.black45),
+                  'Chúng tôi sẽ gửi cho bạn mã OTP.',
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color.fromARGB(134, 101, 101, 101),
+                    height: 1.4,
+                  ),
                 ),
-
                 const SizedBox(height: 20),
 
                 TextFormField(
@@ -59,57 +68,19 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 const SizedBox(height: 10),
 
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
-                    labelText: "Mật khẩu",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    prefixIcon: const Icon(Icons.lock),
-                    suffixIcon: IconButton(
-                      icon: Icon(
-                        _isObscure ? Icons.visibility_off : Icons.visibility,
-                      ),
-                      onPressed: () {
-                        setState(() {
-                          _isObscure = !_isObscure;
-                        });
-                      },
-                    ),
-
-                    filled: true,
-                    fillColor: Colors.white,
-                  ),
-
-                  keyboardType: TextInputType.visiblePassword,
-                  obscureText: _isObscure,
-                  validator: (value) => AppValidator.validatePassword(value),
-                ),
-
-                const SizedBox(height: 10),
-
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {
-                      context.push('/forgot-password');
-                    },
-                    child: const Text(
-                      'Quên mật khẩu?',
-                      style: TextStyle(color: Colors.grey, fontSize: 14),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 10),
-
-                ElevatedButton(
+                const Spacer(),
+                ElevatedButton.icon(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      context.push('/');
+                      context.push('/otp');
                     }
                   },
+
+                  label: const Text(
+                    'Nhận mã OTP',
+                    style: TextStyle(fontSize: 25, color: Colors.white),
+                  ),
+
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     backgroundColor: const Color(0xFF1877F2),
@@ -117,22 +88,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
-                  child: const Text(
-                    'Đăng nhập',
-                    style: TextStyle(fontSize: 25, color: Colors.white),
-                  ),
                 ),
-
-                const Spacer(),
-
+                const SizedBox(height: 20),
                 Center(
                   child: RichText(
                     text: TextSpan(
-                      text: 'Bạn chưa có tài khoản? ',
+                      text: 'Nhớ mật khẩu? ',
                       style: const TextStyle(color: Colors.grey, fontSize: 18),
                       children: [
                         TextSpan(
-                          text: 'Đăng ký',
+                          text: 'Đăng nhập',
                           style: const TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,
@@ -140,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           recognizer:
                               TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.push('/signup');
+                                  context.push('/login');
                                 },
                         ),
                       ],
