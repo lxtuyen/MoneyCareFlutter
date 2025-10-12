@@ -5,7 +5,7 @@ class RoundedImage extends StatelessWidget {
   const RoundedImage({
     super.key,
     this.width,
-    this.heigth,
+    this.height,
     required this.imageUrl,
     this.applyImageRadius = true,
     this.border,
@@ -17,7 +17,7 @@ class RoundedImage extends StatelessWidget {
     this.borderRadius = AppSizes.md,
   });
 
-  final double? width, heigth;
+  final double? width, height;
   final String imageUrl;
   final bool applyImageRadius;
   final BoxBorder? border;
@@ -34,7 +34,7 @@ class RoundedImage extends StatelessWidget {
       onTap: onPressed,
       child: Container(
           width: width,
-          height: heigth,
+          height: height,
           padding: padding,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(borderRadius),

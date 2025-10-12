@@ -24,6 +24,8 @@ dependencies:
   fl_chart: ^1.1.1
   flutter_rating_bar: ^4.0.1
   flutter_svg: ^2.2.1
+  dotted_border: ^2.0.0
+  calendar_date_picker2: ^2.0.1
 
   # icons
   iconsax_flutter: ^1.0.0

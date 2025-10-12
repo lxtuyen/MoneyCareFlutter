@@ -12,9 +12,7 @@ final GoRouter appRouter = GoRouter(
   routes: [
     ShellRoute(
       pageBuilder: (context, state, child) {
-        return NoTransitionPage(
-          child: ScaffoldWithNavBar(child: child),
-        );
+        return NoTransitionPage(child: ScaffoldWithNavBar(child: child));
       },
       routes: [
         GoRoute(
@@ -37,17 +35,17 @@ final GoRouter appRouter = GoRouter(
           path: '/profile',
           builder: (context, state) => const ProfileScreen(),
         ),
-        GoRoute(
-          name: 'login',
-          path: '/login',
-          builder: (context, state) => const LoginScreen(),
-        ),
-        GoRoute(
-          name: 'signup',
-          path: '/signup',
-          builder: (context, state) => const RegisterScreen(),
-        ),
       ],
+    ),
+    GoRoute(
+      name: 'login',
+      path: '/login',
+      builder: (context, state) => const LoginScreen(),
+    ),
+    GoRoute(
+      name: 'signup',
+      path: '/signup',
+      builder: (context, state) => const RegisterScreen(),
     ),
   ],
 );

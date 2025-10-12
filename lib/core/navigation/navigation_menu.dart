@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -85,11 +84,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
   int _getCurrentIndex(String location) {
     if (location.startsWith('/transaction')) return 1;
     if (location.startsWith('/statistics')) return 2;
-    if (location.startsWith('/profile') ||
-        location.startsWith('/signup') ||
-        location.startsWith('/login')) {
-      return 3;
-    }
+    if (location.startsWith('/profile')) return 3;
     return 0; // Mặc định là Home
   }
 
@@ -106,9 +101,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
         context.push('/statistics');
         break;
       case 3:
-        FirebaseAuth.instance.currentUser != null
-            ? context.push('/profile')
-            : context.push('/login');
+        context.push('/profile');
         break;
     }
   }

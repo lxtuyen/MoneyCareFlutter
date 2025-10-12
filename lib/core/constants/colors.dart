@@ -28,8 +28,7 @@ class AppColors {
   ); // Flash White – nền chính
   static const Color backgroundSecondary = Color(
     0xFFFBFBFB,
-  ); // Alabaster – nền phụ / section
-  static const Color backgroundWhite = Colors.white;
+  );
 
   //Button Colors
   static const Color buttonPrimary = Color(0xFF4b68ff);

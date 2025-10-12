@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
 
@@ -35,10 +36,10 @@ class CircularIcon extends StatelessWidget {
             : AppColors.white.withOpacity(0.9),
       ),
       child: iconPath != null
-              ? Image.asset(
+              ? SvgPicture.asset(
                   iconPath!,
-                  width: size,
-                  height: size,
+                  width: width,
+                  height: height,
                   color: color,
                 )
               : Icon(
