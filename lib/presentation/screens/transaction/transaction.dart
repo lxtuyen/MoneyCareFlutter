@@ -10,6 +10,6 @@ class TransactionScreen extends StatefulWidget {
 class _TransactionScreenState extends State<TransactionScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.blueAccent);
+    return Container(color: const Color.fromARGB(255, 107, 130, 169));
   }
 }

@@ -10,6 +10,6 @@ class StatisticsScreen extends StatefulWidget {
 class _StatisticsScreenState extends State<StatisticsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Container(color: Colors.amberAccent);
+    return Container(color: const Color.fromARGB(255, 70, 68, 64));
   }
 }

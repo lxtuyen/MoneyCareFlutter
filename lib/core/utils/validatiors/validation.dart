@@ -26,11 +26,24 @@ class AppValidator {
     return null;
   }
 
+  static String? validateConfirmPassword(
+    String? password,
+    String? confirmPassword,
+  ) {
+    if (confirmPassword == null || confirmPassword.isEmpty) {
+      return 'Please confirm your password.';
+    }
+    if (confirmPassword != password) {
+      return 'Passwords do not match.';
+    }
+    return null;
+  }
+
   static String? validatePhoneNumber(String? value) {
     if (value == null || value.isEmpty) {
       return 'Phone number is required.';
     }
-    // Regular expression for phone number validation
+
     final phoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
     if (!phoneRegExp.hasMatch(value)) {
       return 'Invalid phone number.';
@@ -46,6 +59,41 @@ class AppValidator {
 
     if (!emailRegExp.hasMatch(value)) {
       return 'Invalid email address.';
+    }
+    return null;
+  }
+
+  static String? validateLastName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Last name is required.";
+    }
+    final nameRegExp = RegExp(r"^[a-zA-ZÀ-ỹ\s]+$");
+
+    if (!nameRegExp.hasMatch(value)) {
+      return 'Invalid last name. Last name must contain only letters.';
+    }
+    return null;
+  }
+
+  static String? validateFirstName(String? value) {
+    if (value == null || value.isEmpty) {
+      return "First name is required.";
+    }
+    final nameRegExp = RegExp(r"^[a-zA-ZÀ-ỹ\s]+$");
+
+    if (!nameRegExp.hasMatch(value)) {
+      return 'Invalid first name. First name must contain only letters.';
+    }
+    return null;
+  }
+
+  static String? validateBirthDate(int? day, int? month, int? year) {
+    if (day == null || month == null || year == null) {
+      return 'Please select full date of birth.';
+    }
+    // Kiểm tra năm sinh hợp lệ
+    if (year > DateTime.now().year || year < 1950) {
+      return 'Invalid year of birth.';
     }
     return null;
   }
