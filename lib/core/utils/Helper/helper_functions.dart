@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AppHelperFunction {
@@ -35,32 +36,31 @@ class AppHelperFunction {
   }
 
   static void showSnackBar(String message) {
-    ScaffoldMessenger.of(Get.context!).showSnackBar(SnackBar(
-      content: Text(message),
-    ));
+    ScaffoldMessenger.of(
+      Get.context!,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   static void showAlert(String title, String message) {
     showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Text(message),
-            actions: [
-              TextButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  child: const Text("OK"))
-            ],
-          );
-        });
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   static void navigateScreen(BuildContext context, Widget screen) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (_) => screen),
-    );
+    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   static String truncateText(String text, int maxlength) {
@@ -83,17 +83,18 @@ class AppHelperFunction {
     return MediaQuery.of(Get.context!).size.height;
   }
 
-static double screenWith() {
-  BuildContext? context = Get.context;
-  if (context == null) {
-    return 375.0; // Giá trị mặc định, tránh lỗi null
+  static double screenWith() {
+    BuildContext? context = Get.context;
+    if (context == null) {
+      return 375.0; // Giá trị mặc định, tránh lỗi null
+    }
+    return MediaQuery.of(context).size.width;
   }
-  return MediaQuery.of(context).size.width;
-}
 
-
-  static String getFormattedDate(DateTime date,
-      {String format = 'dd MMM yyyy'}) {
+  static String getFormattedDate(
+    DateTime date, {
+    String format = 'dd MMM yyyy',
+  }) {
     return DateFormat(format).format(date);
   }
 
@@ -105,9 +106,30 @@ static double screenWith() {
     final wrappedList = <Widget>[];
     for (var i = 0; i < widgets.length; i += rowSize) {
       final rowChildren = widgets.sublist(
-          i, i + rowSize > widgets.length ? widgets.length : i + rowSize);
+        i,
+        i + rowSize > widgets.length ? widgets.length : i + rowSize,
+      );
       wrappedList.add(Row(children: rowChildren));
     }
     return wrappedList;
+  }
+
+  static CustomTransitionPage slidePage({
+    required Widget child,
+    required GoRouterState state,
+    Offset begin = const Offset(1.0, 0.0),
+  }) {
+    const end = Offset.zero;
+    const curve = Curves.easeInOut;
+
+    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: child,
+      transitionsBuilder:
+          (context, animation, secondaryAnimation, child) =>
+              SlideTransition(position: animation.drive(tween), child: child),
+    );
   }
 }

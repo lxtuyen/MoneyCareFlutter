@@ -1,83 +1,60 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
 import 'package:money_care/presentation/screens/home/home.dart';
-import 'package:money_care/presentation/screens/introduce/introduce.dart';
-import 'package:money_care/presentation/screens/introduce/next_introduce.dart';
+import 'package:money_care/presentation/screens/onboarding/onboarding_expense_management.dart';
+import 'package:money_care/presentation/screens/onboarding/onboarding_financial_freedom.dart';
 import 'package:money_care/presentation/screens/forgot_password/forgot_password.dart';
 import 'package:money_care/presentation/screens/login/login.dart';
-import 'package:money_care/presentation/screens/login/select_login.dart';
-import 'package:money_care/presentation/screens/onboarding/begin.dart';
-import 'package:money_care/presentation/screens/onboarding/begin_1.dart';
+import 'package:money_care/presentation/screens/login/login_option.dart';
+import 'package:money_care/presentation/screens/onboarding/onboarding_welcome.dart';
+import 'package:money_care/presentation/screens/onboarding/onboarding_saving_rule.dart';
 import 'package:money_care/presentation/screens/profile/profile.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
+import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/statistics/statistics.dart';
 import 'package:money_care/presentation/screens/transaction/transaction.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/introduce',
+  initialLocation: '/splash',
 
   routes: [
     GoRoute(
-      name: 'introduce',
-      path: '/introduce',
-      pageBuilder: (context, state) {
-        return CustomTransitionPage(
-          key: state.pageKey,
-          child: const IntroduceScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(1.0, 0.0); // từ phải sang trái
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-
-            final tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-        );
-      },
+      name: 'splash',
+      path: '/splash',
+      builder: (context, state) => const SplashScreen(),
     ),
     GoRoute(
-      name: 'nextintro',
-      path: '/nextintro',
-      pageBuilder: (context, state) {
-        return CustomTransitionPage(
-          key: state.pageKey,
-          child: const NextIntroduceScreen(),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            const begin = Offset(-1.0, 0.0);
-            const end = Offset.zero;
-            const curve = Curves.easeInOut;
-
-            final tween = Tween(
-              begin: begin,
-              end: end,
-            ).chain(CurveTween(curve: curve));
-
-            return SlideTransition(
-              position: animation.drive(tween),
-              child: child,
-            );
-          },
-        );
-      },
+      name: 'onboarding_expense_management',
+      path: '/onboarding_expense_management',
+      pageBuilder:
+          (context, state) => AppHelperFunction.slidePage(
+            child: const OnboardingExpenseManagementScreen(),
+            state: state,
+            begin: const Offset(1.0, 0.0),
+          ),
     ),
     GoRoute(
-      name: 'selectlogin',
-      path: '/selectlogin',
-      builder: (context, state) => const SelectLoginScreen(),
+      name: 'onboarding_financial_freedom',
+      path: '/onboarding_financial_freedom',
+      pageBuilder:
+          (context, state) => AppHelperFunction.slidePage(
+            child: const OnboardingFinancialFreedomScreen(),
+            state: state,
+            begin: const Offset(-1.0, 0.0),
+          ),
     ),
     GoRoute(
-      name: 'forgot-password',
-      path: '/forgot-password',
+      name: 'select_method_login',
+      path: '/select_method_login',
+      builder: (context, state) => const LoginOptionScreen(),
+    ),
+    GoRoute(
+      name: 'forgot_password',
+      path: '/forgot_password',
       builder: (context, state) => const ForgotPasswordScreen(),
     ),
     GoRoute(
@@ -86,8 +63,8 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const OtpScreen(),
     ),
     GoRoute(
-      name: 'reset-password',
-      path: '/reset-password',
+      name: 'reset_password',
+      path: '/reset_password',
       builder: (context, state) => const ResetPasswordScreen(),
     ),
     GoRoute(
@@ -97,19 +74,19 @@ final GoRouter appRouter = GoRouter(
     ),
 
     GoRoute(
-      name: 'signup',
-      path: '/signup',
+      name: 'register',
+      path: '/register',
       builder: (context, state) => const RegisterScreen(),
     ),
     GoRoute(
-      name: 'begin',
-      path: '/begin',
-      builder: (context, state) => const BeginScreen(),
+      name: 'onboarding_welcome',
+      path: '/onboarding_welcome',
+      builder: (context, state) => const OnboardingWelcomeScreen(),
     ),
     GoRoute(
-      name: 'begin1',
-      path: '/begin1',
-      builder: (context, state) => const Begin1Screen(),
+      name: 'onboarding_saving_rule',
+      path: '/onboarding_saving_rule',
+      builder: (context, state) => const OnboardingSavingRuleScreen(),
     ),
 
     ShellRoute(
