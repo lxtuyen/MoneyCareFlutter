@@ -6,6 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/amount_input.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/note_input.dart';
 
 class ExpensenseHomescreen extends StatefulWidget {
   const ExpensenseHomescreen({super.key});
@@ -57,26 +59,18 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // 🔹 PHẦN CỐ ĐỊNH (không cuộn)
                   const Text(
                     'Phân loại',
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
-                  const Divider(
-                    height: 1, // khoảng cách dọc chiếm chỗ (độ dày + padding)
-                    thickness: 1, // độ dày của đường
-                    color: Colors.grey, // màu đường
-                  ),
+                  const Divider(height: 1, thickness: 1, color: Colors.grey),
                   const SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Nút tạo phân loại mới
                       TextButton.icon(
-                        onPressed: () {
-                          // TODO: mở form tạo phân loại mới
-                        },
+                        onPressed: () {},
                         icon: const Icon(
                           Icons.add,
                           size: 20,
@@ -98,11 +92,8 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                         ),
                       ),
 
-                      // Nút chỉnh sửa
                       TextButton(
-                        onPressed: () {
-                          // TODO: chuyển sang chế độ chỉnh sửa
-                        },
+                        onPressed: () {},
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           minimumSize: const Size(0, 0),
@@ -127,7 +118,6 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // 🔹 PHẦN CUỘN (danh sách phân loại)
                   Expanded(
                     child: ScrollConfiguration(
                       behavior: ScrollConfiguration.of(context).copyWith(
@@ -163,15 +153,12 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
       },
     );
 
-    // ✅ Sau khi đóng BottomSheet, nếu có chọn thì gán vào TextField
     if (selected != null) {
       setState(() {
         _categoryController.text = selected;
       });
     }
   }
-
-  // ✅ Sau khi đóng BottomSheet, nếu có chọn thì gán vào TextField
 
   Widget _categoryItem(String title, String percent, IconData icon) {
     return Container(
@@ -234,31 +221,14 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
     }
   }
 
-  /// 🧮 Format tiền Việt Nam tự động khi nhập
-  void _formatCurrency(String value) {
-    String digits = value.replaceAll(RegExp(r'[^\d]'), '');
-    if (digits.isEmpty) {
-      _amountController.text = '';
-      return;
-    }
-
-    final formatter = NumberFormat('#,###', 'vi_VN');
-    final newValue = formatter.format(int.parse(digits));
-    _amountController.value = TextEditingValue(
-      text: newValue,
-      selection: TextSelection.collapsed(offset: newValue.length),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false, // ✅ Không đẩy layout khi bàn phím mở
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.white,
       body: SafeArea(
         child: Stack(
           children: [
-            // ======= TOÀN BỘ NỘI DUNG =======
             SingleChildScrollView(
               padding: const EdgeInsets.only(bottom: 160),
               child: Column(
@@ -375,51 +345,21 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // --- Nhập số tiền ---
-                        const Text(
-                          'Nhập số tiền',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                        const SizedBox(height: 4),
-                        TextField(
+                        AmountInput(
                           controller: _amountController,
-                          keyboardType: TextInputType.number,
-                          onChanged: _formatCurrency,
-                          decoration: InputDecoration(
-                            hintText: '0 đ',
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 18,
-                              horizontal: 16,
-                            ),
-                            // Viền mặc định (khi chưa focus)
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFBDBDBD), // xám nhạt
-                                width: 1,
-                              ),
-                            ),
-
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 188, 186, 186),
-                                width: 1,
-                              ),
-                            ),
-                          ),
+                          label: 'Nhập số tiền',
+                          hintText: '0 đ',
+                          onChanged: (value) {},
                         ),
 
                         const SizedBox(height: 20),
 
-                        // --- Phân loại ---
                         const Text('Phân Loại', style: TextStyle(fontSize: 16)),
                         const SizedBox(height: 4),
 
                         TextField(
                           controller: _categoryController,
-                          readOnly: true, //readOnly để không cho nhập liệu
+                          readOnly: true,
 
                           decoration: const InputDecoration(
                             // Viền mặc định (khi chưa focus)
@@ -457,36 +397,10 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
 
                         const SizedBox(height: 20),
 
-                        // --- Ghi chú ---
-                        const Text('Ghi chú', style: TextStyle(fontSize: 16)),
-                        const SizedBox(height: 4),
-                        TextField(
-                          decoration: InputDecoration(
-                            // Viền mặc định (khi chưa focus)
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color(0xFFBDBDBD), // xám nhạt
-                                width: 1,
-                              ),
-                            ),
-
-                            hintText: 'Ghi chú',
-                            fillColor: Colors.white,
-                            filled: true,
-                            //contentPadding giúp text không dính sát viền TextField
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 18,
-                              horizontal: 16,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: const BorderSide(
-                                color: Color.fromARGB(255, 188, 186, 186),
-                                width: 1,
-                              ),
-                            ),
-                          ),
+                        NoteInput(
+                          controller: TextEditingController(),
+                          label: 'Ghi chú',
+                          hintText: 'Nhập ghi chú...',
                         ),
                       ],
                     ),
@@ -495,7 +409,6 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
               ),
             ),
 
-            // ======= NÚT GỢI Ý + CẬP NHẬT =======
             Align(
               alignment: Alignment.bottomCenter, // 👈 luôn dính mép dưới
               child: Container(
@@ -558,7 +471,6 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    // --- Nút ảnh + cập nhật ---
                     Row(
                       children: [
                         GestureDetector(
