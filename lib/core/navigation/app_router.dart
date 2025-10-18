@@ -5,6 +5,7 @@ import 'package:money_care/presentation/screens/login/login.dart';
 import 'package:money_care/presentation/screens/profile/profile.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
 import 'package:money_care/presentation/screens/statistics/statistics.dart';
+import 'package:money_care/presentation/screens/transaction/expensense.dart';
 import 'package:money_care/presentation/screens/transaction/transaction.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -25,6 +26,7 @@ final GoRouter appRouter = GoRouter(
           path: '/transaction',
           builder: (context, state) => const TransactionScreen(),
         ),
+
         GoRoute(
           name: 'statistics',
           path: '/statistics',
@@ -46,6 +48,11 @@ final GoRouter appRouter = GoRouter(
       name: 'signup',
       path: '/signup',
       builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      name: 'expensense',
+      path: '/expensense',
+      builder: (context, state) => const ExpensenseHomescreen(),
     ),
   ],
 );

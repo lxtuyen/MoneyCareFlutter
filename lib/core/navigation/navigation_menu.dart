@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -95,7 +96,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
         context.push('/');
         break;
       case 1:
-        context.push('/transaction');
+            _showTransactionOptions(context);
+
+        // context.push('/transaction');
         break;
       case 2:
         context.push('/statistics');
@@ -105,4 +108,33 @@ class ScaffoldWithNavBar extends StatelessWidget {
         break;
     }
   }
+}
+void _showTransactionOptions(BuildContext context) {
+  showCupertinoModalPopup(
+    context: context,
+    builder: (BuildContext context) => CupertinoActionSheet(
+      title: const Text('Chọn loại giao dịch'),
+      actions: <CupertinoActionSheetAction>[
+        CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+            context.push('/expensense');
+          },
+          child: const Text('💰 Tiền thu'),
+        ),
+        CupertinoActionSheetAction(
+          onPressed: () {
+            Navigator.pop(context);
+            context.pushNamed('addTransaction', queryParameters: {'type': 'expense'});
+          },
+          child: const Text('💸 Tiền chi'),
+        ),
+      ],
+      cancelButton: CupertinoActionSheetAction(
+        isDestructiveAction: true,
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Hủy bỏ'),
+      ),
+    ),
+  );
 }
