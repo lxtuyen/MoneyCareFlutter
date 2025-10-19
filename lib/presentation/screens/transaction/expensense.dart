@@ -6,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/amount_input.dart';
+ import 'package:money_care/presentation/screens/transaction/widgets/amount_input.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/editcategory.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/note_input.dart';
 
 class ExpensenseHomescreen extends StatefulWidget {
@@ -93,7 +94,17 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                       ),
 
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showModalBottomSheet(context: context,  
+                            isScrollControlled: true,
+
+                           builder: (context){
+                            return CategoryEditSheet(
+                              categories: categories, 
+                     
+                            );
+                          });
+                        },
                         style: TextButton.styleFrom(
                           padding: EdgeInsets.zero,
                           minimumSize: const Size(0, 0),
