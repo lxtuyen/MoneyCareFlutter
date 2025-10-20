@@ -38,7 +38,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               );
             },
             child: const Text(
-              'Tiền thu',
+              'Tiền Chi',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,
@@ -53,7 +53,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               );
             },
             child: const Text(
-              'Tiền chi',
+              'Tiền Thu',
               style: TextStyle(
                 fontSize: 18,
                 color: Colors.black,

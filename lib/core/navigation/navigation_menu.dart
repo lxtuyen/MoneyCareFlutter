@@ -120,14 +120,14 @@ void _showTransactionOptions(BuildContext context) {
             Navigator.pop(context);
             context.push('/expensense');
           },
-          child: const Text('💰 Tiền thu'),
+          child: const Text(' 💸 Tiền Chi'),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
             Navigator.pop(context);
-            context.pushNamed('addTransaction', queryParameters: {'type': 'expense'});
+            context.push('/income');
           },
-          child: const Text('💸 Tiền chi'),
+          child: const Text('💰 Tiền Thu'),
         ),
       ],
       cancelButton: CupertinoActionSheetAction(

@@ -1,219 +1,25 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/amount_input.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/editcategory.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/note_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/notification.dart';
 
-class ExpensenseHomescreen extends StatefulWidget {
-  const ExpensenseHomescreen({super.key});
+class IncomeScreen extends StatefulWidget {
+  const IncomeScreen({super.key});
 
   @override
-  State<ExpensenseHomescreen> createState() => _ExpensenseHomescreenState();
+  State<IncomeScreen> createState() => _IncomeScreenState();
 }
 
-class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
+class _IncomeScreenState extends State<IncomeScreen> {
   DateTime selectedDate = DateTime.now();
+  final TextEditingController _amountController = TextEditingController();
   String? selectedValue;
   File? _selectedImage;
-  final TextEditingController _categoryController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
-
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'Cần thiết', 'percent': '55%', 'icon': Icons.shopping_bag},
-    {'name': 'Đào tạo', 'percent': '10%', 'icon': Icons.school},
-    {'name': 'Hưởng thụ', 'percent': '10%', 'icon': Icons.spa},
-    {'name': 'Tiết kiệm', 'percent': '10%', 'icon': Icons.savings},
-    {'name': 'Từ thiện', 'percent': '5%', 'icon': Icons.volunteer_activism},
-  ];
-
-  final List<String> phanLoaiList = ['Thu nhập', 'Chi tiêu', 'Tiết kiệm'];
-
-  @override
-  void initState() {
-    super.initState();
-    initializeDateFormatting('vi', null);
-  }
-
-  void _showCategorySheet(BuildContext context) async {
-    final selected = await showModalBottomSheet<String>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.5,
-          minChildSize: 0.3,
-          maxChildSize: 0.9,
-          builder: (context, scrollController) {
-            return Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Phân loại',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 8),
-                  const Divider(height: 1, thickness: 1, color: Colors.grey),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.add,
-                          size: 20,
-                          color: Colors.black87,
-                        ),
-                        label: const Text(
-                          'Tạo phân loại mới',
-                          style: TextStyle(
-                            fontSize: 15.5,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(0, 0),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                          alignment: Alignment.centerLeft,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return CategoryEditSheet(categories: categories);
-                            },
-                          );
-                        },
-                        style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          minimumSize: const Size(0, 0),
-                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                        ),
-                        child: const Text(
-                          'Chỉnh sửa',
-                          style: TextStyle(
-                            color: AppColors.buttonPrimary,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 15.5,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Danh sách phân loại',
-                    style: TextStyle(fontSize: 15.5),
-                  ),
-                  const SizedBox(height: 20),
-                  Expanded(
-                    child: ScrollConfiguration(
-                      behavior: ScrollConfiguration.of(
-                        context,
-                      ).copyWith(scrollbars: false),
-                      child: SingleChildScrollView(
-                        controller: scrollController,
-                        child: Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children:
-                              categories.map((item) {
-                                return GestureDetector(
-                                  onTap:
-                                      () =>
-                                          Navigator.pop(context, item['name']),
-                                  child: _categoryItem(
-                                    item['name'],
-                                    item['percent'],
-                                    item['icon'],
-                                  ),
-                                );
-                              }).toList(),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
-
-    if (selected != null) {
-      setState(() {
-        _categoryController.text = selected;
-      });
-    }
-  }
-
-  Widget _categoryItem(String title, String percent, IconData icon) {
-    return Container(
-      width: 145,
-      height: 105,
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300, width: 1),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.03),
-            blurRadius: 3,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(icon, color: Colors.deepPurple, size: 28),
-          const SizedBox(height: 6),
-          Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
-            textAlign: TextAlign.center,
-          ),
-          const SizedBox(height: 3),
-          Text(
-            percent,
-            style: const TextStyle(color: Colors.grey, fontSize: 13),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(
-      source: ImageSource.gallery,
-      imageQuality: 80,
-    );
-    if (pickedFile != null) {
-      setState(() => _selectedImage = File(pickedFile.path));
-    }
-  }
 
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
@@ -224,6 +30,17 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
     );
     if (picked != null && picked != selectedDate) {
       setState(() => selectedDate = picked);
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 80,
+    );
+    if (pickedFile != null) {
+      setState(() => _selectedImage = File(pickedFile.path));
     }
   }
 
@@ -354,41 +171,6 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                           onChanged: (value) {},
                         ),
                         const SizedBox(height: 20),
-                        const Text('Phân Loại', style: TextStyle(fontSize: 16)),
-                        const SizedBox(height: 4),
-                        TextField(
-                          controller: _categoryController,
-                          readOnly: true,
-                          decoration: const InputDecoration(
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              borderSide: BorderSide(
-                                color: Color(0xFFBDBDBD),
-                                width: 1,
-                              ),
-                            ),
-                            fillColor: Colors.white,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 18,
-                              horizontal: 16,
-                            ),
-                            hintText: 'Phân loại',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(8),
-                              ),
-                              borderSide: BorderSide(
-                                color: Color.fromARGB(255, 188, 186, 186),
-                                width: 1,
-                              ),
-                            ),
-                            suffixIcon: Icon(Icons.keyboard_arrow_down),
-                          ),
-                          onTap: () => _showCategorySheet(context),
-                        ),
-                        const SizedBox(height: 20),
                         NoteInput(
                           controller: TextEditingController(),
                           label: 'Ghi chú',
@@ -490,7 +272,7 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                                 ),
                               ),
                               onPressed: () {
-                                showDialog(
+                                  showDialog(
                                   context: context,
                                   barrierDismissible:
                                       false, // không tắt khi chạm ra ngoài
@@ -512,7 +294,7 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                                 );
                               },
                               child: const Text(
-                                'Cập nhật',
+                                'Tạo',
                                 style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,

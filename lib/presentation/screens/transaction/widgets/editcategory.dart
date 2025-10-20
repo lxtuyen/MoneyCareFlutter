@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/editcategory2.dart';
 
 class CategoryEditSheet extends StatelessWidget {
   final List<Map<String, dynamic>> categories;
 
-  const CategoryEditSheet({
-    super.key,
-    required this.categories,
-  });
+  const CategoryEditSheet({super.key, required this.categories});
 
   @override
   Widget build(BuildContext context) {
@@ -26,16 +24,12 @@ class CategoryEditSheet extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- Header ---
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
                     'Chỉnh sửa phân loại',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
                     onPressed: () => Navigator.pop(context),
@@ -59,13 +53,18 @@ class CategoryEditSheet extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xffFAFAFA),
                         borderRadius: BorderRadius.circular(12),
-                        border:
-                            Border.all(color: Colors.grey.shade200, width: 1),
+                        border: Border.all(
+                          color: Colors.grey.shade200,
+                          width: 1,
+                        ),
                       ),
                       child: Row(
                         children: [
-                          Icon(item['icon'],
-                              color: AppColors.primary, size: 26),
+                          Icon(
+                            item['icon'],
+                            color: AppColors.primary,
+                            size: 26,
+                          ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -74,23 +73,36 @@ class CategoryEditSheet extends StatelessWidget {
                                 Text(
                                   item['name'],
                                   style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 15),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
                                 ),
                                 Text(
                                   item['percent'],
                                   style: const TextStyle(
-                                      fontSize: 13, color: Colors.grey),
+                                    fontSize: 13,
+                                    color: Colors.grey,
+                                  ),
                                 ),
                               ],
                             ),
                           ),
                           IconButton(
-onPressed: () =>  {},
+                            onPressed:
+                                () {
+                              showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true, 
+                                builder: (context) => EditCategory(
+                                  namecategory: item['name'],
+                                  percent: item['percent'],
+                                ));
+                                },
 
-                            // onPressed: () => onEditCategory(item),
-                            icon: const Icon(Icons.edit_outlined,
-                                color: Colors.grey),
+                            icon: const Icon(
+                              Icons.edit_outlined,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -99,9 +111,6 @@ onPressed: () =>  {},
                 ),
               ),
               const SizedBox(height: 10),
-            
-
-
             ],
           ),
         );
