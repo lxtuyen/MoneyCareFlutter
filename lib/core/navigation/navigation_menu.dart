@@ -18,7 +18,6 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: SafeArea(child: child),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: thêm logic mở trang thêm giao dịch
           context.go('/add-transaction');
         },
         shape: const CircleBorder(),

@@ -3,6 +3,7 @@ import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
+import 'package:money_care/presentation/screens/home/widgets/search_anchor.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_limit_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_overview_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary.dart';
@@ -58,6 +59,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       backgroundColor: Color(0XFFF5FAFE),
                       height: 36,
                       width: 36,
+                      onTap: () {
+                        showGeneralDialog(
+                          context: context,
+                          barrierDismissible: true,
+                          barrierLabel: '',
+                          transitionDuration: const Duration(milliseconds: 200),
+                          pageBuilder: (context, anim1, anim2) {
+                            return Align(
+                              alignment: Alignment.topCenter,
+                              child: Material(
+                                color: Colors.transparent,
+                                child: Container(
+                                  margin: const EdgeInsets.only(
+                                    top: 80,
+                                  ),
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  child: SearchAnchorCustom(),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(width: AppSizes.spaceBtwItems),
                     CircularIcon(

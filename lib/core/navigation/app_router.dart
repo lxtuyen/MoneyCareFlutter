@@ -14,6 +14,7 @@ import 'package:money_care/presentation/screens/onboarding/onboarding_welcome.da
 import 'package:money_care/presentation/screens/onboarding/onboarding_saving_rule.dart';
 import 'package:money_care/presentation/screens/profile/profile.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
+import 'package:money_care/presentation/screens/select_saving_fund/select_saving_fund_screen.dart';
 import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/statistics/statistics.dart';
 import 'package:money_care/presentation/screens/transaction/transaction.dart';
@@ -22,6 +23,33 @@ final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
 
   routes: [
+    ShellRoute(
+      pageBuilder: (context, state, child) {
+        return NoTransitionPage(child: ScaffoldWithNavBar(child: child));
+      },
+      routes: [
+        GoRoute(
+          name: 'home',
+          path: '/',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          name: 'transaction',
+          path: '/transaction',
+          builder: (context, state) => const TransactionScreen(),
+        ),
+        GoRoute(
+          name: 'statistics',
+          path: '/statistics',
+          builder: (context, state) => const StatisticsScreen(),
+        ),
+        GoRoute(
+          name: 'profile',
+          path: '/profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
+    ),
     GoRoute(
       name: 'splash',
       path: '/splash',
@@ -68,12 +96,6 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const ResetPasswordScreen(),
     ),
     GoRoute(
-      name: 'login',
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-
-    GoRoute(
       name: 'register',
       path: '/register',
       builder: (context, state) => const RegisterScreen(),
@@ -88,34 +110,6 @@ final GoRouter appRouter = GoRouter(
       path: '/onboarding_saving_rule',
       builder: (context, state) => const OnboardingSavingRuleScreen(),
     ),
-
-    ShellRoute(
-      pageBuilder: (context, state, child) {
-        return NoTransitionPage(child: ScaffoldWithNavBar(child: child));
-      },
-      routes: [
-        GoRoute(
-          name: 'home',
-          path: '/',
-          builder: (context, state) => const HomeScreen(),
-        ),
-        GoRoute(
-          name: 'transaction',
-          path: '/transaction',
-          builder: (context, state) => const TransactionScreen(),
-        ),
-        GoRoute(
-          name: 'statistics',
-          path: '/statistics',
-          builder: (context, state) => const StatisticsScreen(),
-        ),
-        GoRoute(
-          name: 'profile',
-          path: '/profile',
-          builder: (context, state) => const ProfileScreen(),
-        ),
-      ],
-    ),
     GoRoute(
       name: 'login',
       path: '/login',
@@ -125,6 +119,11 @@ final GoRouter appRouter = GoRouter(
       name: 'signup',
       path: '/signup',
       builder: (context, state) => const RegisterScreen(),
+    ),
+    GoRoute(
+      name: 'select_fund',
+      path: '/select_fund',
+      builder: (context, state) => const SelectSavingFundScreen(),
     ),
   ],
 );
