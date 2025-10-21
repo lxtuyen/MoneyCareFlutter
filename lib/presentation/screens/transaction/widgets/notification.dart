@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:money_care/core/constants/colors.dart';
 
 class SuccessNotification extends StatelessWidget {
-   final String message; // nội dung thông báo
-  final VoidCallback onBack; // hàm khi bấm "Quay lại"
-  final VoidCallback onCreateNew; // hàm khi bấm "Tạo mới"
+   final String message;
+  final VoidCallback onBack;
+  final VoidCallback onCreateNew;
 
 
   const SuccessNotification({
@@ -23,7 +24,7 @@ class SuccessNotification extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(Icons.check_circle, color: Colors.green, size: 60),
+            const Icon(Icons.check_circle, color: AppColors.success, size: 60),
             const SizedBox(height: 15),
             Text(
               message,
@@ -43,14 +44,14 @@ class SuccessNotification extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: onBack,
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Colors.grey),
+                        side: const BorderSide(color: AppColors.borderPrimary),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
                       child: const Text(
                         'Quay lại',
-                        style: TextStyle(color: Colors.black87),
+                        style: TextStyle(color: AppColors.text1),
                       ),
                     ),
                   ),
@@ -62,7 +63,7 @@ class SuccessNotification extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: onCreateNew,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF0052D4),
+                        backgroundColor: AppColors.buttonPrimary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),

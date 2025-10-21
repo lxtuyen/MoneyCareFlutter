@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/editcategory2.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category.dart';
 
-class CategoryEditSheet extends StatelessWidget {
+class EditCategorySheet extends StatelessWidget {
   final List<Map<String, dynamic>> categories;
 
-  const CategoryEditSheet({super.key, required this.categories});
+  const EditCategorySheet({super.key, required this.categories});
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +33,13 @@ class CategoryEditSheet extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    onPressed: () => Navigator.pop(context),
+                    onPressed: () => context.pop(),
                     icon: const Icon(Icons.close, color: Colors.grey),
                   ),
                 ],
               ),
               const SizedBox(height: 8),
+
               Expanded(
                 child: ListView.builder(
                   controller: scrollController,
@@ -51,10 +53,10 @@ class CategoryEditSheet extends StatelessWidget {
                         vertical: 10,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xffFAFAFA),
+                        color: AppColors.backgroundPrimary,
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                          color: Colors.grey.shade200,
+                          color: AppColors.borderPrimary,
                           width: 1,
                         ),
                       ),
@@ -88,17 +90,16 @@ class CategoryEditSheet extends StatelessWidget {
                             ),
                           ),
                           IconButton(
-                            onPressed:
-                                () {
+                            onPressed: () {
                               showModalBottomSheet(
                                 context: context,
-                                isScrollControlled: true, 
+                                isScrollControlled: true,
                                 builder: (context) => EditCategory(
                                   namecategory: item['name'],
                                   percent: item['percent'],
-                                ));
-                                },
-
+                                ),
+                              );
+                            },
                             icon: const Icon(
                               Icons.edit_outlined,
                               color: Colors.grey,
@@ -110,7 +111,6 @@ class CategoryEditSheet extends StatelessWidget {
                   },
                 ),
               ),
-              const SizedBox(height: 10),
             ],
           ),
         );

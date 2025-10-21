@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_care/core/constants/colors.dart';
 
 class AmountInput extends StatefulWidget {
   final TextEditingController controller;
@@ -64,14 +65,14 @@ class _AmountInputState extends State<AmountInput> {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xFFBDBDBD),
+                color: AppColors.borderPrimary,
                 width: 1,
               ),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color.fromARGB(255, 188, 186, 186),
+                color: AppColors.borderPrimary,
                 width: 1,
               ),
             ),

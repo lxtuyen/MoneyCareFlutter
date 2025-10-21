@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:money_care/core/constants/colors.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -12,7 +13,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
   @override
   void initState() {
     super.initState();
-    // Gọi popup sau khi build xong frame đầu tiên
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showIOSActionSheet(context);
     });
@@ -26,7 +26,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           'Lựa chọn',
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Colors.grey,
+            color: AppColors.text4,
           ),
         ),
         actions: <CupertinoActionSheetAction>[
@@ -41,7 +41,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               'Tiền Chi',
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                color: AppColors.text1,
               ),
             ),
           ),
@@ -56,7 +56,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               'Tiền Thu',
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.black,
+                color: AppColors.text1,
               ),
             ),
           ),
@@ -67,7 +67,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           child: const Text(
             'Hủy bỏ',
             style: TextStyle(
-              color: Colors.red,
+              color: AppColors.error,
               fontWeight: FontWeight.w500,
             ),
           ),

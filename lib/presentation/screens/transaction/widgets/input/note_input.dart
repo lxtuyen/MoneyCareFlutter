@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_care/core/constants/colors.dart';
 
 class NoteInput extends StatelessWidget {
   final TextEditingController controller;
@@ -38,14 +39,14 @@ class NoteInput extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color(0xFFBDBDBD), // xám nhạt
+                color: AppColors.text4,
                 width: 1,
               ),
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
               borderSide: const BorderSide(
-                color: Color.fromARGB(255, 188, 186, 186),
+                color: AppColors.borderPrimary,
                 width: 1,
               ),
             ),
