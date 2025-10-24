@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/presentation/screens/home/widgets/transaction_item.dart';
+import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 
 class TransactionSection extends StatefulWidget {
   const TransactionSection({super.key});
@@ -22,7 +23,7 @@ class _TransactionSectionState extends State<TransactionSection> {
       "subtitle": "Chi tiêu hằng ngày",
       "date": "03/06/23",
       "amount": "250.000",
-      "type": "expense", // 👈 thêm loại
+      "type": "expense",
     },
     {
       "iconColor": Colors.lightBlue,
@@ -105,9 +106,10 @@ class _TransactionSectionState extends State<TransactionSection> {
                 child: TransactionItem(
                   title: item["title"] as String,
                   amount: item["amount"] as String,
-                  iconColor: item["iconColor"] as Color,
+                  color: item["iconColor"] as Color,
                   subtitle: item["subtitle"] as String,
                   date: item["date"] as String,
+                  isShowDate: true, onTap: () { context.push("/transaction"); },
                 ),
               ),
             ),

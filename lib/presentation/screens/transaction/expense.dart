@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/notification.dart';
+import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction_form.dart';
 
-class ExpensenseHomescreen extends StatefulWidget {
-  const ExpensenseHomescreen({super.key});
+class ExpenseScreen extends StatefulWidget {
+  const ExpenseScreen({super.key});
 
   @override
-  State<ExpensenseHomescreen> createState() => _ExpensenseHomescreenState();
+  State<ExpenseScreen> createState() => _ExpenseScreenState();
 }
 
-class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
+class _ExpenseScreenState extends State<ExpenseScreen> {
   DateTime selectedDate = DateTime.now();
   String? selectedValue;
 
@@ -41,7 +41,7 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
           context: context,
           barrierDismissible: false,
           builder:
-              (context) => SuccessNotification(
+              (context) => SuccessDialog(
                 message: 'Lưu thành công',
                 onBack: () {
                   Navigator.pop(context);
@@ -49,6 +49,7 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
                 onCreateNew: () {
                   Navigator.pop(context);
                 },
+                isShowButton: true,
               ),
         );
       },

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/notification.dart';
+import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction_form.dart';
 
 class IncomeScreen extends StatefulWidget {
@@ -20,7 +20,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
           context: context,
           barrierDismissible: false,
           builder:
-              (context) => SuccessNotification(
+              (context) => SuccessDialog(
                 message: 'Giao dịch đã được lưu thành công',
                 onBack: () {
                   Navigator.pop(context);
@@ -28,6 +28,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                 onCreateNew: () {
                   Navigator.pop(context);
                 },
+                isShowButton: true,
               ),
         );
       },

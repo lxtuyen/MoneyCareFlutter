@@ -3,9 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/core/utils/date_picker_util.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
 
 class TransactionForm extends StatefulWidget {
   final String title;
@@ -43,12 +44,7 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Future<void> _selectDate() async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: selectedDate,
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2050),
-    );
+    final picked = await pickSingleDate(context);
     if (picked != null && picked != selectedDate) {
       setState(() => selectedDate = picked);
     }

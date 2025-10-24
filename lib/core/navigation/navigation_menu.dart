@@ -19,8 +19,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: SafeArea(child: child),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // TODO: thêm logic mở trang thêm giao dịch
-          context.go('/add-transaction');
+           _showTransactionOptions(context);
         },
         shape: const CircleBorder(),
         backgroundColor: AppColors.primary,
@@ -81,24 +80,20 @@ class ScaffoldWithNavBar extends StatelessWidget {
     );
   }
 
-  // Xác định tab hiện tại dựa trên location của GoRouter
   int _getCurrentIndex(String location) {
     if (location.startsWith('/transaction')) return 1;
     if (location.startsWith('/statistics')) return 2;
     if (location.startsWith('/profile')) return 3;
-    return 0; // Mặc định là Home
+    return 0;
   }
 
-  // Điều hướng đến tab mới khi chọn trên BottomNavigationBar
   void _onTabTapped(BuildContext context, int index) {
     switch (index) {
       case 0:
         context.push('/');
         break;
       case 1:
-            _showTransactionOptions(context);
-
-        // context.push('/transaction');
+        context.push('/transaction');
         break;
       case 2:
         context.push('/statistics');
@@ -120,7 +115,7 @@ void _showTransactionOptions(BuildContext context) {
             Navigator.pop(context);
             context.push('/expensense');
           },
-          child: const Text(' 💸 Tiền Chi'),
+          child: const Text('💸 Tiền Chi'),
         ),
         CupertinoActionSheetAction(
           onPressed: () {
