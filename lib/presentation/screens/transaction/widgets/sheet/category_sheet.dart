@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category_sheet.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/category_item.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category_sheet.dart';
 
 class CategorySheet extends StatelessWidget {
   final List<Map<String, dynamic>> categories;
@@ -32,7 +32,6 @@ class CategorySheet extends StatelessWidget {
               const Divider(height: 1, thickness: 1, color: Colors.grey),
               const SizedBox(height: 20),
 
-              // 🔹 Nút tạo và chỉnh sửa
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -40,13 +39,13 @@ class CategorySheet extends StatelessWidget {
                     onPressed: () {
                       // TODO: xử lý thêm phân loại mới
                     },
-                    icon: const Icon(Icons.add, size: 20, color: Colors.black87),
+                    icon: const Icon(Icons.add, size: 20, color: AppColors.text1),
                     label: const Text(
                       'Tạo phân loại mới',
                       style: TextStyle(
                         fontSize: 15.5,
                         fontWeight: FontWeight.w600,
-                        color: Colors.black87,
+                        color: AppColors.text1,
                       ),
                     ),
                     style: TextButton.styleFrom(
@@ -90,7 +89,7 @@ class CategorySheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // 🔹 Danh sách category
+              // Danh sách category
               Expanded(
                 child: ScrollConfiguration(
                   behavior: ScrollConfiguration.of(context)

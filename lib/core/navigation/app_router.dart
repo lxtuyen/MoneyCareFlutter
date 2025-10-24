@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/presentation/screens/transaction/Income.dart';
+import 'package:money_care/presentation/screens/transaction/transaction.dart';
+import 'package:money_care/presentation/screens/transaction/expense.dart';
 import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
@@ -16,9 +19,6 @@ import 'package:money_care/presentation/screens/profile/profile.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
 import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/statistics/statistics.dart';
-import 'package:money_care/presentation/screens/transaction/Income.dart';
-import 'package:money_care/presentation/screens/transaction/expensense.dart';
-import 'package:money_care/presentation/screens/transaction/transaction.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -132,9 +132,9 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       name: 'expensense',
       path: '/expensense',
-      builder: (context, state) => const ExpensenseHomescreen(),
+      builder: (context, state) => const ExpenseScreen(),
     ),
-     GoRoute(
+    GoRoute(
       name: 'income',
       path: '/income',
       builder: (context, state) => const IncomeScreen(),

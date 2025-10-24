@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
+import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 
 class EditCategory extends StatefulWidget {
   final String namecategory;
@@ -116,7 +117,23 @@ class _EditCategoryState extends State<EditCategory> {
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder:
+                                  (context) => SuccessDialog(
+                                    message: 'Chỉnh sửa thành công!!',
+                                    onBack: () {
+                                      Navigator.pop(context);
+                                    },
+                                    onCreateNew: () {
+                                      Navigator.pop(context);
+                                    },
+                                    isShowButton: true,
+                                  ),
+                            );
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.transparent,
                             shadowColor: Colors.transparent,

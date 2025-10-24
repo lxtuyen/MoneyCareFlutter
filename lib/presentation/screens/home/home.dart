@@ -3,11 +3,11 @@ import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
-import 'package:money_care/presentation/screens/home/widgets/spending_limit_card.dart';
-import 'package:money_care/presentation/screens/home/widgets/spending_overview_card.dart';
-import 'package:money_care/presentation/screens/home/widgets/spending_summary.dart';
-import 'package:money_care/presentation/screens/home/widgets/category_section.dart';
-import 'package:money_care/presentation/screens/home/widgets/transaction_section.dart';
+import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_limit_card.dart';
+import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_overview_card.dart';
+import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_summary.dart';
+import 'package:money_care/presentation/screens/home/widgets/category/category_section.dart';
+import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_section.dart';
 import 'package:money_care/presentation/widgets/icon/circular_icon.dart';
 import 'package:money_care/presentation/widgets/texts/section_heading.dart';
 
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
               isOverLimit: false,
             ),
             SpendingLimitCard(
-              title: "ào tạo",
+              title: "Đào tạo",
               limitText: "2,000,000",
               spentText: "1,200,000",
               iconPath: AppIcons.education,

@@ -25,6 +25,7 @@ dependencies:
   flutter_svg: ^2.2.1
   dotted_border: ^2.0.0
   calendar_date_picker2: ^2.0.1
+  percent_indicator: ^4.2.5
 
   # icons
   iconsax_flutter: ^1.0.0
