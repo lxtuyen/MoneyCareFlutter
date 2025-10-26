@@ -99,20 +99,20 @@ class _TransactionSectionState extends State<TransactionSection> {
                 ],
               ),
             )
-          else
-            ...transactions.map(
-              (item) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TransactionItem(
-                  title: item["title"] as String,
-                  amount: item["amount"] as String,
-                  color: item["iconColor"] as Color,
-                  subtitle: item["subtitle"] as String,
-                  date: item["date"] as String,
-                  isShowDate: true, onTap: () { context.push("/transaction"); },
-                ),
-              ),
-            ),
+          // else
+          //   // ...transactions.map(
+          //   //   (item) => Padding(
+          //   //     padding: const EdgeInsets.symmetric(vertical: 8),
+          //   //     child: TransactionItem(
+          //   //       title: item["title"] as String,
+          //   //       amount: item["amount"] as String,
+          //   //       color: item["iconColor"] as Color,
+          //   //       subtitle: item["subtitle"] as String,
+          //   //       date: item["date"] as String,
+          //   //       isShowDate: true, onTap: () { context.push("/transaction"); },
+          //   //     ),
+          //   //   ),
+          //   ),
         ],
       ),
     );

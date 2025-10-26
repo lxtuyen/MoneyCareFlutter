@@ -4,6 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
+import 'package:money_care/presentation/model/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
@@ -11,7 +12,7 @@ import 'package:money_care/presentation/screens/transaction/widgets/sheet/catego
 class TransactionForm extends StatefulWidget {
   final String title;
   final bool showCategory;
-  final List<Map<String, dynamic>>? categoryList;
+  final List<CategoryModel>? categoryList; 
   final VoidCallback onSubmit;
 
   const TransactionForm({
@@ -42,6 +43,7 @@ class _TransactionFormState extends State<TransactionForm> {
     final picker = ImagePicker();
     await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
   }
+  
 
   Future<void> _selectDate() async {
     final picked = await pickSingleDate(context);
@@ -59,6 +61,7 @@ class _TransactionFormState extends State<TransactionForm> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder:
+      
           (context) => CategorySheet(categories: widget.categoryList ?? []),
     );
 
@@ -119,7 +122,7 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
 
-                  // Nội dung
+                  
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(

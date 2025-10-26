@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/presentation/model/category_model.dart';
+import 'package:money_care/presentation/model/transcation_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/filter_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction_detail.dart';
@@ -16,6 +18,57 @@ class TransactionScreen extends StatefulWidget {
 
 class _TransactionScreenState extends State<TransactionScreen> {
   String selected = 'chi';
+  final List<TransactionModel> transactions = [
+  TransactionModel(
+    title: 'Tiền siêu thị',
+    subtitle: 'Chi tiêu hằng ngày',
+    amount: '250.000',
+    date: DateTime.now(),
+    color: Colors.purple,
+    category: const CategoryModel(
+      name: 'Cần thiết',
+      percent: '55%',
+      icon: Icons.shopping_bag,
+    ),
+  ),
+  TransactionModel(
+    title: 'Học tiếng Anh',
+    subtitle: 'Đào tạo',
+    amount: '250.000',
+    date: DateTime.now(),
+    color: Colors.orange,
+    category: const CategoryModel(
+      name: 'Đào tạo',
+      percent: '10%',
+      icon: Icons.school,
+    ),
+  ),
+  TransactionModel(
+    title: 'Tiền tiết kiệm',
+    subtitle: 'Tiết kiệm định kỳ',
+    amount: '250.000',
+    date: DateTime.now(),
+    color: Colors.blue,
+    category: const CategoryModel(
+      name: 'Tiết kiệm',
+      percent: '10%',
+      icon: Icons.savings,
+    ),
+  ),
+  TransactionModel(
+    title: 'Du lịch Mộc Châu',
+    subtitle: 'Hưởng thụ',
+    amount: '250.000',
+    date: DateTime.now(),
+    color: Colors.green,
+    category: const CategoryModel(
+      name: 'Hưởng thụ',
+      percent: '10%',
+      icon: Icons.spa,
+    ),
+  ),
+];
+
 
   @override
   Widget build(BuildContext context) {
@@ -204,92 +257,96 @@ class _TransactionScreenState extends State<TransactionScreen> {
     );
   }
 
-  Widget _buildExpenseList() {
-    return ListView(
-      key: const ValueKey('chi'),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        Text(
-          'Hôm nay',
-          style: TextStyle(fontWeight: FontWeight.bold, color:AppColors.text1),
+Widget _buildExpenseList() {
+  return ListView(
+    key: const ValueKey('chi'),
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    children: [
+      Text(
+        'Hôm nay',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: AppColors.text1,
         ),
-        SizedBox(height: 8),
-        TransactionItem(
-          onTap: () => _showTransactionDetail(context, true),
-          isShowDate: false,
-          title: 'Tiền siêu thị',
-          subtitle: 'Chi tiêu hàng ngày',
-          date: 'Hôm nay',
-          color: Colors.purple,
-          amount: '250.000',
-        ),
-        TransactionItem(
-          onTap: () {},
-          isShowDate: false,
-          title: 'Học tiếng Anh',
-          subtitle: 'Đào tạo',
-          date: 'Hôm nay',
-          color: Colors.orange,
-          amount: '250.000',
-        ),
-        TransactionItem(
-          onTap: () {},
-          isShowDate: false,
-          title: 'Tiền tiết kiệm',
-          subtitle: 'Tiết kiệm',
-          date: 'Hôm nay',
-          color: Colors.blue,
-          amount: '250.000',
-        ),
-        TransactionItem(
-          onTap: () {},
-          isShowDate: false,
-          title: 'Du lịch Mộc Châu',
-          subtitle: 'Hưởng thụ',
-          date: 'Hôm nay',
-          color: Colors.green,
-          amount: '250.000',
-        ),
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 8),
 
-  Widget _buildIncomeList() {
-    return ListView(
-      key: const ValueKey('thu'),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        const Text(
-          'Hôm nay',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text1),
-        ),
-        const SizedBox(height: 8),
-        TransactionItem(
-          onTap: () => _showTransactionDetail(context, false),
-          isShowDate: true,
-          title: 'Nhặt được',
-          amount: '250.000',
-          isExpense: false,
-        ),
-        TransactionItem(
-          onTap: () {},
-          isExpense: false,
-          title: 'Mẹ cho',
-          amount: '500.000',
-          isShowDate: true,
-        ),
-      ],
-    );
-  }
+      ...transactions.map((item) {
+        return TransactionItem(
+          item: item, // ✅ truyền nguyên model
+          isShowDate: false,
+onTap: () => _showTransactionDetail(context, item),
+        );
+      }).toList(),
+    ],
+  );
+}
 
-  void _showTransactionDetail(BuildContext context, bool isExpense) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return TransactionDetail(isExpense: isExpense);
-      },
-    );
-  }
+final List<TransactionModel> incomes = [
+  TransactionModel(
+    title: 'Nhặt được',
+    subtitle: 'Tiền may mắn',
+    amount: '250.000',
+    date: DateTime.now(),
+    color: Colors.green,
+    category: const CategoryModel(
+      name: 'Khác',
+      percent: '',
+      icon: Icons.monetization_on,
+    ),
+  ),
+  TransactionModel(
+    title: 'Mẹ cho',
+    subtitle: 'Tiền hỗ trợ gia đình',
+    amount: '500.000',
+    date: DateTime.now(),
+    color: Colors.cyan,
+    category: const CategoryModel(
+      name: 'Hỗ trợ',
+      percent: '',
+      icon: Icons.volunteer_activism,
+    ),
+  ),
+];
+
+ Widget _buildIncomeList() {
+  return ListView(
+    key: const ValueKey('thu'),
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    children: [
+      const Text(
+        'Hôm nay',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          color: AppColors.text1,
+        ),
+      ),
+      const SizedBox(height: 8),
+
+      ...incomes.map((item) {
+        return TransactionItem(
+          item: item,
+          isShowDate: true,
+          isExpense:selected == 'thu',
+onTap: () => _showTransactionDetail(context, item),
+        );
+      }).toList(),
+    ],
+  );
+}
+
+
+void _showTransactionDetail(BuildContext context, TransactionModel item) {
+  showDialog(
+    context: context,
+    builder: (context) {
+      return TransactionDetail(
+        item: item,
+        isExpense: selected == 'chi', // ✅ Tự kiểm tra thu/chi
+      );
+    },
+  );
+}
 
   void _showCategoryFilterDialog(BuildContext context) {
     showDialog(

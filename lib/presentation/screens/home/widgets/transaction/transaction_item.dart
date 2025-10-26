@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/presentation/model/transcation_model.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
     super.key,
-    required this.title,
-    this.subtitle,
-    this.date,
-    this.color,
-    required this.amount,
-    required this.isShowDate,
+    required this.item,
     required this.onTap,
+    this.isShowDate = true,
     this.isShowDivider = true,
     this.isExpense = true,
   });
 
-  final String title;
-  final String? subtitle;
-  final String? date;
-  final Color? color;
-  final String amount;
+  final TransactionModel item;
   final bool isShowDate;
   final bool isShowDivider;
   final bool isExpense;
@@ -40,7 +33,7 @@ class TransactionItem extends StatelessWidget {
                   width: 12,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: color,
+                    color: item.color, // ✅ lấy màu từ Model
                     shape: BoxShape.circle,
                   ),
                 ),
@@ -52,7 +45,7 @@ class TransactionItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      item.title, // ✅ lấy từ Model
                       style: const TextStyle(
                         fontSize: AppSizes.fontSizeSm,
                         fontWeight: FontWeight.w500,
@@ -61,7 +54,7 @@ class TransactionItem extends StatelessWidget {
 
                     if (isExpense)
                       Text(
-                        subtitle ?? "",
+                        item.subtitle, // ✅ lấy subtitle từ Model
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.text5,
@@ -76,14 +69,14 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   if (isShowDate)
                     Text(
-                      date ?? '',
+                      _formatDate(item.date), // ✅ đổi DateTime => text
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.text5,
                       ),
                     ),
                   Text(
-                    amount,
+                    item.amount,
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeMd,
                       fontWeight: FontWeight.w600,
@@ -104,5 +97,16 @@ class TransactionItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// ✅ format DateTime để hiển thị giống UI cũ ('Hôm nay')
+  static String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day) {
+      return 'Hôm nay';
+    }
+    return '${date.day}/${date.month}/${date.year}';
   }
 }

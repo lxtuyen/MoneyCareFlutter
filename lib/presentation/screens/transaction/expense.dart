@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:money_care/presentation/model/category_model.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction_form.dart';
 
@@ -14,13 +15,14 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   DateTime selectedDate = DateTime.now();
   String? selectedValue;
 
-  final List<Map<String, dynamic>> categories = [
-    {'name': 'Cần thiết', 'percent': '55%', 'icon': Icons.shopping_bag},
-    {'name': 'Đào tạo', 'percent': '10%', 'icon': Icons.school},
-    {'name': 'Hưởng thụ', 'percent': '10%', 'icon': Icons.spa},
-    {'name': 'Tiết kiệm', 'percent': '10%', 'icon': Icons.savings},
-    {'name': 'Từ thiện', 'percent': '5%', 'icon': Icons.volunteer_activism},
-  ];
+final List<CategoryModel> categories = [
+  const CategoryModel(name: 'Cần thiết', percent: '55%', icon: Icons.shopping_bag),
+  const CategoryModel(name: 'Đào tạo', percent: '10%', icon: Icons.school),
+  const CategoryModel(name: 'Hưởng thụ', percent: '10%', icon: Icons.spa),
+  const CategoryModel(name: 'Tiết kiệm', percent: '10%', icon: Icons.savings),
+  const CategoryModel(name: 'Từ thiện', percent: '5%', icon: Icons.volunteer_activism),
+];
+
 
   final List<String> phanLoaiList = ['Thu nhập', 'Chi tiêu', 'Tiết kiệm'];
 
