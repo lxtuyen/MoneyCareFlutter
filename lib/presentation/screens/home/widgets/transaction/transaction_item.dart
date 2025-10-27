@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/presentation/model/transcation_model.dart';
+import 'package:money_care/model/transcation_model.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
@@ -45,7 +45,7 @@ class TransactionItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.title, // ✅ lấy từ Model
+                      item.title,
                       style: const TextStyle(
                         fontSize: AppSizes.fontSizeSm,
                         fontWeight: FontWeight.w500,
@@ -54,7 +54,7 @@ class TransactionItem extends StatelessWidget {
 
                     if (isExpense)
                       Text(
-                        item.subtitle, // ✅ lấy subtitle từ Model
+                        item.subtitle ?? "",
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.text5,
@@ -69,7 +69,7 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   if (isShowDate)
                     Text(
-                      _formatDate(item.date), // ✅ đổi DateTime => text
+                      _formatDate(item.date),
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.text5,
@@ -99,7 +99,6 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
-  /// ✅ format DateTime để hiển thị giống UI cũ ('Hôm nay')
   static String _formatDate(DateTime date) {
     final now = DateTime.now();
     if (date.year == now.year &&

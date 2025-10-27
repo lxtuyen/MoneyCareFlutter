@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/presentation/model/transcation_model.dart';
+import 'package:money_care/model/transcation_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/edit_expense.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/update_transaction.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/widgets/dialog/warm_dialog.dart';
 
@@ -55,7 +55,7 @@ class TransactionDetail extends StatelessWidget {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Edit_Expense(item: item),
+                        builder: (context) => UpdateTransactionScreen(item: item),
                       ),
                     );
 

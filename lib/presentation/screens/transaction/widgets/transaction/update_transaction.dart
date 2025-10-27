@@ -4,22 +4,23 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
-import 'package:money_care/presentation/model/category_model.dart';
-import 'package:money_care/presentation/model/transcation_model.dart';
+import 'package:money_care/model/category_model.dart';
+import 'package:money_care/model/transcation_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
 
-class Edit_Expense extends StatefulWidget {
+class UpdateTransactionScreen extends StatefulWidget {
   final TransactionModel item;
 
-  const Edit_Expense({super.key, required this.item});
+  const UpdateTransactionScreen({super.key, required this.item});
 
   @override
-  State<Edit_Expense> createState() => _Edit_ExpenseState();
+  State<UpdateTransactionScreen> createState() =>
+      _UpdateTransactionScreenState();
 }
 
-class _Edit_ExpenseState extends State<Edit_Expense> {
+class _UpdateTransactionScreenState extends State<UpdateTransactionScreen> {
   late DateTime selectedDate;
   XFile? selectedImage;
 
@@ -30,7 +31,11 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
     CategoryModel(name: 'Đào tạo', percent: '10%', icon: Icons.school),
     CategoryModel(name: 'Hưởng thụ', percent: '10%', icon: Icons.spa),
     CategoryModel(name: 'Tiết kiệm', percent: '10%', icon: Icons.savings),
-    CategoryModel(name: 'Từ thiện', percent: '5%', icon: Icons.volunteer_activism),
+    CategoryModel(
+      name: 'Từ thiện',
+      percent: '5%',
+      icon: Icons.volunteer_activism,
+    ),
   ];
 
   final TextEditingController amountController = TextEditingController();
@@ -42,7 +47,7 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
     super.initState();
     selectedDate = widget.item.date;
     amountController.text = widget.item.amount;
-    noteController.text = widget.item.subtitle ?? '';
+    noteController.text = widget.item.subtitle ?? "";
     categoryController.text = widget.item.category?.name ?? '';
   }
 
@@ -59,22 +64,29 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => SafeArea(
-        child: Wrap(
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt, color: AppColors.primary),
-              title: const Text("Chụp ảnh"),
-              onTap: () => pickImage(ImageSource.camera),
+      builder:
+          (_) => SafeArea(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: const Icon(
+                    Icons.camera_alt,
+                    color: AppColors.primary,
+                  ),
+                  title: const Text("Chụp ảnh"),
+                  onTap: () => pickImage(ImageSource.camera),
+                ),
+                ListTile(
+                  leading: const Icon(
+                    Icons.photo_library,
+                    color: AppColors.primary,
+                  ),
+                  title: const Text("Chọn từ thư viện"),
+                  onTap: () => pickImage(ImageSource.gallery),
+                ),
+              ],
             ),
-            ListTile(
-              leading: const Icon(Icons.photo_library, color: AppColors.primary),
-              title: const Text("Chọn từ thư viện"),
-              onTap: () => pickImage(ImageSource.gallery),
-            ),
-          ],
-        ),
-      ),
+          ),
     );
   }
 
@@ -91,10 +103,11 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (_) => CategorySheet(
-        categories: categories,
-        selectedCategoryInit: widget.item.category?.name,
-      ),
+      builder:
+          (_) => CategorySheet(
+            categories: categories,
+            selectedCategoryInit: widget.item.category?.name,
+          ),
     );
 
     if (selected != null) {
@@ -146,7 +159,10 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _DatePicker(selectedDate: selectedDate, onTap: selectDate),
+                        _DatePicker(
+                          selectedDate: selectedDate,
+                          onTap: selectDate,
+                        ),
                         const SizedBox(height: 20),
                         AmountInput(
                           controller: amountController,
@@ -154,18 +170,23 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
                           hintText: "0 đ",
                         ),
                         const SizedBox(height: 20),
-                        const Text("Phân loại", style: TextStyle(fontSize: 16)),
-                        const SizedBox(height: 4),
-                        TextField(
-                          controller: categoryController,
-                          readOnly: true,
-                          onTap: showCategorySheet,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            suffixIcon: Icon(Icons.keyboard_arrow_down),
+                        if (widget.item.isExpense == true) ...[
+                          const Text(
+                            "Phân loại",
+                            style: TextStyle(fontSize: 16),
                           ),
-                        ),
-                        const SizedBox(height: 20),
+                          const SizedBox(height: 4),
+                          TextField(
+                            controller: categoryController,
+                            readOnly: true,
+                            onTap: showCategorySheet,
+                            decoration: const InputDecoration(
+                              border: OutlineInputBorder(),
+                              suffixIcon: Icon(Icons.keyboard_arrow_down),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                        ],
                         NoteInput(
                           controller: noteController,
                           label: 'Ghi chú',
@@ -184,7 +205,11 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   boxShadow: [
-                    BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, -2))
+                    BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 6,
+                      offset: Offset(0, -2),
+                    ),
                   ],
                 ),
                 child: Row(
@@ -198,15 +223,19 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
                           border: Border.all(color: AppColors.borderPrimary),
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        child: selectedImage == null
-                            ? const Icon(Icons.image_outlined, color: Colors.grey)
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(10),
-                                child: Image.file(
-                                  File(selectedImage!.path),
-                                  fit: BoxFit.cover,
+                        child:
+                            selectedImage == null
+                                ? const Icon(
+                                  Icons.image_outlined,
+                                  color: Colors.grey,
+                                )
+                                : ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    File(selectedImage!.path),
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -219,14 +248,17 @@ class _Edit_ExpenseState extends State<Edit_Expense> {
                         onPressed: () {},
                         child: const Text(
                           "Cập nhật",
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
@@ -241,7 +273,11 @@ class _BackButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => Navigator.pop(context),
-      child: const Icon(Icons.arrow_back_ios_new, color: Colors.white, size: 22),
+      child: const Icon(
+        Icons.arrow_back_ios_new,
+        color: Colors.white,
+        size: 22,
+      ),
     );
   }
 }
@@ -267,7 +303,10 @@ class _DatePicker extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Icon(Icons.calendar_today_outlined, color: AppColors.primary),
+                const Icon(
+                  Icons.calendar_today_outlined,
+                  color: AppColors.primary,
+                ),
                 const SizedBox(width: 10),
                 Text(DateFormat('EEEE, dd/MM/yy', 'vi').format(selectedDate)),
               ],

@@ -4,7 +4,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
-import 'package:money_care/presentation/model/category_model.dart';
+import 'package:money_care/model/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
@@ -20,7 +20,7 @@ class TransactionForm extends StatefulWidget {
     required this.title,
     this.showCategory = true,
     this.categoryList,
-    required this.onSubmit,
+    required this.onSubmit
   });
 
   @override

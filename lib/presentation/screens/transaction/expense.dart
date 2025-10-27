@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
-import 'package:money_care/presentation/model/category_model.dart';
+import 'package:money_care/model/category_model.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/transaction_form.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({super.key});

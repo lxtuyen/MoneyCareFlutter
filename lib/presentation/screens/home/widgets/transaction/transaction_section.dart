@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 
 class TransactionSection extends StatefulWidget {
   const TransactionSection({super.key});

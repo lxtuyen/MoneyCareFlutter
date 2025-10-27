@@ -29,10 +29,4 @@ class CategoryModel {
     };
   }
 }
-final List<CategoryModel> categories = [
-  const CategoryModel(name: 'Cần thiết', percent: '55%', icon: Icons.shopping_bag),
-  const CategoryModel(name: 'Đào tạo', percent: '10%', icon: Icons.school),
-  const CategoryModel(name: 'Hưởng thụ', percent: '10%', icon: Icons.spa),
-  const CategoryModel(name: 'Tiết kiệm', percent: '10%', icon: Icons.savings),
-  const CategoryModel(name: 'Từ thiện', percent: '5%', icon: Icons.volunteer_activism),
-];
+

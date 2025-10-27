@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/transaction_form.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 
 class IncomeScreen extends StatefulWidget {
   const IncomeScreen({super.key});
