@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(AppSizes.md),
         child: Column(
           children: [
+            /// Header chào người dùng + icon tìm kiếm & thông báo
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -50,19 +51,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.text4,
                   ),
                 ),
-
                 Row(
                   children: [
                     CircularIcon(
                       iconPath: AppIcons.search,
-                      backgroundColor: Color(0XFFF5FAFE),
+                      backgroundColor: const Color(0XFFF5FAFE),
                       height: 36,
                       width: 36,
                     ),
                     const SizedBox(width: AppSizes.spaceBtwItems),
                     CircularIcon(
                       iconPath: AppIcons.notification,
-                      backgroundColor: Color(0XFFF5FAFE),
+                      backgroundColor: const Color(0XFFF5FAFE),
                       height: 36,
                       width: 36,
                     ),
@@ -72,38 +72,44 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
+            /// Tổng kết chi tiêu
             SpendingSummary(balance: '1.000.000', spending: '250.000'),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
+            /// Phân loại chi tiêu
             AppSectionHeading(
               title: "Chi theo phân loại",
               showActionButton: false,
             ),
-
             const SizedBox(height: AppSizes.defaultSpace),
+            /// Phân loại chi tiêu
             CategorySection(),
 
             const SizedBox(height: AppSizes.defaultSpace),
-            AppSectionHeading(title: "Giao dịch gần đây"),
 
+            /// Giao dịch gần đây
+            AppSectionHeading(title: "Giao dịch gần đây"),
             const SizedBox(height: AppSizes.defaultSpace),
             TransactionSection(),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
+            /// Tổng quan chi tiêu
             AppSectionHeading(title: "Tổng quan", showActionButton: false),
             const SizedBox(height: AppSizes.spaceBtwItems),
             GestureDetector(
               onTap: _pickDateRange,
               child: Row(
-                children: [
+                children: const [
                   Icon(Icons.calendar_month_outlined, size: 18),
                   SizedBox(width: 4),
-                  Text('Chọn Khoảng ngày'),
+                  Text('Chọn khoảng ngày'),
                 ],
               ),
             ),
             const SizedBox(height: AppSizes.defaultSpace),
-
             SpendingOverviewCard(
               startDate: startDate,
               endDate: endDate,
@@ -111,7 +117,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
-            AppSectionHeading(title: "Hạn mực chi tiêu"),
+
+            /// Hạn mức chi tiêu
+            AppSectionHeading(title: "Hạn mức chi tiêu"),
             const SizedBox(height: AppSizes.defaultSpace),
 
             SpendingLimitCard(

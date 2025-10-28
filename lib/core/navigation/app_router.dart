@@ -110,7 +110,7 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           name: 'statistics',
           path: '/statistics',
-          builder: (context, state) => const StatisticsScreen(),
+          builder: (context, state) => StatisticsScreen(),
         ),
         GoRoute(
           name: 'profile',
@@ -119,16 +119,7 @@ final GoRouter appRouter = GoRouter(
         ),
       ],
     ),
-    GoRoute(
-      name: 'login',
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      name: 'signup',
-      path: '/signup',
-      builder: (context, state) => const RegisterScreen(),
-    ),
+
     GoRoute(
       name: 'expensense',
       path: '/expensense',

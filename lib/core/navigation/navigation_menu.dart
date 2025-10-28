@@ -19,7 +19,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       body: SafeArea(child: child),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-           _showTransactionOptions(context);
+          _showTransactionOptions(context);
         },
         shape: const CircleBorder(),
         backgroundColor: AppColors.primary,
@@ -104,32 +104,34 @@ class ScaffoldWithNavBar extends StatelessWidget {
     }
   }
 }
+
 void _showTransactionOptions(BuildContext context) {
   showCupertinoModalPopup(
     context: context,
-    builder: (BuildContext context) => CupertinoActionSheet(
-      title: const Text('Chọn loại giao dịch'),
-      actions: <CupertinoActionSheetAction>[
-        CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-            context.push('/expensense');
-          },
-          child: const Text('💸 Tiền Chi'),
+    builder:
+        (BuildContext context) => CupertinoActionSheet(
+          title: const Text('Chọn loại giao dịch'),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                context.push('/expensense');
+              },
+              child: const Text('💸 Tiền Chi'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                context.push('/income');
+              },
+              child: const Text('💰 Tiền Thu'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Hủy bỏ'),
+          ),
         ),
-        CupertinoActionSheetAction(
-          onPressed: () {
-            Navigator.pop(context);
-            context.push('/income');
-          },
-          child: const Text('💰 Tiền Thu'),
-        ),
-      ],
-      cancelButton: CupertinoActionSheetAction(
-        isDestructiveAction: true,
-        onPressed: () => Navigator.pop(context),
-        child: const Text('Hủy bỏ'),
-      ),
-    ),
   );
 }

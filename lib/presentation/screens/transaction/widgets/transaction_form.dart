@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:go_router/go_router.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
@@ -44,7 +45,12 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Future<void> _selectDate() async {
-    final picked = await pickSingleDate(context);
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2050),
+    );
     if (picked != null && picked != selectedDate) {
       setState(() => selectedDate = picked);
     }
@@ -97,14 +103,19 @@ class _TransactionFormState extends State<TransactionForm> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           GestureDetector(
-                            onTap: () => Navigator.pop(context),
+                            onTap: () {
+                              if (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              } else {
+                                context.go('/home');
+                              }
+                            },
                             child: const Icon(
                               Icons.arrow_back_ios_new,
                               color: Colors.white,
                               size: 22,
                             ),
                           ),
-
                           Text(
                             widget.title,
                             style: const TextStyle(

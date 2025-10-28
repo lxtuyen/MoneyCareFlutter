@@ -211,7 +211,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       children: [
         Text(
           'Hôm nay',
-          style: TextStyle(fontWeight: FontWeight.bold, color:AppColors.text1),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text1),
         ),
         SizedBox(height: 8),
         TransactionItem(
