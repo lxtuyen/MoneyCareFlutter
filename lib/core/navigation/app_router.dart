@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/presentation/screens/select_saving_fund/select_saving_fund.dart';
 import 'package:money_care/presentation/screens/transaction/Income.dart';
 import 'package:money_care/presentation/screens/transaction/transaction.dart';
 import 'package:money_care/presentation/screens/transaction/expense.dart';
@@ -28,6 +29,34 @@ final GoRouter appRouter = GoRouter(
       name: 'splash',
       path: '/splash',
       builder: (context, state) => const SplashScreen(),
+    ),
+    ShellRoute(
+      pageBuilder: (context, state, child) {
+        return NoTransitionPage(child: ScaffoldWithNavBar(child: child));
+      },
+      routes: [
+        GoRoute(
+          name: 'home',
+          path: '/',
+          builder: (context, state) => const HomeScreen(),
+        ),
+        GoRoute(
+          name: 'transaction',
+          path: '/transaction',
+          builder: (context, state) => const TransactionScreen(),
+        ),
+
+        GoRoute(
+          name: 'statistics',
+          path: '/statistics',
+          builder: (context, state) => StatisticsScreen(),
+        ),
+        GoRoute(
+          name: 'profile',
+          path: '/profile',
+          builder: (context, state) => const ProfileScreen(),
+        ),
+      ],
     ),
     GoRoute(
       name: 'onboarding_expense_management',
@@ -74,7 +103,6 @@ final GoRouter appRouter = GoRouter(
       path: '/login',
       builder: (context, state) => const LoginScreen(),
     ),
-
     GoRoute(
       name: 'register',
       path: '/register',
@@ -90,36 +118,6 @@ final GoRouter appRouter = GoRouter(
       path: '/onboarding_saving_rule',
       builder: (context, state) => const OnboardingSavingRuleScreen(),
     ),
-
-    ShellRoute(
-      pageBuilder: (context, state, child) {
-        return NoTransitionPage(child: ScaffoldWithNavBar(child: child));
-      },
-      routes: [
-        GoRoute(
-          name: 'home',
-          path: '/',
-          builder: (context, state) => const HomeScreen(),
-        ),
-        GoRoute(
-          name: 'transaction',
-          path: '/transaction',
-          builder: (context, state) => const TransactionScreen(),
-        ),
-
-        GoRoute(
-          name: 'statistics',
-          path: '/statistics',
-          builder: (context, state) => StatisticsScreen(),
-        ),
-        GoRoute(
-          name: 'profile',
-          path: '/profile',
-          builder: (context, state) => const ProfileScreen(),
-        ),
-      ],
-    ),
-
     GoRoute(
       name: 'expensense',
       path: '/expensense',
@@ -129,6 +127,11 @@ final GoRouter appRouter = GoRouter(
       name: 'income',
       path: '/income',
       builder: (context, state) => const IncomeScreen(),
+    ),
+    GoRoute(
+      name: 'select_saving_fund',
+      path: '/select_saving_fund',
+      builder: (context, state) => const SelectSavingFundScreen(),
     ),
   ],
 );

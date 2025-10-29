@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
+import 'package:money_care/models/category_model.dart';
 
 class TagItem extends StatelessWidget {
-  final String text;
-  final Color color;
-  const TagItem(this.text, this.color);
+  final CategoryModel category;
+  const TagItem({required this.category, super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
+        color: category.color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Text(text, style: TextStyle(color: color, fontSize: 12)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            '${category.percentage.toStringAsFixed(0)}%',
+            style: TextStyle(
+              color: category.color,
+              fontSize: 13,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(width: 6),
+          Flexible(
+            child: Text(
+              category.label,
+              style: TextStyle(
+                color: category.color,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+              ),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

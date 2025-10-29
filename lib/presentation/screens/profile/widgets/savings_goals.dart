@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:intl/intl.dart';
 
 class SavingsGoals extends StatelessWidget {
   final double currentSaving;
@@ -16,6 +17,7 @@ class SavingsGoals extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double percent = currentSaving / targetSaving;
+    final formatter = NumberFormat.decimalPattern('vi');
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -24,7 +26,7 @@ class SavingsGoals extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: const [
           BoxShadow(
-            color: Colors.black12,
+            color: AppColors.text5,
             blurRadius: 6,
             offset: Offset(0, 2),
           ),
@@ -42,7 +44,6 @@ class SavingsGoals extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           LinearProgressIndicator(
-          
             value: percent,
             backgroundColor: Colors.grey.shade300,
             color: AppColors.primary,
@@ -54,14 +55,14 @@ class SavingsGoals extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                currentSaving.toStringAsFixed(0),
+                formatter.format(currentSaving),
                 style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
-                targetSaving.toStringAsFixed(0),
+                formatter.format(targetSaving),
                 style: const TextStyle(color: Colors.grey),
               ),
             ],
@@ -81,7 +82,7 @@ class SavingsGoals extends StatelessWidget {
                     style: TextStyle(fontSize: 14),
                   ),
                   Text(
-                    currentSaving.toStringAsFixed(0),
+                    formatter.format(currentSaving),
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,

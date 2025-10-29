@@ -51,7 +51,6 @@ class SpendingOverviewCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 💰 Tổng chi tiêu
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -82,7 +81,6 @@ class SpendingOverviewCard extends StatelessWidget {
             ),
             const SizedBox(height: AppSizes.spaceBtwItems),
 
-            // 📈 Biểu đồ chi tiêu
             SizedBox(
               height: 220,
               child: LineChart(
@@ -92,7 +90,6 @@ class SpendingOverviewCard extends StatelessWidget {
                   gridData: FlGridData(show: false),
                   borderData: FlBorderData(show: false),
 
-                  // ⚙️ Tiêu đề trục
                   titlesData: FlTitlesData(
                     topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
@@ -101,7 +98,6 @@ class SpendingOverviewCard extends StatelessWidget {
                       sideTitles: SideTitles(showTitles: false),
                     ),
 
-                    // 🗓️ Trục X: Ngày trong khoảng
                     bottomTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
@@ -125,7 +121,6 @@ class SpendingOverviewCard extends StatelessWidget {
                       ),
                     ),
 
-                    // 💸 Trục Y: Số tiền
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
@@ -142,7 +137,6 @@ class SpendingOverviewCard extends StatelessWidget {
                     ),
                   ),
 
-                  // 📊 Dữ liệu biểu đồ
                   lineBarsData: [
                     LineChartBarData(
                       spots: List.generate(
@@ -167,7 +161,6 @@ class SpendingOverviewCard extends StatelessWidget {
                     ),
                   ],
 
-                  // 💬 Tooltip hiển thị khi chạm
                   lineTouchData: LineTouchData(
                     enabled: true,
                     touchTooltipData: LineTouchTooltipData(

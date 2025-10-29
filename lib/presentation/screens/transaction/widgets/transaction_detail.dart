@@ -19,14 +19,12 @@ class TransactionDetail extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Tiêu đề
             const Text(
               "Chi tiết tiền chi",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
             const SizedBox(height: 16),
 
-            // Nội dung
             TransactionItem(
               onTap: () {},
               isShowDate: true,
@@ -41,7 +39,6 @@ class TransactionDetail extends StatelessWidget {
 
             const SizedBox(height: 32),
 
-            // Hai nút hành động
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_care/core/constants/colors.dart';
 
 class DescriptionItem extends StatelessWidget {
   const DescriptionItem({
@@ -6,15 +7,21 @@ class DescriptionItem extends StatelessWidget {
     required this.title,
     required this.value,
     required this.percent,
-    required this.percentColor,
-    required this.icon,
   });
 
   final String title;
   final String value;
   final String percent;
-  final Color percentColor;
-  final IconData icon;
+
+  Color get _percentColor {
+    if (percent.startsWith('-')) return Colors.red;
+    return Colors.green;
+  }
+
+  IconData get _percentIcon {
+    if (percent.startsWith('-')) return Icons.arrow_drop_down;
+    return Icons.arrow_drop_up;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +32,7 @@ class DescriptionItem extends StatelessWidget {
           title,
           style: const TextStyle(
             fontSize: 13,
-            color: Colors.black54,
+            color: AppColors.text1,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -43,13 +50,13 @@ class DescriptionItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            Icon(icon, color: percentColor, size: 20),
+            Icon(_percentIcon, color: _percentColor, size: 20),
             Text(
               percent,
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
-                color: percentColor,
+                color: _percentColor,
               ),
             ),
           ],

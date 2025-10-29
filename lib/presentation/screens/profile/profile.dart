@@ -11,51 +11,42 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double currentSaving = 4500000;
     double targetSaving = 7500000;
-    double percent = currentSaving / targetSaving;
 
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: Column(
-          children: [
-            Container(
-              height: 195,
-              decoration: const BoxDecoration(
-                color: Color(0xFF0B84FF),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(40),
-                  bottomRight: Radius.circular(40),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                height: 140,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(40),
+                    bottomRight: Radius.circular(40),
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        AppTexts.profileTitle,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      const SizedBox(width: 22),
+                    ],
+                  ),
                 ),
               ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Navigator.pop(context),
-                      child: const Icon(
-                        Icons.arrow_back_ios_new,
-                        color: Colors.white,
-                        size: 22,
-                      ),
-                    ),
-                    Text(
-                      AppTexts.profileTitle,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                    const SizedBox(width: 22),
-                  ],
-                ),
-              ),
-            ),
 
-            Expanded(
-              child: SingleChildScrollView(
+              Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -94,8 +85,8 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

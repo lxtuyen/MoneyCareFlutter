@@ -1,17 +1,36 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money_care/core/constants/text_string.dart';
-import 'package:money_care/presentation/screens/statistics/widgets/description_total.dart';
-import 'package:money_care/presentation/screens/statistics/widgets/overview_chart.dart';
+import 'package:money_care/models/category_model.dart';
+import 'package:money_care/presentation/screens/statistics/widgets/description/description_total.dart';
+import 'package:money_care/presentation/screens/statistics/widgets/chart/overview_chart.dart';
+import 'package:money_care/presentation/screens/statistics/widgets/chart/savings_line_chart.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/statistical.dart';
+import 'package:money_care/presentation/screens/statistics/widgets/statistics_header.dart';
+import 'package:money_care/presentation/widgets/texts/section_heading.dart';
 
 class StatisticsScreen extends StatefulWidget {
+  const StatisticsScreen({super.key});
+
   @override
   State<StatisticsScreen> createState() => _StatisticsScreenState();
 }
 
 class _StatisticsScreenState extends State<StatisticsScreen> {
   String selected = 'chi';
+
+  List<String> generateLast7DaysLabels() {
+    final List<String> labels = [];
+    final now = DateTime.now();
+    final formatter = DateFormat('dd/MM');
+
+    for (int i = 6; i >= 0; i--) {
+      final date = now.subtract(Duration(days: i));
+      labels.add(formatter.format(date));
+    }
+    return labels;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,159 +50,12 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     bottomRight: Radius.circular(40),
                   ),
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: const [
-                          Icon(
-                            Icons.arrow_back_ios_new,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          Text(
-                            AppTexts.statisticsTitle,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.white,
-                            size: 22,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.calendar_today,
-                                color: Colors.white,
-                                size: 16,
-                              ),
-                              SizedBox(width: 6),
-                              Text(
-                                'Tháng này',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                ),
-                              ),
-                              Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
-                              // 🔹 Tiền chi
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => setState(() => selected = 'chi'),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF1976D2),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color:
-                                              selected == 'chi'
-                                                  ? Colors.white
-                                                  : Colors.transparent,
-                                          width: 3,
-                                        ),
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          'Tiền chi',
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(
-                                              0.8,
-                                            ),
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        const Text(
-                                          '10.000.000',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-
-                              // 🔹 Tiền thu
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => setState(() => selected = 'thu'),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: const Color(0xFF1976D2),
-                                      borderRadius: BorderRadius.circular(10),
-                                      border: Border(
-                                        bottom: BorderSide(
-                                          color:
-                                              selected == 'thu'
-                                                  ? Colors.white
-                                                  : Colors.transparent,
-                                          width: 3,
-                                        ),
-                                      ),
-                                    ),
-                                    padding: const EdgeInsets.all(12),
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          'Tiền thu',
-                                          style: TextStyle(
-                                            color: Colors.white.withOpacity(
-                                              0.8,
-                                            ),
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        const Text(
-                                          '12.000.000',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                child: StatisticsHeader(
+                  selected: selected,
+                  onSelected: (value) => setState(() => selected = value),
+                  title: "Thống kê",
+                  spendText: "5.500.000",
+                  incomeText: "9.900.000",
                 ),
               ),
 
@@ -191,100 +63,72 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "Tổng chi tiêu theo tháng",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {},
-                      child: const Text(
-                        "Xem thêm",
-                        style: TextStyle(color: Color(0xFF0B84FF)),
-                      ),
-                    ),
-                  ],
+                child: AppSectionHeading(
+                  title: "Tổng chi tiêu theo tháng",
+                  showActionButton: true,
                 ),
               ),
               const SizedBox(height: 10),
 
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: Container(
-                  height: 220,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 6,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: LineChart(
-                    LineChartData(
-                      gridData: const FlGridData(show: false),
-                      titlesData: const FlTitlesData(show: false),
-                      borderData: FlBorderData(show: false),
-                      lineBarsData: [
-                        LineChartBarData(
-                          isCurved: true,
-                          color: Colors.orange,
-                          barWidth: 3,
-                          belowBarData: BarAreaData(
-                            show: true,
-                            color: Colors.orange.withOpacity(0.15),
-                          ),
-                          spots: const [
-                            FlSpot(0, 3),
-                            FlSpot(1, 2.8),
-                            FlSpot(2, 5),
-                            FlSpot(3, 4.5),
-                            FlSpot(4, 6.2),
-                            FlSpot(5, 4.0),
-                          ],
-                        ),
-                        LineChartBarData(
-                          isCurved: true,
-                          color: Color(0xFF0B84FF),
-                          barWidth: 3,
-                          belowBarData: BarAreaData(
-                            show: true,
-                            color: Color(0xFF0B84FF).withOpacity(0.15),
-                          ),
-                          spots: const [
-                            FlSpot(0, 2),
-                            FlSpot(1, 3.5),
-                            FlSpot(2, 3),
-                            FlSpot(3, 5),
-                            FlSpot(4, 4.2),
-                            FlSpot(5, 5),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                child: SavingsLineChart(
+                  xLabels: generateLast7DaysLabels(),
+                  thisMonthSpots: [
+                    FlSpot(0, 400),
+                    FlSpot(1, 420),
+                    FlSpot(2, 380),
+                    FlSpot(3, 800),
+                    FlSpot(4, 620),
+                    FlSpot(5, 450),
+                    FlSpot(6, 460),
+                  ],
+                  lastMonthSpots: [
+                    FlSpot(0, 600),
+                    FlSpot(1, 650),
+                    FlSpot(2, 620),
+                    FlSpot(3, 600),
+                    FlSpot(4, 620),
+                    FlSpot(5, 600),
+                    FlSpot(6, 580),
+                  ],
                 ),
               ),
+
               const SizedBox(height: 25),
 
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
-                child: Text(
-                  AppTexts.limitOverview,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
+                child: AppSectionHeading(title: AppTexts.limitOverview),
               ),
               const SizedBox(height: 10),
-              StatisticalWidgets(),
+              StatisticalWidgets(
+                dateRange: "01/10/2025 - 31/10/2025",
+                totalAmount: "10.000.000 đ",
+                categories: [
+                  CategoryModel(
+                    label: "Chi tiêu",
+                    color: Color(0xFF0B84FF),
+                    percentage: 40,
+                  ),
+                  CategoryModel(
+                    label: "Ăn uống",
+                    color: Colors.orange,
+                    percentage: 25,
+                  ),
+                  CategoryModel(
+                    label: "Giải trí",
+                    color: Colors.purple,
+                    percentage: 20,
+                  ),
+                  CategoryModel(
+                    label: "Tiết kiệm",
+                    color: Colors.green,
+                    percentage: 15,
+                  ),
+                ],
+              ),
+
               const SizedBox(height: 25),
               OverviewChart(),
               const SizedBox(height: 25),

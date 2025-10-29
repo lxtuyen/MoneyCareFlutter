@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/presentation/screens/statistics/widgets/description_item.dart';
+import 'package:money_care/presentation/screens/statistics/widgets/description/description_item.dart';
 
 class DescriptionTotal extends StatelessWidget {
   const DescriptionTotal({super.key});
@@ -11,15 +11,11 @@ class DescriptionTotal extends StatelessWidget {
         "title": "Trung bình chi theo ngày",
         "value": "500.000",
         "percent": "-2%",
-        "percentColor": Colors.red,
-        "icon": Icons.arrow_drop_down,
       },
       {
         "title": "Số dư tháng này",
         "value": "2.000.000",
         "percent": "+11%",
-        "percentColor": Colors.green,
-        "icon": Icons.arrow_drop_up,
       },
     ];
 
@@ -35,8 +31,6 @@ class DescriptionTotal extends StatelessWidget {
                   title: item['title'] as String,
                   value: item['value'] as String,
                   percent: item['percent'] as String,
-                  percentColor: item['percentColor'] as Color,
-                  icon: item['icon'] as IconData,
                 ),
               ),
             )

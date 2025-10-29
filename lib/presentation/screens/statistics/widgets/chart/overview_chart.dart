@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:money_care/core/constants/colors.dart';
-// import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/chart_card.dart';
 
 class OverviewChart extends StatelessWidget {
@@ -33,22 +31,6 @@ class OverviewChart extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // GestureDetector(
-            //   onTap: () {
-            //     // TODO: Thêm hành động khi bấm vào nút "+"
-            //   },
-            //   child: Container(
-            //     width: 50,
-            //     height: 90,
-            //     decoration: BoxDecoration(
-            //       color: AppColors.backgroundPrimary,
-            //       borderRadius: BorderRadius.circular(AppSizes.cardRadiusLg),
-            //     ),
-            //     child: const Center(
-            //       child: Icon(Icons.add, color: AppColors.text5, size: 28),
-            //     ),
-            //   ),
-            // ),
             const SizedBox(width: 12),
             ...categories.map(
               (item) => ChartCard(

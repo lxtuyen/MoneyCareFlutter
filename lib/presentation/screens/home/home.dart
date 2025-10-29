@@ -39,7 +39,6 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(AppSizes.md),
         child: Column(
           children: [
-            /// Header chào người dùng + icon tìm kiếm & thông báo
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -96,7 +95,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: AppSizes.defaultSpace),
 
-            /// Tổng quan chi tiêu
             AppSectionHeading(title: "Tổng quan", showActionButton: false),
             const SizedBox(height: AppSizes.spaceBtwItems),
             GestureDetector(
@@ -118,7 +116,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: AppSizes.defaultSpace),
 
-            /// Hạn mức chi tiêu
             AppSectionHeading(title: "Hạn mức chi tiêu"),
             const SizedBox(height: AppSizes.defaultSpace),
 
