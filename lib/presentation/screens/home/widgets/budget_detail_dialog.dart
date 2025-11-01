@@ -9,12 +9,12 @@ class BudgetDetailDialog extends StatelessWidget {
   final bool isOverLimit;
 
   const BudgetDetailDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.limit,
     required this.spent,
     required this.isOverLimit,
-  }) : super(key: key);
+  });
 
   double _parseNumber(String s) =>
       double.tryParse(s.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;

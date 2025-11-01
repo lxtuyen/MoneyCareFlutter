@@ -1,25 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:go_router/go_router.dart';
+import 'package:money_care/model/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
+import 'package:money_care/model/transaction_model.dart';
 
 class TransactionForm extends StatefulWidget {
   final String title;
   final bool showCategory;
-  final List<Map<String, dynamic>>? categoryList;
   final VoidCallback onSubmit;
+  final TransactionModel? item;
 
   const TransactionForm({
     super.key,
     required this.title,
     this.showCategory = true,
-    this.categoryList,
     required this.onSubmit,
+    this.item,
   });
 
   @override
@@ -32,10 +34,35 @@ class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
+  final List<CategoryModel> categories = [
+    const CategoryModel(
+      name: 'Cần thiết',
+      percent: '55%',
+      icon: Icons.shopping_bag,
+    ),
+    const CategoryModel(name: 'Đào tạo', percent: '10%', icon: Icons.school),
+    const CategoryModel(name: 'Hưởng thụ', percent: '10%', icon: Icons.spa),
+    const CategoryModel(name: 'Tiết kiệm', percent: '10%', icon: Icons.savings),
+    const CategoryModel(
+      name: 'Từ thiện',
+      percent: '5%',
+      icon: Icons.volunteer_activism,
+    ),
+  ];
+
   @override
   void initState() {
     super.initState();
     initializeDateFormatting('vi', null);
+
+    if (widget.item != null) {
+      final item = widget.item!;
+
+      selectedDate = item.date;
+      _amountController.text = item.amount.toString();
+      _categoryController.text = item.category?.name ?? "";
+      _noteController.text = item.note ?? "";
+    }
   }
 
   Future<void> _pickImage() async {
@@ -63,8 +90,7 @@ class _TransactionFormState extends State<TransactionForm> {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder:
-          (context) => CategorySheet(categories: widget.categoryList ?? []),
+      builder: (context) => CategorySheet(categories: categories),
     );
 
     if (selected != null) {
@@ -85,7 +111,6 @@ class _TransactionFormState extends State<TransactionForm> {
               padding: const EdgeInsets.only(bottom: 160),
               child: Column(
                 children: [
-                  // Header
                   Container(
                     height: 165,
                     decoration: const BoxDecoration(
@@ -129,7 +154,6 @@ class _TransactionFormState extends State<TransactionForm> {
                     ),
                   ),
 
-                  // Nội dung
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -216,7 +240,6 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
             ),
 
-            // Thanh dưới cùng
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -257,9 +280,9 @@ class _TransactionFormState extends State<TransactionForm> {
                             backgroundColor: AppColors.primary,
                           ),
                           onPressed: widget.onSubmit,
-                          child: const Text(
-                            'Cập nhật',
-                            style: TextStyle(
+                          child: Text(
+                            widget.item == null ? 'Tạo' : 'Cập nhật',
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
                             ),

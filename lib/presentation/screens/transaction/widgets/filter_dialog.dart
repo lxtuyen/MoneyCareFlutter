@@ -48,11 +48,9 @@ class _FilterDialogState extends State<FilterDialog> {
 
       setState(() {
         if (widget.multiSelect) {
-          // thêm (nếu đã có chuỗi tùy chỉnh cũ, xóa nó trước)
           _selectedItems.removeWhere((s) => s.startsWith("Tùy chỉnh"));
           _selectedItems.add(formatted);
         } else {
-          // thay thế lựa chọn duy nhất bằng chuỗi tùy chỉnh
           _selectedItems
             ..clear()
             ..add(formatted);
@@ -69,10 +67,7 @@ class _FilterDialogState extends State<FilterDialog> {
         spacing: 8,
         runSpacing: 8,
         children: widget.items.map((item) {
-          // Kiểm tra item có phải là phần "Tùy chỉnh" hay không
           final bool isCustomItem = item.toLowerCase().contains('tùy chỉnh');
-
-          // Nếu đã có một chuỗi "Tùy chỉnh: ..." trong _selectedItems, hiển thị chuỗi đó thay cho item gốc
           final String customSelectedText =
               _selectedItems.firstWhere((s) => s.startsWith('Tùy chỉnh'), orElse: () => '');
 
@@ -89,19 +84,16 @@ class _FilterDialogState extends State<FilterDialog> {
             isSelected: isSelected,
             onSelected: (selected) async {
               if (isCustomItem) {
-                // mở DateRangePicker khi nhấn vào "Tùy chỉnh..."
                 await _pickDateRange(context);
               } else {
                 setState(() {
                   if (widget.multiSelect) {
-                    // toggle chọn nhiều
                     if (selected) {
                       _selectedItems.add(item);
                     } else {
                       _selectedItems.remove(item);
                     }
                   } else {
-                    // chỉ chọn 1: clear rồi add (hoặc bỏ chọn nếu selected == false)
                     _selectedItems.clear();
                     if (selected) {
                       _selectedItems.add(item);

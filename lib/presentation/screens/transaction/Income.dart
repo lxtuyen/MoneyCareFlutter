@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/transaction_form.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 
 class IncomeScreen extends StatefulWidget {
   const IncomeScreen({super.key});
@@ -8,7 +8,6 @@ class IncomeScreen extends StatefulWidget {
   @override
   State<IncomeScreen> createState() => _IncomeScreenState();
 }
-
 class _IncomeScreenState extends State<IncomeScreen> {
   @override
   Widget build(BuildContext context) {

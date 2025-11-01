@@ -1,29 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/model/transaction_model.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
     super.key,
-    required this.title,
-    this.subtitle,
-    this.date,
-    this.color,
-    required this.amount,
-    required this.isShowDate,
+    required this.item,
     required this.onTap,
+    this.isShowDate = true,
     this.isShowDivider = true,
-    this.isExpense = true,
   });
 
-  final String title;
-  final String? subtitle;
-  final String? date;
-  final Color? color;
-  final String amount;
+  final TransactionModel item;
   final bool isShowDate;
   final bool isShowDivider;
-  final bool isExpense;
   final VoidCallback onTap;
 
   @override
@@ -35,16 +26,14 @@ class TransactionItem extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (isExpense)
                 Container(
                   width: 12,
                   height: 12,
                   decoration: BoxDecoration(
-                    color: color,
+                    color: item.color,
                     shape: BoxShape.circle,
                   ),
                 ),
-              if (isExpense)
                 const SizedBox(width: AppSizes.spaceBtwItems),
 
               Expanded(
@@ -52,16 +41,15 @@ class TransactionItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      item.title,
                       style: const TextStyle(
                         fontSize: AppSizes.fontSizeSm,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
 
-                    if (isExpense)
                       Text(
-                        subtitle ?? "",
+                        item.note ?? "",
                         style: const TextStyle(
                           fontSize: 12,
                           color: AppColors.text5,
@@ -76,14 +64,14 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   if (isShowDate)
                     Text(
-                      date ?? '',
+                      _formatDate(item.date),
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.text5,
                       ),
                     ),
                   Text(
-                    amount,
+                    item.amount,
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeMd,
                       fontWeight: FontWeight.w600,
@@ -104,5 +92,15 @@ class TransactionItem extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  static String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    if (date.year == now.year &&
+        date.month == now.month &&
+        date.day == now.day) {
+      return 'Hôm nay';
+    }
+    return '${date.day}/${date.month}/${date.year}';
   }
 }

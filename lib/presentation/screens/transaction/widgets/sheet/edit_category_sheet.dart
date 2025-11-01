@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/model/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category.dart';
 
 class EditCategorySheet extends StatelessWidget {
-  final List<Map<String, dynamic>> categories;
+  final List<CategoryModel> categories;
 
   const EditCategorySheet({super.key, required this.categories});
 
@@ -62,25 +63,21 @@ class EditCategorySheet extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            item['icon'],
-                            color: AppColors.primary,
-                            size: 26,
-                          ),
+                          Icon(item.icon, color: AppColors.primary, size: 26),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item['name'],
+                                  item.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                   ),
                                 ),
                                 Text(
-                                  item['percent'],
+                                  item.percent,
                                   style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.grey,
