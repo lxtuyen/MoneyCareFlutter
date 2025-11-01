@@ -12,7 +12,6 @@ class CategoryItem extends StatelessWidget {
     required this.percent,
     required this.icon,
     this.isSelected = false,
-
   });
 
    @override

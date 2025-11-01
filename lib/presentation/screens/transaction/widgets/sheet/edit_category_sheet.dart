@@ -93,8 +93,8 @@ class EditCategorySheet extends StatelessWidget {
                                 isScrollControlled: true,
                                 builder:
                                     (context) => EditCategory(
-                                      namecategory: item['name'],
-                                      percent: item['percent'],
+                                      namecategory: item.name,
+                                      percent: item.percent,
                                     ),
                               );
                             },

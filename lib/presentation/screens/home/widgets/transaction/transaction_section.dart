@@ -39,22 +39,6 @@ class _TransactionSectionState extends State<TransactionSection> {
       "amount": "10.000.000",
       "type": "income",
     },
-    {
-      "iconColor": Colors.orange,
-      "title": "Tiền điện nước",
-      "subtitle": "Chi tiêu hằng ngày",
-      "date": "02/06/23",
-      "amount": "1.200.000",
-      "type": "expense",
-    },
-    {
-      "iconColor": Colors.red,
-      "title": "Bán đồ cũ",
-      "subtitle": "Đồ dùng cá nhân",
-      "date": "05/06/23",
-      "amount": "500.000",
-      "type": "income",
-    },
   ];
 
   @override
@@ -97,20 +81,6 @@ class _TransactionSectionState extends State<TransactionSection> {
                 ],
               ),
             )
-          // else
-          //   // ...transactions.map(
-          //   //   (item) => Padding(
-          //   //     padding: const EdgeInsets.symmetric(vertical: 8),
-          //   //     child: TransactionItem(
-          //   //       title: item["title"] as String,
-          //   //       amount: item["amount"] as String,
-          //   //       color: item["iconColor"] as Color,
-          //   //       subtitle: item["subtitle"] as String,
-          //   //       date: item["date"] as String,
-          //   //       isShowDate: true, onTap: () { context.push("/transaction"); },
-          //   //     ),
-          //   //   ),
-          //   ),
         ],
       ),
     );

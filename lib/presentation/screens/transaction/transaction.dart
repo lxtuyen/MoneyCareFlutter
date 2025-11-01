@@ -7,7 +7,7 @@ import 'package:money_care/presentation/screens/home/widgets/transaction/transac
 import 'package:money_care/presentation/screens/statistics/widgets/statistics_header.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/filter_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/search_filter.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/transaction_detail.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_detail.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -20,6 +20,20 @@ class _TransactionScreenState extends State<TransactionScreen> {
   String selected = 'chi';
   TextEditingController searchController = TextEditingController();
   String searchKeyword = '';
+    final List<TransactionModel> transactions = [
+    TransactionModel(
+      title: 'Tiền siêu thị',
+      note: 'Chi tiêu hằng ngày',
+      amount: '250.000',
+      date: DateTime.now(),
+      color: Colors.purple,
+      category: const CategoryModel(
+        name: 'Cần thiết',
+        percent: '55%',
+        icon: Icons.shopping_bag,
+      ),
+    ),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +88,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
       children: [
         Text(
           'Hôm nay',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text1),
           style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text1),
         ),
         const SizedBox(height: 8),

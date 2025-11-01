@@ -61,7 +61,6 @@ class CategorySection extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Nút thêm (+)
             GestureDetector(
               onTap: onAddCategory,
               child: Container(

@@ -28,7 +28,6 @@ class SpendingSummary extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // bên trái
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -68,7 +67,6 @@ class SpendingSummary extends StatelessWidget {
               ),
             ],
           ),
-          // bên phải
           DottedBorder(
             borderType: BorderType.RRect,
             radius: const Radius.circular(AppSizes.borderRadiusLg),

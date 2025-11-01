@@ -47,10 +47,7 @@ class LoginOptionScreen extends StatelessWidget {
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: () {
-                    // final authController = AuthController();
-                    // authController.signInWithGoogle(context);
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: AppColors.text1,

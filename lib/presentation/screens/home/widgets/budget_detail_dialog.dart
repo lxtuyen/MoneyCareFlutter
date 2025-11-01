@@ -37,7 +37,6 @@ class BudgetDetailDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -107,9 +106,10 @@ class BudgetDetailDialog extends StatelessWidget {
                         Text(
                           spent,
                           style: TextStyle(
-                            color: isOverLimit
-                                ? AppColors.error
-                                : AppColors.success,
+                            color:
+                                isOverLimit
+                                    ? AppColors.error
+                                    : AppColors.success,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

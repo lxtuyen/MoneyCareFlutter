@@ -72,23 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: AppSizes.defaultSpace),
 
-            /// Tổng kết chi tiêu
             SpendingSummary(balance: '1.000.000', spending: '250.000'),
 
             const SizedBox(height: AppSizes.defaultSpace),
 
-            /// Phân loại chi tiêu
             AppSectionHeading(
               title: "Chi theo phân loại",
               showActionButton: false,
             ),
+            
             const SizedBox(height: AppSizes.defaultSpace),
-            /// Phân loại chi tiêu
+
             CategorySection(),
 
             const SizedBox(height: AppSizes.defaultSpace),
 
-            /// Giao dịch gần đây
             AppSectionHeading(title: "Giao dịch gần đây"),
             const SizedBox(height: AppSizes.defaultSpace),
             TransactionSection(),
