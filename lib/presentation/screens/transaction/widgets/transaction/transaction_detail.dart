@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/model/transcation_model.dart';
+import 'package:money_care/model/transaction_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/transaction/update_transaction.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/widgets/dialog/warm_dialog.dart';
 
@@ -27,24 +27,22 @@ class TransactionDetail extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Tiêu đề
-            const Text(
-              "Chi tiết tiền chi",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+            Text(
+              isExpense ? "Chi tiết tiền chi" : "Chi tiết tiền thu",
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
+
             const SizedBox(height: 16),
 
             TransactionItem(
               item: item,
               isShowDate: true,
               isShowDivider: false,
-              isExpense: isExpense,
               onTap: () {},
             ),
 
             const SizedBox(height: 32),
 
-            // Hai nút hành động
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -55,12 +53,21 @@ class TransactionDetail extends StatelessWidget {
                     final result = await Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => UpdateTransactionScreen(item: item),
+                        builder:
+                            (context) => TransactionForm(
+                              title:
+                              isExpense ? "Chỉnh sửa chi" : "Chỉnh sửa thu",
+                              item: item,
+                              showCategory: isExpense ? true : false,
+                              onSubmit: () {
+                                print("cập nhật thành công");
+                              },
+                            ),
                       ),
                     );
 
                     if (result != null) {
-                      print("✅ Cập nhật xong: $result");
+                      print("Cập nhật xong: $result");
                     }
                   },
 

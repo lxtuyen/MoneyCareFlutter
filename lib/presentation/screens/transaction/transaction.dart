@@ -3,7 +3,7 @@ import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/model/category_model.dart';
-import 'package:money_care/model/transcation_model.dart';
+import 'package:money_care/model/transaction_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/filter_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_detail.dart';
@@ -21,7 +21,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   final List<TransactionModel> transactions = [
     TransactionModel(
       title: 'Tiền siêu thị',
-      subtitle: 'Chi tiêu hằng ngày',
+      note: 'Chi tiêu hằng ngày',
       amount: '250.000',
       date: DateTime.now(),
       color: Colors.purple,
@@ -29,42 +29,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
         name: 'Cần thiết',
         percent: '55%',
         icon: Icons.shopping_bag,
-      ),
-    ),
-    TransactionModel(
-      title: 'Học tiếng Anh',
-      subtitle: 'Đào tạo',
-      amount: '250.000',
-      date: DateTime.now(),
-      color: Colors.orange,
-      category: const CategoryModel(
-        name: 'Đào tạo',
-        percent: '10%',
-        icon: Icons.school,
-      ),
-    ),
-    TransactionModel(
-      title: 'Tiền tiết kiệm',
-      subtitle: 'Tiết kiệm định kỳ',
-      amount: '250.000',
-      date: DateTime.now(),
-      color: Colors.blue,
-      category: const CategoryModel(
-        name: 'Tiết kiệm',
-        percent: '10%',
-        icon: Icons.savings,
-      ),
-    ),
-    TransactionModel(
-      title: 'Du lịch Mộc Châu',
-      subtitle: 'Hưởng thụ',
-      amount: '250.000',
-      date: DateTime.now(),
-      color: Colors.green,
-      category: const CategoryModel(
-        name: 'Hưởng thụ',
-        percent: '10%',
-        icon: Icons.spa,
       ),
     ),
   ];
@@ -103,7 +67,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    // 🔹 Tiền chi
                     Expanded(
                       child: GestureDetector(
                         onTap: () => setState(() => selected = 'chi'),
@@ -147,7 +110,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
                     ),
                     const SizedBox(width: 12),
 
-                    // 🔹 Tiền thu
                     Expanded(
                       child: GestureDetector(
                         onTap: () => setState(() => selected = 'thu'),
@@ -195,7 +157,6 @@ class _TransactionScreenState extends State<TransactionScreen> {
             ),
           ),
 
-          // Thanh tìm kiếm
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
@@ -273,7 +234,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
             isShowDate: false,
             onTap: () => _showTransactionDetail(context, item),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -281,14 +242,10 @@ class _TransactionScreenState extends State<TransactionScreen> {
   final List<TransactionModel> incomes = [
     TransactionModel(
       title: 'Nhặt được',
+      note: "Tiền lẻ",
       amount: '250.000',
       date: DateTime.now(),
-      isExpense: false,
-    ),
-    TransactionModel(
-      title: 'Mẹ cho',
-      amount: '500.000',
-      date: DateTime.now(),
+      color: Colors.orange,
       isExpense: false,
     ),
   ];
@@ -308,10 +265,9 @@ class _TransactionScreenState extends State<TransactionScreen> {
           return TransactionItem(
             item: item,
             isShowDate: true,
-            isExpense: selected == 'thu',
             onTap: () => _showTransactionDetail(context, item),
           );
-        }).toList(),
+        }),
       ],
     );
   }
@@ -322,7 +278,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
       builder: (context) {
         return TransactionDetail(
           item: item,
-          isExpense: selected == 'chi', // ✅ Tự kiểm tra thu/chi
+          isExpense: selected == 'chi',
         );
       },
     );

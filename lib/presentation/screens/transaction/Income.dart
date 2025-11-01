@@ -8,7 +8,6 @@ class IncomeScreen extends StatefulWidget {
   @override
   State<IncomeScreen> createState() => _IncomeScreenState();
 }
-
 class _IncomeScreenState extends State<IncomeScreen> {
   @override
   Widget build(BuildContext context) {
