@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/image_string.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
@@ -47,10 +47,7 @@ class LoginOptionScreen extends StatelessWidget {
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: () {
-                    // final authController = AuthController();
-                    // authController.signInWithGoogle(context);
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: AppColors.text1,
@@ -106,7 +103,7 @@ class LoginOptionScreen extends StatelessWidget {
                       style: TextStyle(fontSize: 14, color: AppColors.text1),
                     ),
                     GestureDetector(
-                      onTap: () => context.push('/register'),
+                      onTap: () => Get.toNamed('/register'),
                       child: const Text(
                         AppTexts.signup,
                         style: TextStyle(

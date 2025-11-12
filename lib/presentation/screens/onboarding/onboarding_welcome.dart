@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/image_string.dart';
 import 'package:money_care/core/constants/text_string.dart';
@@ -65,7 +65,7 @@ class OnboardingWelcomeScreen extends StatelessWidget {
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: () => context.push('/onboarding_saving_rule'),
+                            onPressed: () => Get.toNamed('/onboarding_saving_rule'),
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 14),
                               shape: RoundedRectangleBorder(

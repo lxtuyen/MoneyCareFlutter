@@ -61,6 +61,5 @@ class AppTexts {
   static const String registerSubtitle = 'Đăng ký tài khoản với Email của bạn';
   static const String firstName = 'Họ';
   static const String lastName = 'Tên';
-  static const String phone = 'Số điện thoại';
   static const String alreadyHaveAccount = 'Bạn đã có tài khoản? ';
 }

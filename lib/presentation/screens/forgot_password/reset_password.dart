@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
@@ -125,7 +125,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ElevatedButton.icon(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                        context.push('/');
+                        Get.toNamed('/');
                       }
                     },
 
@@ -161,7 +161,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    context.push('/login');
+                                    Get.toNamed('/login');
                                   },
                           ),
                         ],

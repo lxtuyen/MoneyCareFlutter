@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 Future<void> showDeleteConfirmationDialog({
   required BuildContext context,
@@ -13,14 +14,14 @@ Future<void> showDeleteConfirmationDialog({
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Đóng hộp thoại
+              Get.back();
             },
             child: const Text("Hủy"),
           ),
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // Đóng hộp thoại trước
-              onConfirm(); // Gọi hàm xử lý xóa
+              Get.back();
+              onConfirm();
             },
             child: const Text("Xóa", style: TextStyle(color: Colors.red)),
           ),
@@ -28,14 +29,4 @@ Future<void> showDeleteConfirmationDialog({
       );
     },
   );
-}
-
-Future<void> showAddAndUpdateDialog(BuildContext context,
-    String? id, {
-    String? name,
-    String? category,
-    String? price,
-    String? imageURL,
-  }) async {
-
 }
