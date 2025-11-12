@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 
@@ -8,6 +9,7 @@ class IncomeScreen extends StatefulWidget {
   @override
   State<IncomeScreen> createState() => _IncomeScreenState();
 }
+
 class _IncomeScreenState extends State<IncomeScreen> {
   @override
   Widget build(BuildContext context) {
@@ -22,10 +24,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
               (context) => SuccessDialog(
                 message: 'Giao dịch đã được lưu thành công',
                 onBack: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 onCreateNew: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 isShowButton: true,
               ),

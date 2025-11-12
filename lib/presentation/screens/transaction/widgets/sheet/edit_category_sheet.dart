@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/model/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category.dart';
@@ -34,7 +34,7 @@ class EditCategorySheet extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () => Get.back(),
                     icon: const Icon(Icons.close, color: Colors.grey),
                   ),
                 ],

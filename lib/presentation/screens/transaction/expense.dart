@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
@@ -30,10 +31,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               (context) => SuccessDialog(
                 message: 'Lưu thành công',
                 onBack: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 onCreateNew: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 isShowButton: true,
               ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
@@ -58,7 +58,7 @@ class _EditCategoryState extends State<EditCategory> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () => context.pop(),
+                      onPressed: () => Get.back(),
                       icon: const Icon(Icons.close, color: Colors.grey),
                     ),
                   ],
@@ -90,7 +90,7 @@ class _EditCategoryState extends State<EditCategory> {
                       child: SizedBox(
                         height: 60,
                         child: OutlinedButton(
-                          onPressed: () => Navigator.pop(context),
+                          onPressed: () => Get.back(),
                           style: OutlinedButton.styleFrom(
                             side: const BorderSide(color: Colors.grey),
                             shape: RoundedRectangleBorder(
@@ -125,10 +125,10 @@ class _EditCategoryState extends State<EditCategory> {
                                   (context) => SuccessDialog(
                                     message: 'Chỉnh sửa thành công!!',
                                     onBack: () {
-                                      Navigator.pop(context);
+                                      Get.back();
                                     },
                                     onCreateNew: () {
-                                      Navigator.pop(context);
+                                      Get.back();
                                     },
                                     isShowButton: true,
                                   ),

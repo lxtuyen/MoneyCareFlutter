@@ -3,6 +3,7 @@ import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/model/category_model.dart';
 import 'package:money_care/model/transaction_model.dart';
+import 'package:get/get.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/statistics_header.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/filter_dialog.dart';
@@ -20,7 +21,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   String selected = 'chi';
   TextEditingController searchController = TextEditingController();
   String searchKeyword = '';
-    final List<TransactionModel> transactions = [
+  final List<TransactionModel> transactions = [
     TransactionModel(
       title: 'Tiền siêu thị',
       note: 'Chi tiêu hằng ngày',
@@ -140,10 +141,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
     showDialog(
       context: context,
       builder: (context) {
-        return TransactionDetail(
-          item: item,
-          isExpense: selected == 'chi',
-        );
+        return TransactionDetail(item: item, isExpense: selected == 'chi');
       },
     );
   }
@@ -203,7 +201,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               leading: const Icon(Icons.category_outlined),
               title: const Text('Lọc theo phân loại'),
               onTap: () {
-                Navigator.pop(context);
+                Get.back();
                 _showCategoryFilterDialog(context);
               },
             ),
@@ -211,7 +209,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               leading: const Icon(Icons.access_time_outlined),
               title: const Text('Lọc theo thời gian'),
               onTap: () {
-                Navigator.pop(context);
+                Get.back();
                 _showTimeFilterDialog(context);
               },
             ),

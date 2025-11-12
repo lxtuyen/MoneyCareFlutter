@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/image_string.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -27,13 +27,13 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
     if (!hasSeenOnboarding) {
-      context.go('/onboarding_expense_management');
+      Get.offAllNamed('/onboarding_expense_management');
     } else if (!hasLoggedIn) {
-      context.go('/select_method_login');
+      Get.offAllNamed('/select_method_login');
     } else if (!hasSeenWelcome) {
-      context.go('/onboarding_welcome');
+      Get.offAllNamed('/onboarding_welcome');
     } else {
-      context.go('/home');
+      Get.offAllNamed('/home');
     }
   }
 

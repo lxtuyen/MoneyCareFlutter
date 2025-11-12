@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
 
@@ -128,7 +128,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
                 ElevatedButton(
                   onPressed: () {
-                    context.push('/reset-password');
+                    Get.toNamed('/reset-password');
                   },
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(55),
@@ -163,7 +163,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           recognizer:
                               TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.push('/login');
+                                  Get.toNamed('/login');
                                 },
                         ),
                       ],

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AppHelperFunction {
@@ -50,17 +49,13 @@ class AppHelperFunction {
           content: Text(message),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Get.back(),
               child: const Text("OK"),
             ),
           ],
         );
       },
     );
-  }
-
-  static void navigateScreen(BuildContext context, Widget screen) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   static String truncateText(String text, int maxlength) {
@@ -86,7 +81,7 @@ class AppHelperFunction {
   static double screenWith() {
     BuildContext? context = Get.context;
     if (context == null) {
-      return 375.0; // Giá trị mặc định, tránh lỗi null
+      return 375.0;
     }
     return MediaQuery.of(context).size.width;
   }
@@ -112,24 +107,5 @@ class AppHelperFunction {
       wrappedList.add(Row(children: rowChildren));
     }
     return wrappedList;
-  }
-
-  static CustomTransitionPage slidePage({
-    required Widget child,
-    required GoRouterState state,
-    Offset begin = const Offset(1.0, 0.0),
-  }) {
-    const end = Offset.zero;
-    const curve = Curves.easeInOut;
-
-    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-    return CustomTransitionPage(
-      key: state.pageKey,
-      child: child,
-      transitionsBuilder:
-          (context, animation, secondaryAnimation, child) =>
-              SlideTransition(position: animation.drive(tween), child: child),
-    );
   }
 }

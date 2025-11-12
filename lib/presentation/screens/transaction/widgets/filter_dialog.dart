@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/presentation/widgets/choice_chip/choice_chips.dart';
+import 'package:get/get.dart';
 
 class FilterDialog extends StatefulWidget {
   const FilterDialog({
@@ -32,9 +33,10 @@ class _FilterDialogState extends State<FilterDialog> {
       context: context,
       firstDate: DateTime(now.year - 1),
       lastDate: DateTime(now.year + 1),
-      initialDateRange: startDate != null && endDate != null
-          ? DateTimeRange(start: startDate!, end: endDate!)
-          : null,
+      initialDateRange:
+          startDate != null && endDate != null
+              ? DateTimeRange(start: startDate!, end: endDate!)
+              : null,
     );
 
     if (picked != null) {
@@ -66,56 +68,60 @@ class _FilterDialogState extends State<FilterDialog> {
       content: Wrap(
         spacing: 8,
         runSpacing: 8,
-        children: widget.items.map((item) {
-          final bool isCustomItem = item.toLowerCase().contains('tùy chỉnh');
-          final String customSelectedText =
-              _selectedItems.firstWhere((s) => s.startsWith('Tùy chỉnh'), orElse: () => '');
+        children:
+            widget.items.map((item) {
+              final bool isCustomItem = item.toLowerCase().contains(
+                'tùy chỉnh',
+              );
+              final String customSelectedText = _selectedItems.firstWhere(
+                (s) => s.startsWith('Tùy chỉnh'),
+                orElse: () => '',
+              );
 
-          final String displayText = (isCustomItem && customSelectedText.isNotEmpty)
-              ? customSelectedText
-              : item;
+              final String displayText =
+                  (isCustomItem && customSelectedText.isNotEmpty)
+                      ? customSelectedText
+                      : item;
 
-          final bool isSelected = isCustomItem
-              ? _selectedItems.any((s) => s.startsWith('Tùy chỉnh'))
-              : _selectedItems.contains(item);
+              final bool isSelected =
+                  isCustomItem
+                      ? _selectedItems.any((s) => s.startsWith('Tùy chỉnh'))
+                      : _selectedItems.contains(item);
 
-          return CustomChoiceChip(
-            text: displayText,
-            isSelected: isSelected,
-            onSelected: (selected) async {
-              if (isCustomItem) {
-                await _pickDateRange(context);
-              } else {
-                setState(() {
-                  if (widget.multiSelect) {
-                    if (selected) {
-                      _selectedItems.add(item);
-                    } else {
-                      _selectedItems.remove(item);
-                    }
+              return CustomChoiceChip(
+                text: displayText,
+                isSelected: isSelected,
+                onSelected: (selected) async {
+                  if (isCustomItem) {
+                    await _pickDateRange(context);
                   } else {
-                    _selectedItems.clear();
-                    if (selected) {
-                      _selectedItems.add(item);
-                    }
+                    setState(() {
+                      if (widget.multiSelect) {
+                        if (selected) {
+                          _selectedItems.add(item);
+                        } else {
+                          _selectedItems.remove(item);
+                        }
+                      } else {
+                        _selectedItems.clear();
+                        if (selected) {
+                          _selectedItems.add(item);
+                        }
+                      }
+                    });
                   }
-                });
-              }
-            },
-          );
-        }).toList(),
+                },
+              );
+            }).toList(),
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text(
-            "Hủy",
-            style: TextStyle(color: AppColors.text3),
-          ),
+          onPressed: () => Get.back(),
+          child: const Text("Hủy", style: TextStyle(color: AppColors.text3)),
         ),
         ElevatedButton(
           onPressed: () {
-            Navigator.pop(context);
+            Get.back();
             widget.onApply(_selectedItems.toList());
           },
           child: const Text(

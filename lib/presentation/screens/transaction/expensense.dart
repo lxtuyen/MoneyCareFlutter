@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/notification.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 
@@ -10,7 +11,6 @@ class ExpensenseHomescreen extends StatefulWidget {
 }
 
 class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
-
   @override
   void initState() {
     super.initState();
@@ -29,10 +29,10 @@ class _ExpensenseHomescreenState extends State<ExpensenseHomescreen> {
               (context) => SuccessNotification(
                 message: 'Lưu thành công',
                 onBack: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
                 onCreateNew: () {
-                  Navigator.pop(context);
+                  Get.back();
                 },
               ),
         );

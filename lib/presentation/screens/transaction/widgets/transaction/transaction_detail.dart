@@ -5,6 +5,7 @@ import 'package:money_care/presentation/screens/home/widgets/transaction/transac
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/widgets/dialog/warm_dialog.dart';
+import 'package:get/get.dart';
 
 class TransactionDetail extends StatelessWidget {
   final TransactionModel item;
@@ -48,7 +49,7 @@ class TransactionDetail extends StatelessWidget {
               children: [
                 ElevatedButton.icon(
                   onPressed: () async {
-                    Navigator.pop(context);
+                    Get.back();
 
                     final result = await Navigator.push(
                       context,
@@ -56,7 +57,7 @@ class TransactionDetail extends StatelessWidget {
                         builder:
                             (context) => TransactionForm(
                               title:
-                              isExpense ? "Chỉnh sửa chi" : "Chỉnh sửa thu",
+                                  isExpense ? "Chỉnh sửa chi" : "Chỉnh sửa thu",
                               item: item,
                               showCategory: isExpense ? true : false,
                               onSubmit: () {
@@ -103,16 +104,16 @@ class TransactionDetail extends StatelessWidget {
                       builder:
                           (context) => WarningDialog(
                             message: "Bạn có chắc chắn muốn xóa giao dịch này?",
-                            onCancel: () => Navigator.pop(context),
+                            onCancel: () => Get.back(),
                             onConfirm: () {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
+                              Get.back();
+                              Get.back();
                               showDialog(
                                 context: context,
                                 builder:
                                     (context) => SuccessDialog(
                                       message: "Xóa giao dịch thành công!",
-                                      onBack: () => Navigator.pop(context),
+                                      onBack: () => Get.back(),
                                       onCreateNew: () {},
                                       isShowButton: false,
                                     ),

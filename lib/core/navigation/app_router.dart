@@ -1,14 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+import 'package:money_care/core/bindings/auth_binding.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
-import 'package:money_care/presentation/screens/select_saving_fund/select_saving_fund.dart';
-import 'package:money_care/presentation/screens/transaction/Income.dart';
-import 'package:money_care/presentation/screens/transaction/transaction.dart';
-import 'package:money_care/presentation/screens/transaction/expense.dart';
-import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
-import 'package:money_care/presentation/screens/home/home.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_expense_management.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_financial_freedom.dart';
 import 'package:money_care/presentation/screens/forgot_password/forgot_password.dart';
@@ -16,122 +10,43 @@ import 'package:money_care/presentation/screens/login/login.dart';
 import 'package:money_care/presentation/screens/login/login_option.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_welcome.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_saving_rule.dart';
-import 'package:money_care/presentation/screens/profile/profile.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
 import 'package:money_care/presentation/screens/splash/splash.dart';
-import 'package:money_care/presentation/screens/statistics/statistics.dart';
 
-final GoRouter appRouter = GoRouter(
-  initialLocation: '/splash',
+final List<GetPage> appPages = [
+  GetPage(name: '/splash', page: () => const SplashScreen()),
+  GetPage(
+    name: '/onboarding_expense_management',
+    page: () => const OnboardingExpenseManagementScreen(),
+    transition: Transition.rightToLeft,
+  ),
+  GetPage(
+    name: '/onboarding_financial_freedom',
+    page: () => const OnboardingFinancialFreedomScreen(),
+    transition: Transition.leftToRight,
+  ),
+  GetPage(name: '/select_method_login', page: () => const LoginOptionScreen()),
+  GetPage(name: '/forgot_password', page: () => const ForgotPasswordScreen()),
+  GetPage(name: '/otp', page: () => const OtpScreen()),
+  GetPage(name: '/reset_password', page: () => const ResetPasswordScreen()),
+  GetPage(
+    name: '/login',
+    page: () => const LoginScreen(),
+    binding: AuthBinding(),
+  ),
+  GetPage(
+    name: '/register',
+    page: () => const RegisterScreen(),
+    binding: AuthBinding(),
+  ),
+  GetPage(
+    name: '/onboarding_welcome',
+    page: () => const OnboardingWelcomeScreen(),
+  ),
+  GetPage(
+    name: '/onboarding_saving_rule',
+    page: () => const OnboardingSavingRuleScreen(),
+  ),
 
-  routes: [
-    GoRoute(
-      name: 'splash',
-      path: '/splash',
-      builder: (context, state) => const SplashScreen(),
-    ),
-    ShellRoute(
-      pageBuilder: (context, state, child) {
-        return NoTransitionPage(child: ScaffoldWithNavBar(child: child));
-      },
-      routes: [
-        GoRoute(
-          name: 'home',
-          path: '/',
-          builder: (context, state) => const HomeScreen(),
-        ),
-        GoRoute(
-          name: 'transaction',
-          path: '/transaction',
-          builder: (context, state) => const TransactionScreen(),
-        ),
-
-        GoRoute(
-          name: 'statistics',
-          path: '/statistics',
-          builder: (context, state) => StatisticsScreen(),
-        ),
-        GoRoute(
-          name: 'profile',
-          path: '/profile',
-          builder: (context, state) => const ProfileScreen(),
-        ),
-      ],
-    ),
-    GoRoute(
-      name: 'onboarding_expense_management',
-      path: '/onboarding_expense_management',
-      pageBuilder:
-          (context, state) => AppHelperFunction.slidePage(
-            child: const OnboardingExpenseManagementScreen(),
-            state: state,
-            begin: const Offset(1.0, 0.0),
-          ),
-    ),
-    GoRoute(
-      name: 'onboarding_financial_freedom',
-      path: '/onboarding_financial_freedom',
-      pageBuilder:
-          (context, state) => AppHelperFunction.slidePage(
-            child: const OnboardingFinancialFreedomScreen(),
-            state: state,
-            begin: const Offset(-1.0, 0.0),
-          ),
-    ),
-    GoRoute(
-      name: 'select_method_login',
-      path: '/select_method_login',
-      builder: (context, state) => const LoginOptionScreen(),
-    ),
-    GoRoute(
-      name: 'forgot_password',
-      path: '/forgot_password',
-      builder: (context, state) => const ForgotPasswordScreen(),
-    ),
-    GoRoute(
-      name: 'otp',
-      path: '/otp',
-      builder: (context, state) => const OtpScreen(),
-    ),
-    GoRoute(
-      name: 'reset_password',
-      path: '/reset_password',
-      builder: (context, state) => const ResetPasswordScreen(),
-    ),
-    GoRoute(
-      name: 'login',
-      path: '/login',
-      builder: (context, state) => const LoginScreen(),
-    ),
-    GoRoute(
-      name: 'register',
-      path: '/register',
-      builder: (context, state) => const RegisterScreen(),
-    ),
-    GoRoute(
-      name: 'onboarding_welcome',
-      path: '/onboarding_welcome',
-      builder: (context, state) => const OnboardingWelcomeScreen(),
-    ),
-    GoRoute(
-      name: 'onboarding_saving_rule',
-      path: '/onboarding_saving_rule',
-      builder: (context, state) => const OnboardingSavingRuleScreen(),
-    ),
-    GoRoute(
-      name: 'expensense',
-      path: '/expensense',
-      builder: (context, state) => const ExpenseScreen(),
-    ),
-    GoRoute(
-      name: 'income',
-      path: '/income',
-      builder: (context, state) => const IncomeScreen(),
-    ),
-    GoRoute(
-      name: 'select_saving_fund',
-      path: '/select_saving_fund',
-      builder: (context, state) => const SelectSavingFundScreen(),
-    ),
-  ],
-);
+  GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
+];
