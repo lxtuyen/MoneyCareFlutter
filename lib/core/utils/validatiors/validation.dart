@@ -97,4 +97,23 @@ class AppValidator {
     }
     return null;
   }
+
+  static String? validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Vui lòng nhập tên quỹ';
+    }
+
+    return null;
+  }
+
+  static String? validatePercentage(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Nhập %';
+    }
+    final numVal = int.tryParse(value);
+    if (numVal == null || numVal < 0 || numVal > 100) {
+      return 'Phải từ 0-100';
+    }
+    return null;
+  }
 }

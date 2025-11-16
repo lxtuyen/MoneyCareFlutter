@@ -30,7 +30,6 @@ class OnboardingSavingRuleScreen extends StatelessWidget {
             
                 const SizedBox(height: 32),
             
-                // Mô tả
                 Text(
                   AppTexts.savingRuleDescription1,
                   textAlign: TextAlign.center,
@@ -52,14 +51,13 @@ class OnboardingSavingRuleScreen extends StatelessWidget {
                 ),
                 const Spacer(),
             
-                // Nút hành động
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('hasSeenOnboarding', true);
-                      Get.toNamed('/select_method_login');
+                      Get.toNamed('/select_saving_fund');
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),

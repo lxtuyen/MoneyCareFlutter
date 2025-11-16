@@ -1,7 +1,7 @@
 import 'package:money_care/core/constants/api_routes.dart';
+import 'package:money_care/models/api_response.dart';
 import '../models/user_model.dart';
 import 'api_service.dart';
-
 class AuthService {
   final ApiService apiService;
 
@@ -13,14 +13,13 @@ class AuthService {
       'password': password,
     });
 
-    final token = res['accessToken'];
-    final userJson = res['user'];
+    final apiRes = ApiResponse.fromMap(res, (data) => UserModel.fromJson(data['user'], data['accessToken']));
 
-    if (token == null || userJson == null) {
-      throw Exception(res['message'] ?? 'Login thất bại');
+    if (apiRes.data == null) {
+      throw Exception(apiRes.message ?? 'Login thất bại');
     }
 
-    return UserModel.fromJson(userJson, token);
+    return apiRes.data!;
   }
 
   Future<String> register(
@@ -36,6 +35,43 @@ class AuthService {
       'lastName': lastName,
     });
 
-    return res['message'] ?? 'Không rõ thông báo';
+    final apiRes = ApiResponse.fromMap(res, (_) => null);
+
+    return apiRes.message ?? 'Không rõ thông báo';
+  }
+
+  Future<String> forgotPassword(String email) async {
+    final res = await apiService.post(ApiRoutes.forgotPassword, {
+      'email': email,
+    });
+
+    final apiRes = ApiResponse.fromMap(res, (_) => null);
+
+    return apiRes.message ?? 'Không rõ thông báo';
+  }
+
+  Future<String> verifyOtp(String email, String otp) async {
+    final res = await apiService.post(ApiRoutes.verifyOtp, {
+      'email': email,
+      'otp': otp
+    });
+
+    final apiRes = ApiResponse.fromMap(res, (_) => null);
+
+    return apiRes.message ?? 'Không rõ thông báo';
+  }
+
+  Future<String> resetPassword(
+    String email,
+    String newPassword,
+  ) async {
+    final res = await apiService.post(ApiRoutes.resetPassword, {
+      'email': email,
+      'newPassword': newPassword,
+    });
+
+    final apiRes = ApiResponse.fromMap(res, (_) => null);
+
+    return apiRes.message ?? 'Không rõ thông báo';
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
 import 'package:money_care/presentation/screens/profile/widgets/menu_item.dart';
@@ -11,6 +13,7 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double currentSaving = 4500000;
     double targetSaving = 7500000;
+    final AuthController authController = Get.find<AuthController>();
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -69,8 +72,10 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     BuildMenuItem(
                       icon: Icons.category_outlined,
-                      title: AppTexts.annualPortfolioReport,
-                      onTap: () {},
+                      title: AppTexts.savingFunds,
+                      onTap: () {
+                        Get.toNamed('/select_saving_fund');
+                      },
                     ),
                     BuildMenuItem(
                       icon: Icons.account_balance_wallet_outlined,
@@ -78,9 +83,12 @@ class ProfileScreen extends StatelessWidget {
                       onTap: () {},
                     ),
                     BuildMenuItem(
-                      icon: Icons.help_outline,
-                      title: AppTexts.helpTitle,
-                      onTap: () {},
+                      icon: Icons.exit_to_app,
+                      title: AppTexts.logout,
+                      onTap: () {
+                        authController.logout();
+                        Get.offAllNamed('/login');
+                      },
                     ),
                   ],
                 ),

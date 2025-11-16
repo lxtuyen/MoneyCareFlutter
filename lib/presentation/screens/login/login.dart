@@ -29,18 +29,32 @@ class _LoginScreenState extends State<LoginScreen> {
     Future<void> onPressed() async {
       if (_formKey.currentState!.validate()) {
         await authController.login(
-          emailController.text,
-          passwordController.text,
+          emailController.text.trim(),
+          passwordController.text.trim(),
         );
-        final user = authController.user.value;
 
-        if (user?.role == 'user') {
-          Get.offAllNamed('/main');
-        } else if (user?.role == 'admin') {
-          Get.offAllNamed('/admin_dashboard');
-        } else {
+        final user = authController.user.value;
+        
+        if (user == null) {
           AppHelperFunction.showSnackBar('Đăng nhập thất bại');
+          return;
         }
+
+        if (user.role == 'user') {
+          if (user.savingFund != null) {
+            Get.offAllNamed('/main');
+          } else {
+            Get.offAllNamed('/onboarding_welcome');
+          }
+          return;
+        }
+
+        if (user.role == 'admin') {
+          Get.offAllNamed('/admin_dashboard');
+          return;
+        }
+
+        AppHelperFunction.showSnackBar('Đăng nhập thất bại');
       }
     }
 

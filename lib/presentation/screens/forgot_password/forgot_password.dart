@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -15,9 +17,24 @@ class ForgotPasswordScreen extends StatefulWidget {
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   final TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    Future<void> onPressed() async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          final message = await authController.forgotPassword(
+            emailController.text,
+          );
+          Get.offAllNamed('/otp');
+          AppHelperFunction.showSnackBar(message);
+        } catch (e) {
+          AppHelperFunction.showSnackBar(e.toString());
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -31,7 +48,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 80),
-            
+
                   RichText(
                     text: const TextSpan(
                       style: TextStyle(
@@ -42,14 +59,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [TextSpan(text: AppTexts.forgotPasswordTitle)],
                     ),
                   ),
-            
+
                   const SizedBox(height: 10),
                   const Text(
                     AppTexts.forgotPasswordDescription,
                     style: TextStyle(fontSize: 15, color: AppColors.text4),
                   ),
                   const SizedBox(height: 20),
-            
+
                   TextFormField(
                     controller: emailController,
                     decoration: InputDecoration(
@@ -64,30 +81,37 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     keyboardType: TextInputType.emailAddress,
                     validator: (value) => AppValidator.validateEmail(value),
                   ),
-            
-                const Spacer(),
-            
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        Get.toNamed('/otp');
-                      }
-                    },
-            
-                    label: const Text(
-                      AppTexts.getOtp,
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-            
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+
+                  const Spacer(),
+
+                  Obx(() {
+                    return ElevatedButton(
+                      onPressed:
+                          authController.isLoading.value ? null : onPressed,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
-                    ),
-                  ),
+                      child:
+                          authController.isLoading.value
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                AppTexts.getOtp,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                    );
+                  }),
+
                   const SizedBox(height: 20),
+
                   Center(
                     child: RichText(
                       text: TextSpan(

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageService {
@@ -47,7 +48,7 @@ class StorageService {
   }
 
   // ----------------- Specialized methods -----------------
-  
+
   static const String keyAccessToken = 'access_token';
   static const String keyUserInfo = 'user_info';
 
@@ -59,12 +60,17 @@ class StorageService {
     return readString(keyAccessToken);
   }
 
-  Future<void> saveUserInfo(String json) async {
-    await writeString(keyUserInfo, json);
+  Future<void> saveUserInfo(Map<String, dynamic> apiRes) async {
+    String jsonString = jsonEncode(apiRes);
+    await writeString(keyUserInfo, jsonString);
   }
 
-  String? getUserInfo() {
-    return readString(keyUserInfo);
+  Map<String, dynamic>? getUserInfo() {
+    String? jsonString = readString(keyUserInfo);
+    if (jsonString != null) {
+      return jsonDecode(jsonString);
+    }
+    return null;
   }
 
   Future<void> logout() async {

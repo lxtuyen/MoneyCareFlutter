@@ -99,13 +99,13 @@ class LoginOptionScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      AppTexts.noAccount,
+                      AppTexts.alreadyHaveAccount,
                       style: TextStyle(fontSize: 14, color: AppColors.text1),
                     ),
                     GestureDetector(
-                      onTap: () => Get.toNamed('/register'),
+                      onTap: () => Get.toNamed('/login'),
                       child: const Text(
-                        AppTexts.signup,
+                        AppTexts.login,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

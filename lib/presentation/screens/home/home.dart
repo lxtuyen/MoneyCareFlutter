@@ -3,6 +3,8 @@ import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
+import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_limit_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_overview_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_summary.dart';
@@ -21,6 +23,21 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime? startDate;
   DateTime? endDate;
+  String fullName = '';
+
+  @override
+  void initState() {
+    super.initState();
+    initUserInfo();
+  }
+
+  Future<void> initUserInfo() async {
+    Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
+    UserModel user = UserModel.fromJson(userInfoJson, '');
+    setState(() {
+      fullName = user.profile.fullName;
+    });
+  }
 
   void _pickDateRange() async {
     final picked = await pickDateRange(context);
@@ -43,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Chào Mừng, Tuyển",
+                  "Chào Mừng, $fullName",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
@@ -80,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
               title: "Chi theo phân loại",
               showActionButton: false,
             ),
-            
+
             const SizedBox(height: AppSizes.defaultSpace),
 
             CategorySection(),

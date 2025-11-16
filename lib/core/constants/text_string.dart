@@ -8,7 +8,7 @@ class AppTexts {
   static const String rememberPassword = 'Nhớ mật khẩu? ';
 
   // --- OTP ---
-  static const String getOtp = 'Nhập mã OTP';
+  static const String getOtp = 'Nhận mã OTP';
   static const String otpDescription = 'Nhập mã OTP để lấy lại mật khẩu.';
   static const String otpLabel = 'Mã OTP';
   static const String otpHint = '- - - - - -';
@@ -74,8 +74,9 @@ class AppTexts {
   static const String profile = 'Thông tin cá nhân';
   static const String reportOfTheYear = 'Báo cáo trong năm';
   static const String annualPortfolioReport = 'Báo cáo danh mục trong năm';
+  static const String savingFunds = 'Quỹ tiết kiệm';
   static const String fixedCosts = 'Chi phí cố định';
-  static const String helpTitle = 'Trợ giúp';
+  static const String logout = 'Đăng xuất';
 
   // --- Statistics ---
   static const String statisticsTitle = 'Thống kê';

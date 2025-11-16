@@ -39,7 +39,6 @@ class WarningDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Nội dung cảnh báo
             Text(
               message,
               textAlign: TextAlign.center,
@@ -51,7 +50,6 @@ class WarningDialog extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Hai nút hành động
             Row(
               children: [
                 Expanded(
