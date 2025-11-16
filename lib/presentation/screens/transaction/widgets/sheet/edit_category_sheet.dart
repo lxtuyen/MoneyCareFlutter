@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/model/category_model.dart';
+import 'package:money_care/model/category.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category.dart';
 
 class EditCategorySheet extends StatelessWidget {
@@ -77,7 +77,7 @@ class EditCategorySheet extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  item.percent,
+                                  item.percentage,
                                   style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.grey,
@@ -94,7 +94,7 @@ class EditCategorySheet extends StatelessWidget {
                                 builder:
                                     (context) => EditCategory(
                                       namecategory: item.name,
-                                      percent: item.percent,
+                                      percent: item.percentage,
                                     ),
                               );
                             },

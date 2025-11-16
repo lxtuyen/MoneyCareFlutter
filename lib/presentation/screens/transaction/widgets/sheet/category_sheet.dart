@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/model/category_model.dart';
+import 'package:money_care/model/category.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/category_item.dart';
 
 class CategorySheet extends StatefulWidget {
@@ -59,8 +59,8 @@ class _CategorySheetState extends State<CategorySheet> {
                         },
                         child: CategoryItem(
                           title: item.name,
-                          percent: item.percent,
-                          icon: item.icon,
+                          percentage: item.percentage,
+                          //icon: item.icon,
                           isSelected: isSelected,
                         ),
                       );

@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_care/core/constants/text_string.dart';
-import 'package:money_care/models/category_model.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/description/description_total.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/chart/overview_chart.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/chart/savings_line_chart.dart';
@@ -105,28 +104,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               StatisticalWidgets(
                 dateRange: "01/10/2025 - 31/10/2025",
                 totalAmount: "10.000.000 đ",
-                categories: [
-                  CategoryModel(
-                    label: "Chi tiêu",
-                    color: Color(0xFF0B84FF),
-                    percentage: 40,
-                  ),
-                  CategoryModel(
-                    label: "Ăn uống",
-                    color: Colors.orange,
-                    percentage: 25,
-                  ),
-                  CategoryModel(
-                    label: "Giải trí",
-                    color: Colors.purple,
-                    percentage: 20,
-                  ),
-                  CategoryModel(
-                    label: "Tiết kiệm",
-                    color: Colors.green,
-                    percentage: 15,
-                  ),
-                ],
+                categories: [],
               ),
 
               const SizedBox(height: 25),

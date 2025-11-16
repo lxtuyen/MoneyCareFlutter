@@ -50,9 +50,9 @@ class StatisticalWidgets extends StatelessWidget {
                       sectionsSpace: 2,
                       sections: categories.map(
                         (e) => PieChartSectionData(
-                          color: e.color,
+                          /*color: e.color,
                           value: e.percentage,
-                          title: '',
+                          title: '',*/
                         ),
                       ).toList(),
                     ),

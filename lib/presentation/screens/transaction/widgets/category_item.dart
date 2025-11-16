@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 
 class CategoryItem extends StatelessWidget {
   final String title;
-  final String percent;
-  final IconData icon;
+  final String percentage;
+  final IconData? icon;
   final bool isSelected;
 
   const CategoryItem({
     super.key,
     required this.title,
-    required this.percent,
-    required this.icon,
+    required this.percentage,
+    this.icon,
     this.isSelected = false,
   });
 
@@ -52,7 +52,7 @@ class CategoryItem extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            percent,
+            percentage,
             style: TextStyle(
               color: isSelected ? Colors.blue : Colors.grey,
               fontSize: 13,

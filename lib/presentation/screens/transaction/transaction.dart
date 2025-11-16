@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/model/category_model.dart';
-import 'package:money_care/model/transaction_model.dart';
+import 'package:money_care/models/transaction_model.dart';
 import 'package:get/get.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/statistics_header.dart';
@@ -21,20 +20,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   String selected = 'chi';
   TextEditingController searchController = TextEditingController();
   String searchKeyword = '';
-  final List<TransactionModel> transactions = [
-    TransactionModel(
-      title: 'Tiền siêu thị',
-      note: 'Chi tiêu hằng ngày',
-      amount: '250.000',
-      date: DateTime.now(),
-      color: Colors.purple,
-      category: const CategoryModel(
-        name: 'Cần thiết',
-        percent: '55%',
-        icon: Icons.shopping_bag,
-      ),
-    ),
-  ];
+  final List<TransactionModel> transactions = [];
 
   @override
   Widget build(BuildContext context) {

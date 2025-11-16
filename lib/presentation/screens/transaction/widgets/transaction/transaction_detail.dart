@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/model/transaction_model.dart';
+import 'package:money_care/models/transaction_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';

@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/model/category_model.dart';
+import 'package:money_care/model/category.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/amount_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
-import 'package:money_care/model/transaction_model.dart';
+import 'package:money_care/models/transaction_model.dart';
 
 class TransactionForm extends StatefulWidget {
   final String title;
@@ -34,7 +34,7 @@ class _TransactionFormState extends State<TransactionForm> {
   final TextEditingController _categoryController = TextEditingController();
   final TextEditingController _noteController = TextEditingController();
 
-  final List<CategoryModel> categories = [
+ /* final List<CategoryModel> categories = [
     const CategoryModel(
       name: 'Cần thiết',
       percent: '55%',
@@ -48,7 +48,7 @@ class _TransactionFormState extends State<TransactionForm> {
       percent: '5%',
       icon: Icons.volunteer_activism,
     ),
-  ];
+  ];*/
 
   @override
   void initState() {
@@ -83,7 +83,7 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   void _showCategorySheet(BuildContext context) async {
-    final selected = await showModalBottomSheet<String>(
+    /*final selected = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.white,
@@ -97,7 +97,7 @@ class _TransactionFormState extends State<TransactionForm> {
       setState(() {
         _categoryController.text = selected;
       });
-    }
+    }*/
   }
 
   @override
