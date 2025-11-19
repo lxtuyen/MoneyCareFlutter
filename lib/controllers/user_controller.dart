@@ -1,0 +1,50 @@
+import 'package:get/get.dart';
+import 'package:money_care/models/user_profile.dart';
+import 'package:money_care/services/user_service.dart';
+
+class UserController extends GetxController {
+  final UserService service;
+
+  UserController({required this.service});
+
+  var userProfile = Rxn<UserProfileModel>();
+  var isLoading = false.obs;
+
+  Future<UserProfileModel> updateProfile(
+    String? firstName,
+    String? lastName,
+    int? monthlyIncome,
+  ) async {
+    try {
+      isLoading.value = true;
+
+      final updated =
+          await service.updateMyProfile(firstName, lastName, monthlyIncome);
+
+      userProfile.value = updated;
+
+      return updated;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<String> addMonthlyIncome(int monthlyIncome) async {
+    try {
+      isLoading.value = true;
+
+      final message = await service.addMonthlyIncome(monthlyIncome);
+
+      if (userProfile.value != null) {
+        userProfile.value = userProfile.value!.copyWith(
+          monthlyIncome: monthlyIncome,
+        );
+        userProfile.refresh();
+      }
+
+      return message;
+    } finally {
+      isLoading.value = false;
+    }
+  }
+}

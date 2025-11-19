@@ -12,16 +12,20 @@ class AuthController extends GetxController {
   var user = Rxn<UserModel>();
   var isLoading = false.obs;
 
-  Future<void> login(String email, String password) async {
+  Future<String?> login(String email, String password) async {
     try {
       isLoading.value = true;
 
-      final apiRes = await authService.login(email, password);
+      final res = await authService.login(email, password);
 
-      user.value = apiRes;
+      user.value = res;
 
-      await storage.saveUserInfo(apiRes.toJson());
-      await storage.saveToken(apiRes.accessToken);
+      await storage.saveUserInfo(res.toJson());
+      await storage.saveToken(res.accessToken);
+
+      return null;
+    } catch (e) {
+      return e.toString();
     } finally {
       isLoading.value = false;
     }
@@ -35,8 +39,7 @@ class AuthController extends GetxController {
   ) async {
     try {
       isLoading.value = true;
-      final apiRes = await authService.register(email, password, firstName, lastName);
-      return apiRes;
+      return await authService.register(email, password, firstName, lastName);
     } finally {
       isLoading.value = false;
     }
@@ -45,9 +48,12 @@ class AuthController extends GetxController {
   Future<String> forgotPassword(String email) async {
     try {
       isLoading.value = true;
-      final apiRes = await authService.forgotPassword(email);
+
+      final res = await authService.forgotPassword(email);
+
       await storage.writeString('user_email', email);
-      return apiRes;
+
+      return res;
     } finally {
       isLoading.value = false;
     }
@@ -56,9 +62,11 @@ class AuthController extends GetxController {
   Future<String> verifyOtp(String otp) async {
     try {
       isLoading.value = true;
-      final userEmail = await storage.readString('user_email');
-      final apiRes = await authService.verifyOtp(userEmail!, otp);
-      return apiRes;
+
+      final email = storage.readString('user_email');
+      final res = await authService.verifyOtp(email!, otp);
+
+      return res;
     } finally {
       isLoading.value = false;
     }
@@ -67,16 +75,19 @@ class AuthController extends GetxController {
   Future<String> resetPassword(String newPassword) async {
     try {
       isLoading.value = true;
-      final userEmail = await storage.readString('user_email');
-      final apiRes = await authService.resetPassword(userEmail!, newPassword);
+
+      final email = storage.readString('user_email');
+      final res = await authService.resetPassword(email!, newPassword);
+
       await storage.remove('user_email');
-      return apiRes;
+
+      return res;
     } finally {
       isLoading.value = false;
     }
   }
 
-  void logout() async {
+  Future<void> logout() async {
     user.value = null;
     await storage.logout();
   }

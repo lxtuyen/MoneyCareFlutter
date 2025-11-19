@@ -21,24 +21,29 @@ class SavingFundController extends GetxController {
     }
   }
 
-  Future<void> selectSavingFund(int userId,int id) async {
+  Future<void> selectSavingFund(int userId, int id) async {
     try {
       isLoading.value = true;
 
-      final selectedFund = await service.selectSavingFund(userId, id);
+      final selected = await service.selectSavingFund(userId, id);
 
-      for (var fund in savingFunds) {
-        fund.isSelected = fund.id == selectedFund.id;
-      }
-
-      savingFunds.refresh();
+      savingFunds.value = savingFunds.map((f) {
+        f.isSelected = f.id == selected.id;
+        return f;
+      }).toList();
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> createFund(String name, List<CategoryModel> categories, userId) async {
-    final fund = await service.createSavingFund(name, categories, userId);
+  Future<void> createFund(
+    String name,
+    List<CategoryModel> categories,
+    int userId
+  ) async {
+    final fund =
+        await service.createSavingFund(name, categories, userId);
+
     savingFunds.add(fund);
   }
 
@@ -47,14 +52,20 @@ class SavingFundController extends GetxController {
     String name,
     List<CategoryModel> categories,
   ) async {
-    final updated = await service.updateSavingFund(id, name, categories);
+    final updated =
+        await service.updateSavingFund(id, name, categories);
 
     final index = savingFunds.indexWhere((f) => f.id == id);
-    if (index != -1) savingFunds[index] = updated;
+    if (index != -1) {
+      savingFunds[index] = updated;
+      savingFunds.refresh();
+    }
   }
 
   Future<void> deleteFund(int id) async {
     final ok = await service.deleteSavingFund(id);
-    if (ok) savingFunds.removeWhere((f) => f.id == id);
+    if (ok) {
+      savingFunds.removeWhere((f) => f.id == id);
+    }
   }
 }
