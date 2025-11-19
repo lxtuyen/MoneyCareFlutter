@@ -91,7 +91,6 @@ class AppValidator {
     if (day == null || month == null || year == null) {
       return 'Please select full date of birth.';
     }
-    // Kiểm tra năm sinh hợp lệ
     if (year > DateTime.now().year || year < 1950) {
       return 'Invalid year of birth.';
     }
@@ -116,4 +115,27 @@ class AppValidator {
     }
     return null;
   }
+
+  static String? validateMonthlyIncome(String? value) {
+  if (value == null || value.trim().isEmpty) {
+    return 'Vui lòng nhập thu nhập hàng tháng';
+  }
+
+  final numVal = double.tryParse(value.replaceAll(',', ''));
+
+  if (numVal == null) {
+    return 'Thu nhập phải là số hợp lệ';
+  }
+
+  if (numVal <= 0) {
+    return 'Thu nhập phải lớn hơn 0';
+  }
+
+  if (numVal > 1000000000) {
+    return 'Thu nhập quá lớn (giới hạn 1,000,000,000)';
+  }
+
+  return null;
+}
+
 }

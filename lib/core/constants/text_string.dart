@@ -9,11 +9,11 @@ class AppTexts {
 
   // --- OTP ---
   static const String getOtp = 'Nhận mã OTP';
+  static const String enterOtp = 'Nhập mã OTP';
   static const String otpDescription = 'Nhập mã OTP để lấy lại mật khẩu.';
   static const String otpLabel = 'Mã OTP';
   static const String otpHint = '- - - - - -';
   static const String notReceiveOtp = 'Không nhận được mã? Thử lại sau ';
-  static const String otpResendTime = '30s';
   static const String confirmOtpButton = 'Xác nhận mã OTP';
 
   // --- Reset Password ---
@@ -54,6 +54,11 @@ class AppTexts {
   static const String savingRuleDescription2 =
       'Và bạn hoàn toàn có thể tự tạo quỹ tiết kiệm riêng theo nhu cầu của bản thân!';
   static const String continueButton = 'Tiếp tục';
+
+  // --- Onboarding Income ---
+  static const String done = 'Hoàn tất';
+  static const String next = 'Bỏ qua';
+  static const String incomeTitle = 'Số tiền thu nhập hàng tháng của bạn là bao nhiêu?';
 
   // --- Onboarding Welcome ---
   static const String welcomeTitle = 'Chào mừng bạn đến với ';

@@ -71,7 +71,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 const SizedBox(height: 80),
 
                 const Text(
-                  AppTexts.getOtp,
+                  AppTexts.enterOtp,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,

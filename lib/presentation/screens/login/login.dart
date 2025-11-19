@@ -28,15 +28,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     Future<void> onPressed() async {
       if (_formKey.currentState!.validate()) {
-        await authController.login(
+        final message = await authController.login(
           emailController.text.trim(),
           passwordController.text.trim(),
         );
 
         final user = authController.user.value;
-        
         if (user == null) {
-          AppHelperFunction.showSnackBar('Đăng nhập thất bại');
+          AppHelperFunction.showSnackBar(message!);
           return;
         }
 

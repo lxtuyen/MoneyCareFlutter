@@ -28,7 +28,7 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
     UserModel user = UserModel.fromJson(userInfoJson, '');
     controller.loadFunds(user.id);
     setState(() {
-      userId = user.id; 
+      userId = user.id;
     });
   }
 
@@ -77,9 +77,11 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color:
-                                    fund.isSelected!
+                                    (fund.isSelected == true ||
+                                            selectedIndex == index)
                                         ? Colors.blue
                                         : Colors.grey.shade300,
+
                                 width: 1.5,
                               ),
                             ),
@@ -164,9 +166,12 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                         final selectedFund =
                             controller.savingFunds[selectedIndex];
 
-                        await controller.selectSavingFund(userId, selectedFund.id);
+                        await controller.selectSavingFund(
+                          userId,
+                          selectedFund.id,
+                        );
 
-                        Get.offAllNamed('/main');
+                        Get.offAllNamed('/onboarding_income');
                       }
                     },
                     style: ElevatedButton.styleFrom(

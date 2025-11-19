@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
+import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 import 'package:money_care/data/storage_service.dart';
@@ -78,10 +79,11 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
       appBar: AppBar(
         title: const Text('Tạo quỹ tiết kiệm'),
         leading: IconButton(
-              onPressed: () {
-                Get.back();
-              },
-              icon: const Icon(Icons.arrow_back))
+          onPressed: () {
+            Get.back();
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -151,13 +153,26 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
                   },
                 ),
               ),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: _createSavingFund,
-                  child: const Text('Tạo quỹ'),
-                ),
-              ),
+              Obx(() {
+                return ElevatedButton(
+                  onPressed:
+                      _controller.isLoading.value ? null : _createSavingFund,
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(50),
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                  child:
+                      _controller.isLoading.value
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                            'Tạo quỹ',
+                            style: TextStyle(fontSize: 25, color: Colors.white),
+                          ),
+                );
+              }),
             ],
           ),
         ),
