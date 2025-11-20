@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
@@ -21,14 +24,18 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime? startDate;
-  DateTime? endDate;
+  final now = DateTime.now();
+  late DateTime startDate = DateTime(now.year, now.month, 1);
+  late DateTime endDate = DateTime(now.year, now.month + 1, 0);
   String fullName = '';
+  final TransactionController transactionController = Get.find<TransactionController>();
+  late int userId;
 
   @override
   void initState() {
     super.initState();
     initUserInfo();
+    loadSavingFundData();
   }
 
   Future<void> initUserInfo() async {
@@ -36,15 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
     UserModel user = UserModel.fromJson(userInfoJson, '');
     setState(() {
       fullName = user.profile.fullName;
+      userId = user.id;
     });
   }
+
+  Future<void> loadSavingFundData() async {
+    transactionController.loadTotals(userId, startDate.toIso8601String(), endDate.toIso8601String());
+  }
+
 
   void _pickDateRange() async {
     final picked = await pickDateRange(context);
     if (picked.isNotEmpty) {
       setState(() {
-        startDate = picked.first;
-        endDate = picked.length > 1 ? picked.last : picked.first;
+        startDate = picked.first!;
+        endDate = (picked.length > 1 ? picked.last : picked.first)!;
       });
     }
   }

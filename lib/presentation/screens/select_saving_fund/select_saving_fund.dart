@@ -20,10 +20,10 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
   @override
   void initState() {
     super.initState();
-    initUserInfo();
+    loadSavingFundData();
   }
 
-  Future<void> initUserInfo() async {
+  Future<void> loadSavingFundData() async {
     Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
     UserModel user = UserModel.fromJson(userInfoJson, '');
     controller.loadFunds(user.id);

@@ -91,14 +91,13 @@ class _TransactionScreenState extends State<TransactionScreen> {
   }
 
   final List<TransactionModel> incomes = [
-    TransactionModel(
-      title: 'Nhặt được',
+    /*TransactionModel(
       note: "Tiền lẻ",
       amount: '250.000',
       date: DateTime.now(),
       color: Colors.orange,
       isExpense: false,
-    ),
+    ),*/
   ];
 
   Widget _buildIncomeList() {

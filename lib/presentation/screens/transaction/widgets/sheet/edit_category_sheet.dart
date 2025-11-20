@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/model/category.dart';
+import 'package:money_care/models/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category.dart';
 
 class EditCategorySheet extends StatelessWidget {
@@ -63,7 +64,11 @@ class EditCategorySheet extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Icon(item.icon, color: AppColors.primary, size: 26),
+                          SvgPicture.asset(
+                            'icons/${item.icon}.svg',
+                            width: 26,
+                            height: 26,
+                          ),
                           const SizedBox(width: 12),
                           Expanded(
                             child: Column(
@@ -77,7 +82,7 @@ class EditCategorySheet extends StatelessWidget {
                                   ),
                                 ),
                                 Text(
-                                  item.percentage,
+                                  item.percentage.toString(),
                                   style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.grey,
@@ -94,7 +99,7 @@ class EditCategorySheet extends StatelessWidget {
                                 builder:
                                     (context) => EditCategory(
                                       namecategory: item.name,
-                                      percent: item.percentage,
+                                      percent: item.percentage.toString(),
                                     ),
                               );
                             },

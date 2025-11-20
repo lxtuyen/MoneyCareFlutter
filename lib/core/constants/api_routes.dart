@@ -12,5 +12,10 @@ class ApiRoutes {
   static const selectSavingFund = 'saving-fund/select';
 
   // --- User proflie ---
-  static const userProfile = 'user-profile/me';  
+  static const userProfile = 'user-profile/me';
+
+  // --- Transaction ---
+  static const transaction = 'transactions';
+  static const getTransactionsByUser = 'transactions/me';
+  static const totalTransactions = 'transactions/totals';
 }

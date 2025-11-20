@@ -26,35 +26,35 @@ class TransactionItem extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: item.color,
-                    shape: BoxShape.circle,
-                  ),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  shape: BoxShape.circle,
                 ),
-                const SizedBox(width: AppSizes.spaceBtwItems),
+              ),
+              const SizedBox(width: AppSizes.spaceBtwItems),
 
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      item.title,
+                      item.note ?? "",
                       style: const TextStyle(
                         fontSize: AppSizes.fontSizeSm,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
 
-                      Text(
-                        item.note ?? "",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.text5,
-                        ),
+                    Text(
+                      item.category!.name,
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.text5,
                       ),
+                    ),
                   ],
                 ),
               ),
@@ -64,14 +64,14 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   if (isShowDate)
                     Text(
-                      _formatDate(item.date),
+                      _formatDate(item.transactionDate),
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.text5,
                       ),
                     ),
                   Text(
-                    item.amount,
+                    item.amount.toString(),
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeMd,
                       fontWeight: FontWeight.w600,
@@ -94,9 +94,9 @@ class TransactionItem extends StatelessWidget {
     );
   }
 
-  static String _formatDate(DateTime date) {
+  static String _formatDate(DateTime? date) {
     final now = DateTime.now();
-    if (date.year == now.year &&
+    if (date!.year == now.year &&
         date.month == now.month &&
         date.day == now.day) {
       return 'Hôm nay';

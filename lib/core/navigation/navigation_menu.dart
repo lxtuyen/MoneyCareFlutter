@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -27,13 +28,10 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
       return Scaffold(
         body: SafeArea(
-          child: IndexedStack(
-            index: currentIndex,
-            children: screens,
-          ),
+          child: IndexedStack(index: currentIndex, children: screens),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () => Get.toNamed('/add-transaction'),
+          onPressed: () => _showTransactionOptions(context),
           shape: const CircleBorder(),
           backgroundColor: AppColors.primary,
           child: const Icon(Icons.add, size: 32, color: Colors.white),
@@ -41,7 +39,9 @@ class ScaffoldWithNavBar extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
-            labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>((states) {
+            labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>((
+              states,
+            ) {
               if (states.contains(MaterialState.selected)) {
                 return const TextStyle(
                   color: AppColors.primary,
@@ -90,6 +90,38 @@ class ScaffoldWithNavBar extends StatelessWidget {
       isActive ? 'icons/$path-active.svg' : 'icons/$path.svg',
       width: 24,
       height: 24,
+    );
+  }
+
+  void _showTransactionOptions(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: const Text('Chọn loại giao dịch'),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                Get.toNamed('/income');
+              },
+              child: const Text('Tạo thu'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                Get.toNamed('/expense');
+              },
+              child: const Text('Tạo chi'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Hủy bỏ'),
+          ),
+        );
+      },
     );
   }
 }

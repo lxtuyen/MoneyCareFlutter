@@ -9,6 +9,7 @@ class SavingFundController extends GetxController {
   SavingFundController({required this.service});
 
   RxList<SavingFundModel> savingFunds = <SavingFundModel>[].obs;
+  Rxn<SavingFundModel> currentFund = Rxn<SavingFundModel>();
   RxBool isLoading = false.obs;
 
   Future<void> loadFunds(int userId) async {
@@ -21,16 +22,26 @@ class SavingFundController extends GetxController {
     }
   }
 
+  Future<void> loadFundById(int id) async {
+    try {
+      isLoading.value = true;
+      currentFund.value = await service.getSavingFund(id);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> selectSavingFund(int userId, int id) async {
     try {
       isLoading.value = true;
 
       final selected = await service.selectSavingFund(userId, id);
 
-      savingFunds.value = savingFunds.map((f) {
-        f.isSelected = f.id == selected.id;
-        return f;
-      }).toList();
+      savingFunds.value =
+          savingFunds.map((f) {
+            f.isSelected = f.id == selected.id;
+            return f;
+          }).toList();
     } finally {
       isLoading.value = false;
     }
@@ -39,10 +50,9 @@ class SavingFundController extends GetxController {
   Future<void> createFund(
     String name,
     List<CategoryModel> categories,
-    int userId
+    int userId,
   ) async {
-    final fund =
-        await service.createSavingFund(name, categories, userId);
+    final fund = await service.createSavingFund(name, categories, userId);
 
     savingFunds.add(fund);
   }
@@ -52,8 +62,7 @@ class SavingFundController extends GetxController {
     String name,
     List<CategoryModel> categories,
   ) async {
-    final updated =
-        await service.updateSavingFund(id, name, categories);
+    final updated = await service.updateSavingFund(id, name, categories);
 
     final index = savingFunds.indexWhere((f) => f.id == id);
     if (index != -1) {

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/model/category.dart';
+import 'package:money_care/models/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/category_item.dart';
 
 class CategorySheet extends StatefulWidget {
-final List<CategoryModel> categories;
-  final String? selectedCategoryInit;
+  final List<CategoryModel> categories;
+  final CategoryModel? selectedCategoryInit;
 
   const CategorySheet({
     super.key,
     required this.categories,
-        this.selectedCategoryInit,
-
+    this.selectedCategoryInit,
   });
 
   @override
@@ -18,7 +17,7 @@ final List<CategoryModel> categories;
 }
 
 class _CategorySheetState extends State<CategorySheet> {
-    String? selectedCategory;
+  CategoryModel? selectedCategory;
 
   @override
   void initState() {
@@ -39,8 +38,10 @@ class _CategorySheetState extends State<CategorySheet> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('Phân loại',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              const Text(
+                'Phân loại',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 20),
 
               Expanded(
@@ -49,22 +50,23 @@ class _CategorySheetState extends State<CategorySheet> {
                   child: Wrap(
                     spacing: 10,
                     runSpacing: 10,
-                    children: widget.categories.map((item) {
-                      final isSelected = selectedCategory == item.name;
+                    children:
+                        widget.categories.map((item) {
+                          final isSelected = selectedCategory == item;
 
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() => selectedCategory = item.name);
-                          Navigator.pop(context, item.name);
-                        },
-                        child: CategoryItem(
-                          title: item.name,
-                          percentage: item.percentage,
-                          //icon: item.icon,
-                          isSelected: isSelected,
-                        ),
-                      );
-                    }).toList(),
+                          return GestureDetector(
+                            onTap: () {
+                              setState(() => selectedCategory = item);
+                              Navigator.pop(context, item);
+                            },
+                            child: CategoryItem(
+                              title: item.name,
+                              percentage: item.percentage,
+                              icon: item.icon,
+                              isSelected: isSelected,
+                            ),
+                          );
+                        }).toList(),
                   ),
                 ),
               ),

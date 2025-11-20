@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:money_care/data/storage_service.dart';
-import 'package:money_care/models/api_responese.dart';
+import 'package:money_care/models/response/api_response.dart';
 
 class ApiService {
   final String baseUrl;
@@ -34,12 +34,16 @@ class ApiService {
 
   Future<ApiResponse<T>> get<T>(
     String path, {
+    Map<String, dynamic>? queryParameters,
     T Function(dynamic)? fromJsonT,
   }) async {
-    final response = await http.get(
-      Uri.parse('$baseUrl/$path'),
-      headers: _headers(),
+    final uri = Uri.parse('$baseUrl/$path').replace(
+      queryParameters: queryParameters?.map(
+        (key, value) => MapEntry(key, value.toString()),
+      ),
     );
+
+    final response = await http.get(uri, headers: _headers());
 
     return _handleResponse(response, fromJsonT);
   }

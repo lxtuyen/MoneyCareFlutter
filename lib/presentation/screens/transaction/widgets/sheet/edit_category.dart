@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/input/note_input.dart';
 import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 
 class EditCategory extends StatefulWidget {
@@ -67,20 +66,20 @@ class _EditCategoryState extends State<EditCategory> {
                 const Divider(height: 1, thickness: 1, color: Colors.grey),
                 const SizedBox(height: 15),
 
-                NoteInput(
+                /*NoteInput(
                   controller: namecategorycontroller,
                   label: 'Tên loại chi tiết',
                   hintText: '',
                   maxLines: 1,
-                ),
+                ),*/
                 const SizedBox(height: 15),
 
-                NoteInput(
+                /*NoteInput(
                   controller: percentcontroller,
                   label: 'Phần trăm',
                   hintText: '',
                   maxLines: 1,
-                ),
+                ),*/
                 const SizedBox(height: 24),
 
                 Row(

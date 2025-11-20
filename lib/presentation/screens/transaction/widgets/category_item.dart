@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CategoryItem extends StatelessWidget {
   final String title;
-  final String percentage;
-  final IconData? icon;
+  final int percentage;
+  final String icon;
   final bool isSelected;
 
   const CategoryItem({
     super.key,
     required this.title,
     required this.percentage,
-    this.icon,
+    required this.icon,
     this.isSelected = false,
   });
 
-   @override
+  @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
@@ -39,10 +40,11 @@ class CategoryItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            icon,
+          SvgPicture.asset(
+            'icons/$icon.svg',
             color: isSelected ? Colors.blue : Colors.grey,
-            size: 28,
+            width: 28,
+            height: 28,
           ),
           const SizedBox(height: 6),
           Text(
@@ -52,7 +54,7 @@ class CategoryItem extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            percentage,
+            percentage.toString(),
             style: TextStyle(
               color: isSelected ? Colors.blue : Colors.grey,
               fontSize: 13,
