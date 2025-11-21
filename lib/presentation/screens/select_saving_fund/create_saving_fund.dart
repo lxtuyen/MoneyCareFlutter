@@ -7,6 +7,7 @@ import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 import 'package:money_care/data/storage_service.dart';
 import 'package:money_care/models/category_model.dart';
+import 'package:money_care/models/dto/saving_fund_dto.dart';
 import 'package:money_care/models/user_model.dart';
 
 class CreateSavingFund extends StatefulWidget {
@@ -59,11 +60,12 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
         return;
       }
       try {
-        await _controller.createFund(
-          _nameController.text.trim(),
-          _categories,
-          userId,
+        final dto = SavingFundDto(
+          categories: _categories,
+          name: _nameController.text.trim(),
+          id: userId,
         );
+        await _controller.createFund(dto);
 
         Get.back();
         AppHelperFunction.showSnackBar('Tạo quỹ thành công');

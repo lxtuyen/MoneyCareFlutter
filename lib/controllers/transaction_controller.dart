@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:money_care/models/dto/transaction_filter_dto.dart';
+import 'package:money_care/models/dto/transaction_load_dto.dart';
 import '../services/transaction_service.dart';
 import '../models/transaction_model.dart';
 import '../models/response/transaction_totals.dart';
@@ -30,11 +31,11 @@ class TransactionController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> loadTotals(int userId, String? startDate, String? endDate) async {
+  Future<void> getTotals(TransactionLoadDto dto) async {
     isLoading.value = true;
 
     try {
-      totals.value = await service.getTotals(userId, startDate, endDate);
+      totals.value = await service.getTotals(dto);
       errorMessage.value = null;
     } catch (e) {
       totals.value = null;
@@ -42,6 +43,21 @@ class TransactionController extends GetxController {
     }
 
     isLoading.value = false;
+  }
+
+  Future<TransactionModel?> loadById(int id) async {
+    isLoading.value = true;
+
+    try {
+      errorMessage.value = null;
+      return await service.findById(id);
+    } catch (e) {
+      totals.value = null;
+      errorMessage.value = e.toString();
+      return null;
+    } finally {
+      isLoading.value = false;
+    }
   }
 
   Future<void> createTransaction(TransactionCreateDto dto) async {

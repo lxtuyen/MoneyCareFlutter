@@ -1,6 +1,7 @@
 import 'package:money_care/core/constants/api_routes.dart';
 import 'package:money_care/models/dto/transaction_create_dto.dart';
 import 'package:money_care/models/dto/transaction_filter_dto.dart';
+import 'package:money_care/models/dto/transaction_load_dto.dart';
 import 'package:money_care/models/response/transaction_totals.dart';
 import 'package:money_care/models/transaction_model.dart';
 import 'api_service.dart';
@@ -55,9 +56,9 @@ class TransactionService {
     return res.data!;
   }
 
-  Future<TransactionTotals> getTotals(int userId, String? startDate, String? endDate) async {
+  Future<TransactionTotals> getTotals(TransactionLoadDto dto) async {
     final res = await api.get<TransactionTotals>(
-      "${ApiRoutes.totalTransactions}/$userId&start_date=$startDate&end_date=$endDate",
+      "${ApiRoutes.totalTransactions}/${dto.userId}&start_date=${dto.startDate}&end_date=${dto.endDate}",
       fromJsonT: (json) => TransactionTotals.fromJson(json),
     );
 

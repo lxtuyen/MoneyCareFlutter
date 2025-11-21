@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
 import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/dto/transaction_load_dto.dart';
 import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_limit_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_overview_card.dart';
@@ -28,7 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime startDate = DateTime(now.year, now.month, 1);
   late DateTime endDate = DateTime(now.year, now.month + 1, 0);
   String fullName = '';
-  final TransactionController transactionController = Get.find<TransactionController>();
+  final TransactionController transactionController =
+      Get.find<TransactionController>();
   late int userId;
 
   @override
@@ -48,9 +49,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> loadSavingFundData() async {
-    transactionController.loadTotals(userId, startDate.toIso8601String(), endDate.toIso8601String());
+    final dto = TransactionLoadDto(
+      userId: userId,
+      startDate: startDate.toIso8601String(),
+      endDate: endDate.toIso8601String(),
+    );
+    transactionController.getTotals(dto);
   }
-
 
   void _pickDateRange() async {
     final picked = await pickDateRange(context);

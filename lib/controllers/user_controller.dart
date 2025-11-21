@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:money_care/models/dto/profile_update_dto.dart';
 import 'package:money_care/models/user_profile.dart';
 import 'package:money_care/services/user_service.dart';
 
@@ -10,16 +11,12 @@ class UserController extends GetxController {
   var userProfile = Rxn<UserProfileModel>();
   var isLoading = false.obs;
 
-  Future<UserProfileModel> updateProfile(
-    String? firstName,
-    String? lastName,
-    int? monthlyIncome,
-  ) async {
+  Future<UserProfileModel> updateProfile(ProfileUpdateDto dto) async {
     try {
       isLoading.value = true;
 
       final updated =
-          await service.updateMyProfile(firstName, lastName, monthlyIncome);
+          await service.updateMyProfile(dto);
 
       userProfile.value = updated;
 

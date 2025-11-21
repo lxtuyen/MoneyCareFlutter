@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:money_care/models/category_model.dart';
+import 'package:money_care/models/dto/saving_fund_dto.dart';
 import 'package:money_care/models/saving_fund_model.dart';
 import 'package:money_care/services/saving_fund_service.dart';
 
@@ -47,24 +47,18 @@ class SavingFundController extends GetxController {
     }
   }
 
-  Future<void> createFund(
-    String name,
-    List<CategoryModel> categories,
-    int userId,
-  ) async {
-    final fund = await service.createSavingFund(name, categories, userId);
+  Future<void> createFund(SavingFundDto dto) async {
+    final fund = await service.createSavingFund(dto);
 
     savingFunds.add(fund);
   }
 
   Future<void> updateFund(
-    int id,
-    String name,
-    List<CategoryModel> categories,
+  SavingFundDto dto
   ) async {
-    final updated = await service.updateSavingFund(id, name, categories);
+    final updated = await service.updateSavingFund(dto);
 
-    final index = savingFunds.indexWhere((f) => f.id == id);
+    final index = savingFunds.indexWhere((f) => f.id == dto.id);
     if (index != -1) {
       savingFunds[index] = updated;
       savingFunds.refresh();

@@ -1,5 +1,5 @@
 import 'package:money_care/core/constants/api_routes.dart';
-import 'package:money_care/models/category_model.dart';
+import 'package:money_care/models/dto/saving_fund_dto.dart';
 import 'package:money_care/models/saving_fund_model.dart';
 import 'api_service.dart';
 
@@ -8,18 +8,10 @@ class SavingFundService {
 
   SavingFundService({required this.api});
 
-  Future<SavingFundModel> createSavingFund(
-    String name,
-    List<CategoryModel> categories,
-    int userId,
-  ) async {
+  Future<SavingFundModel> createSavingFund(SavingFundDto dto) async {
     final res = await api.post<SavingFundModel>(
       ApiRoutes.savingFund,
-      body: {
-        'name': name,
-        'categories': categories.map((c) => c.toJsonCreate()).toList(),
-        'userId': userId,
-      },
+      body: dto.toJsonCreate(),
       fromJsonT: (json) => SavingFundModel.fromMap(json),
     );
 
@@ -55,17 +47,10 @@ class SavingFundService {
     return res.data!;
   }
 
-  Future<SavingFundModel> updateSavingFund(
-    int id,
-    String name,
-    List<CategoryModel> categories,
-  ) async {
+  Future<SavingFundModel> updateSavingFund(SavingFundDto dto) async {
     final res = await api.put<SavingFundModel>(
-      "${ApiRoutes.savingFund}/$id",
-      body: {
-        'name': name,
-        'categories': categories.map((c) => c.toJson()).toList(),
-      },
+      "${ApiRoutes.savingFund}/${dto.id}",
+      body: dto.toJsonUpdate(),
       fromJsonT: (json) => SavingFundModel.fromMap(json),
     );
 
@@ -77,9 +62,7 @@ class SavingFundService {
   }
 
   Future<bool> deleteSavingFund(int id) async {
-    final res = await api.delete<void>(
-      "${ApiRoutes.savingFund}/$id",
-    );
+    final res = await api.delete<void>("${ApiRoutes.savingFund}/$id");
 
     return res.success;
   }
