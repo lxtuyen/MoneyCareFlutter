@@ -1,27 +1,29 @@
 class AppValidator {
+  // =====================
+  // 🟦 ACCOUNT / AUTH
+  // =====================
+
+  static String? validateEmail(String? value) {
+    if (value == null || value.isEmpty) return "Email is required.";
+    final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegExp.hasMatch(value)) return 'Invalid email address.';
+    return null;
+  }
+
   static String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required.';
-    }
-    // Check for minimum password length
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long.';
-    }
-    // Check for at least one uppercase letter
+    if (value == null || value.isEmpty) return 'Password is required.';
+    if (value.length < 6) return 'Password must be at least 6 characters.';
     if (!value.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter.';
+      return 'Password must contain at least 1 uppercase letter.';
     }
-    // Check for at least one lowercase letter
     if (!value.contains(RegExp(r'[a-z]'))) {
-      return 'Password must contain at least one lowercase letter.';
+      return 'Password must contain at least 1 lowercase letter.';
     }
-    // Check for at least one digit
     if (!value.contains(RegExp(r'[0-9]'))) {
-      return 'Password must contain at least one digit.';
+      return 'Password must contain at least 1 digit.';
     }
-    // Check for at least one special character
     if (!value.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
-      return 'Password must contain at least one special character.';
+      return 'Password must contain at least 1 special character.';
     }
     return null;
   }
@@ -33,67 +35,154 @@ class AppValidator {
     if (confirmPassword == null || confirmPassword.isEmpty) {
       return 'Please confirm your password.';
     }
-    if (confirmPassword != password) {
-      return 'Passwords do not match.';
-    }
+    if (confirmPassword != password) return 'Passwords do not match.';
     return null;
   }
 
   static String? validatePhoneNumber(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Phone number is required.';
-    }
+    if (value == null || value.isEmpty) return 'Phone number is required.';
+    final phoneRegExp = RegExp(r'^\+?[0-9]{9,15}$');
+    if (!phoneRegExp.hasMatch(value)) return 'Invalid phone number.';
+    return null;
+  }
 
-    final phoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
-    if (!phoneRegExp.hasMatch(value)) {
-      return 'Invalid phone number.';
+  static String? validateOTP(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Vui lòng nhập mã OTP.';
+    }
+    if (!RegExp(r'^[0-9]{4,6}$').hasMatch(value)) {
+      return 'OTP phải gồm 4–6 số.';
     }
     return null;
   }
 
-  static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Email is required.";
-    }
-    final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  // =====================
+  // 🟩 NAME / TEXT INPUT
+  // =====================
 
-    if (!emailRegExp.hasMatch(value)) {
-      return 'Invalid email address.';
+  static String? validateFirstName(String? value) {
+    if (value == null || value.isEmpty) return "First name is required.";
+    final nameRegExp = RegExp(r"^[a-zA-ZÀ-ỹ\s]+$");
+    if (!nameRegExp.hasMatch(value)) {
+      return 'Invalid first name (letters only).';
     }
     return null;
   }
 
   static String? validateLastName(String? value) {
-    if (value == null || value.isEmpty) {
-      return "Last name is required.";
-    }
+    if (value == null || value.isEmpty) return "Last name is required.";
     final nameRegExp = RegExp(r"^[a-zA-ZÀ-ỹ\s]+$");
-
     if (!nameRegExp.hasMatch(value)) {
-      return 'Invalid last name. Last name must contain only letters.';
+      return 'Invalid last name (letters only).';
     }
     return null;
   }
 
-  static String? validateFirstName(String? value) {
-    if (value == null || value.isEmpty) {
-      return "First name is required.";
+  static String? validateName(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Vui lòng nhập tên.';
     }
-    final nameRegExp = RegExp(r"^[a-zA-ZÀ-ỹ\s]+$");
+    return null;
+  }
 
-    if (!nameRegExp.hasMatch(value)) {
-      return 'Invalid first name. First name must contain only letters.';
+  static String? validateAddress(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return "Vui lòng nhập địa chỉ.";
     }
+    if (value.length < 5) return "Địa chỉ quá ngắn.";
+    return null;
+  }
+
+  static String? validateNote(String? value) {
+    if (value != null && value.length > 200) {
+      return 'Ghi chú quá dài (tối đa 200 kí tự).';
+    }
+    return null;
+  }
+
+  static String? validateUsername(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Vui lòng nhập username.';
+    }
+    if (value.length < 4) return 'Username phải dài hơn 4 ký tự.';
+    if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+      return 'Username chỉ chứa chữ, số và dấu gạch dưới.';
+    }
+    return null;
+  }
+
+  static String? validateAmount(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Vui lòng nhập số tiền';
+    }
+
+    final numVal = double.tryParse(value.replaceAll(',', '').replaceAll('.', ''));
+
+    if (numVal == null) return 'Số tiền không hợp lệ';
+    if (numVal <= 0) return 'Số tiền phải lớn hơn 0';
+    if (numVal > 100000000000) return 'Số tiền quá lớn';
+
+    return null;
+  }
+
+  static String? validatePercentage(String? value) {
+    if (value == null || value.isEmpty) return 'Nhập %';
+    final numVal = int.tryParse(value);
+    if (numVal == null || numVal < 0 || numVal > 100) {
+      return 'Phải từ 0–100';
+    }
+    return null;
+  }
+
+  static String? validateMonthlyIncome(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Vui lòng nhập thu nhập hàng tháng';
+    }
+
+    final numVal = double.tryParse(value.replaceAll(',', ''));
+
+    if (numVal == null) return 'Thu nhập phải là số hợp lệ';
+    if (numVal <= 0) return 'Thu nhập phải lớn hơn 0';
+    if (numVal > 1000000000) {
+      return 'Thu nhập quá lớn (giới hạn 1,000,000,000)';
+    }
+
+    return null;
+  }
+
+  static String? validateInteger(String? value) {
+    if (value == null || value.isEmpty) return 'Vui lòng nhập số';
+    if (int.tryParse(value) == null) return 'Phải là số nguyên';
+    return null;
+  }
+
+  static String? validateDouble(String? value) {
+    if (value == null || value.isEmpty) return 'Vui lòng nhập số';
+    if (double.tryParse(value) == null) return 'Phải là số hợp lệ';
     return null;
   }
 
   static String? validateBirthDate(int? day, int? month, int? year) {
     if (day == null || month == null || year == null) {
-      return 'Please select full date of birth.';
+      return 'Vui lòng chọn ngày sinh đầy đủ.';
     }
-    // Kiểm tra năm sinh hợp lệ
     if (year > DateTime.now().year || year < 1950) {
-      return 'Invalid year of birth.';
+      return 'Năm sinh không hợp lệ.';
+    }
+    return null;
+  }
+
+  static String? validateTransactionDate(DateTime? date) {
+    if (date == null) return 'Vui lòng chọn ngày giao dịch.';
+    if (date.isAfter(DateTime.now())) {
+      return 'Ngày giao dịch không thể ở tương lai.';
+    }
+    return null;
+  }
+
+  static String? validateCategory(String? value) {
+    if (value == null || value.trim().isEmpty) {
+      return 'Vui lòng chọn phân loại';
     }
     return null;
   }

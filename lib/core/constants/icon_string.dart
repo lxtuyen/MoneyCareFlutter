@@ -15,4 +15,6 @@ class AppIcons{
   static const String education = "icons/education_icon.svg";
   static const String essential = "icons/essential_icon.svg";
 
+  static const String filter = "icons/filter.svg";
+
 }

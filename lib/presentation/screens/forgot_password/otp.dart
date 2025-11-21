@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
+import 'package:flutter/services.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -13,9 +18,46 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController otpController = TextEditingController();
+  final AuthController authController = Get.find<AuthController>();
+  var secondsRemaining = 60.obs; // biến đếm ngược
+  Timer? countdownTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    startCountdown();
+  }
+
+  @override
+  void dispose() {
+    countdownTimer?.cancel();
+    super.dispose();
+  }
+
+  void startCountdown() {
+    secondsRemaining.value = 60;
+    countdownTimer?.cancel();
+    countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (secondsRemaining.value > 0) {
+        secondsRemaining.value--;
+      } else {
+        timer.cancel();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    Future<void> onPressed() async {
+      try {
+        final message = await authController.verifyOtp(otpController.text);
+        Get.offAllNamed('/reset_password');
+        AppHelperFunction.showSnackBar(message);
+      } catch (e) {
+        AppHelperFunction.showSnackBar(e.toString());
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -29,7 +71,7 @@ class _OtpScreenState extends State<OtpScreen> {
                 const SizedBox(height: 80),
 
                 const Text(
-                  AppTexts.getOtp,
+                  AppTexts.enterOtp,
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -84,6 +126,10 @@ class _OtpScreenState extends State<OtpScreen> {
                           controller: otpController,
                           textAlign: TextAlign.center,
                           keyboardType: TextInputType.number,
+                          inputFormatters: [
+                            LengthLimitingTextInputFormatter(6),
+                            FilteringTextInputFormatter.digitsOnly,
+                          ],
                           decoration: const InputDecoration(
                             hintText: AppTexts.otpHint,
                             hintStyle: TextStyle(
@@ -103,45 +149,62 @@ class _OtpScreenState extends State<OtpScreen> {
                 const SizedBox(height: 20),
 
                 Center(
-                  child: RichText(
-                    text: TextSpan(
-                      text: AppTexts.notReceiveOtp,
-                      style: const TextStyle(
-                        color: AppColors.text3,
-                        fontSize: 16,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '30s',
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          recognizer: TapGestureRecognizer()..onTap = () {},
+                  child: Obx(() {
+                    return RichText(
+                      text: TextSpan(
+                        text: AppTexts.notReceiveOtp,
+                        style: const TextStyle(
+                          color: AppColors.text3,
+                          fontSize: 16,
                         ),
-                      ],
-                    ),
-                  ),
+                        children: [
+                          TextSpan(
+                            text: '${secondsRemaining.value}s',
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            recognizer:
+                                TapGestureRecognizer()
+                                  ..onTap = () {
+                                    if (secondsRemaining.value == 0) {
+                                      startCountdown();
+                                    }
+                                  },
+                          ),
+                        ],
+                      ),
+                    );
+                  }),
                 ),
 
                 const Spacer(),
 
-                ElevatedButton(
-                  onPressed: () {
-                    context.push('/reset-password');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(55),
-                    backgroundColor: AppColors.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15),
+                Obx(() {
+                  return ElevatedButton(
+                    onPressed:
+                        authController.isLoading.value ? null : onPressed,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(50),
+                      backgroundColor: AppColors.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
-                  ),
-                  child: const Text(
-                    AppTexts.confirmOtpButton,
-                    style: TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                ),
+                    child:
+                        authController.isLoading.value
+                            ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                            : const Text(
+                              AppTexts.confirmOtpButton,
+                              style: TextStyle(
+                                fontSize: 25,
+                                color: Colors.white,
+                              ),
+                            ),
+                  );
+                }),
 
                 const SizedBox(height: 16),
 
@@ -163,7 +226,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           recognizer:
                               TapGestureRecognizer()
                                 ..onTap = () {
-                                  context.push('/login');
+                                  Get.toNamed('/login');
                                 },
                         ),
                       ],

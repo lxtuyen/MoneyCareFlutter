@@ -1,8 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -18,8 +21,42 @@ class _LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
+
+  final AuthController authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
+    Future<void> onPressed() async {
+      if (_formKey.currentState!.validate()) {
+        final message = await authController.login(
+          emailController.text.trim(),
+          passwordController.text.trim(),
+        );
+
+        final user = authController.user.value;
+        if (user == null) {
+          AppHelperFunction.showSnackBar(message!);
+          return;
+        }
+
+        if (user.role == 'user') {
+          if (user.savingFund != null) {
+            Get.offAllNamed('/main');
+          } else {
+            Get.offAllNamed('/onboarding_welcome');
+          }
+          return;
+        }
+
+        if (user.role == 'admin') {
+          Get.offAllNamed('/admin_dashboard');
+          return;
+        }
+
+        AppHelperFunction.showSnackBar('Đăng nhập thất bại');
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -97,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        context.push('/forgot_password');
+                        Get.toNamed('/forgot_password');
                       },
                       child: const Text(
                         AppTexts.forgotPassword,
@@ -108,24 +145,31 @@ class _LoginScreenState extends State<LoginScreen> {
 
                   const SizedBox(height: 10),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.push('/');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                  Obx(() {
+                    return ElevatedButton(
+                      onPressed:
+                          authController.isLoading.value ? null : onPressed,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      AppTexts.login,
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-                  ),
+                      child:
+                          authController.isLoading.value
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                AppTexts.login,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                    );
+                  }),
 
                   const Spacer(),
 
@@ -147,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    context.push('/register');
+                                    Get.toNamed('/register');
                                   },
                           ),
                         ],

@@ -3,7 +3,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/presentation/screens/home/widgets/transaction_item.dart';
 
 class TransactionSection extends StatefulWidget {
   const TransactionSection({super.key});
@@ -22,7 +21,7 @@ class _TransactionSectionState extends State<TransactionSection> {
       "subtitle": "Chi tiêu hằng ngày",
       "date": "03/06/23",
       "amount": "250.000",
-      "type": "expense", // 👈 thêm loại
+      "type": "expense",
     },
     {
       "iconColor": Colors.lightBlue,
@@ -38,22 +37,6 @@ class _TransactionSectionState extends State<TransactionSection> {
       "subtitle": "Công ty ABC",
       "date": "01/06/23",
       "amount": "10.000.000",
-      "type": "income",
-    },
-    {
-      "iconColor": Colors.orange,
-      "title": "Tiền điện nước",
-      "subtitle": "Chi tiêu hằng ngày",
-      "date": "02/06/23",
-      "amount": "1.200.000",
-      "type": "expense",
-    },
-    {
-      "iconColor": Colors.red,
-      "title": "Bán đồ cũ",
-      "subtitle": "Đồ dùng cá nhân",
-      "date": "05/06/23",
-      "amount": "500.000",
       "type": "income",
     },
   ];
@@ -98,19 +81,6 @@ class _TransactionSectionState extends State<TransactionSection> {
                 ],
               ),
             )
-          else
-            ...transactions.map(
-              (item) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TransactionItem(
-                  title: item["title"] as String,
-                  amount: item["amount"] as String,
-                  iconColor: item["iconColor"] as Color,
-                  subtitle: item["subtitle"] as String,
-                  date: item["date"] as String,
-                ),
-              ),
-            ),
         ],
       ),
     );

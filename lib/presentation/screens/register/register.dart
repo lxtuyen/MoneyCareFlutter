@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -15,7 +17,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController lastNameController = TextEditingController();
   final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
 
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
@@ -23,8 +25,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
 
+  final AuthController authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
+    Future<void> onPressed() async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          final message = await authController.register(
+            emailController.text,
+            passwordController.text,
+            firstNameController.text,
+            lastNameController.text,
+          );
+
+          Get.offAllNamed('/login');
+
+          AppHelperFunction.showSnackBar(message);
+        } catch (e) {
+           AppHelperFunction.showSnackBar(e.toString());
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -106,19 +129,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(height: 15),
 
                   TextFormField(
-                    controller: phoneController,
+                    controller: emailController,
                     decoration: InputDecoration(
-                      labelText: AppTexts.phone,
+                      labelText: AppTexts.emailLabel,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      prefixIcon: const Icon(Icons.phone),
+                      prefixIcon: const Icon(Icons.email),
                       filled: true,
                       fillColor: Colors.white,
                     ),
-                    keyboardType: TextInputType.phone,
-                    validator:
-                        (value) => AppValidator.validatePhoneNumber(value),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) => AppValidator.validateEmail(value),
                   ),
 
                   const SizedBox(height: 15),
@@ -185,24 +207,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                   const SizedBox(height: 25),
 
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.push('/login');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                  Obx(() {
+                    return ElevatedButton(
+                      onPressed:
+                          authController.isLoading.value ? null : onPressed,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
-                    ),
-                    child: const Text(
-                      AppTexts.signup,
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-                  ),
+                      child:
+                          authController.isLoading.value
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                AppTexts.signup,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                    );
+                  }),
 
                   const SizedBox(height: 25),
 
@@ -224,7 +253,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    context.push('/login');
+                                    Get.toNamed('/login');
                                   },
                           ),
                         ],

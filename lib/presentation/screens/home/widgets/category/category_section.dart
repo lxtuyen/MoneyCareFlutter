@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/presentation/screens/home/widgets/category_card.dart';
+import 'package:money_care/presentation/screens/home/widgets/category/category_card.dart';
 
 class CategorySection extends StatelessWidget {
   const CategorySection({super.key, this.onAddCategory});
@@ -61,7 +61,6 @@ class CategorySection extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            // Nút thêm (+)
             GestureDetector(
               onTap: onAddCategory,
               child: Container(

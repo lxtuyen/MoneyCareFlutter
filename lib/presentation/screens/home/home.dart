@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
-import 'package:money_care/presentation/screens/home/widgets/search_anchor.dart';
-import 'package:money_care/presentation/screens/home/widgets/spending_limit_card.dart';
-import 'package:money_care/presentation/screens/home/widgets/spending_overview_card.dart';
-import 'package:money_care/presentation/screens/home/widgets/spending_summary.dart';
-import 'package:money_care/presentation/screens/home/widgets/category_section.dart';
-import 'package:money_care/presentation/screens/home/widgets/transaction_section.dart';
+import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/dto/transaction_load_dto.dart';
+import 'package:money_care/models/user_model.dart';
+import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_limit_card.dart';
+import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_overview_card.dart';
+import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_summary.dart';
+import 'package:money_care/presentation/screens/home/widgets/category/category_section.dart';
+import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_section.dart';
 import 'package:money_care/presentation/widgets/icon/circular_icon.dart';
 import 'package:money_care/presentation/widgets/texts/section_heading.dart';
 
@@ -20,15 +24,45 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  DateTime? startDate;
-  DateTime? endDate;
+  final now = DateTime.now();
+  late DateTime startDate = DateTime(now.year, now.month, 1);
+  late DateTime endDate = DateTime(now.year, now.month + 1, 0);
+  String fullName = '';
+  final TransactionController transactionController =
+      Get.find<TransactionController>();
+  late int userId;
+
+  @override
+  void initState() {
+    super.initState();
+    initUserInfo();
+    loadSavingFundData();
+  }
+
+  Future<void> initUserInfo() async {
+    Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
+    UserModel user = UserModel.fromJson(userInfoJson, '');
+    setState(() {
+      fullName = user.profile.fullName;
+      userId = user.id;
+    });
+  }
+
+  Future<void> loadSavingFundData() async {
+    final dto = TransactionLoadDto(
+      userId: userId,
+      startDate: startDate.toIso8601String(),
+      endDate: endDate.toIso8601String(),
+    );
+    transactionController.getTotals(dto);
+  }
 
   void _pickDateRange() async {
     final picked = await pickDateRange(context);
     if (picked.isNotEmpty) {
       setState(() {
-        startDate = picked.first;
-        endDate = picked.length > 1 ? picked.last : picked.first;
+        startDate = picked.first!;
+        endDate = (picked.length > 1 ? picked.last : picked.first)!;
       });
     }
   }
@@ -44,19 +78,18 @@ class _HomeScreenState extends State<HomeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Chào Mừng, Tuyển",
+                  "Chào Mừng, $fullName",
                   style: TextStyle(
                     fontWeight: FontWeight.w600,
                     fontSize: 16,
                     color: AppColors.text4,
                   ),
                 ),
-
                 Row(
                   children: [
                     CircularIcon(
                       iconPath: AppIcons.search,
-                      backgroundColor: Color(0XFFF5FAFE),
+                      backgroundColor: const Color(0XFFF5FAFE),
                       height: 36,
                       width: 36,
                       onTap: () {
@@ -87,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(width: AppSizes.spaceBtwItems),
                     CircularIcon(
                       iconPath: AppIcons.notification,
-                      backgroundColor: Color(0XFFF5FAFE),
+                      backgroundColor: const Color(0XFFF5FAFE),
                       height: 36,
                       width: 36,
                     ),
@@ -97,38 +130,41 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
             SpendingSummary(balance: '1.000.000', spending: '250.000'),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
             AppSectionHeading(
               title: "Chi theo phân loại",
               showActionButton: false,
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
             CategorySection(),
 
             const SizedBox(height: AppSizes.defaultSpace),
-            AppSectionHeading(title: "Giao dịch gần đây"),
 
+            AppSectionHeading(title: "Giao dịch gần đây"),
             const SizedBox(height: AppSizes.defaultSpace),
             TransactionSection(),
 
             const SizedBox(height: AppSizes.defaultSpace),
+
             AppSectionHeading(title: "Tổng quan", showActionButton: false),
             const SizedBox(height: AppSizes.spaceBtwItems),
             GestureDetector(
               onTap: _pickDateRange,
               child: Row(
-                children: [
+                children: const [
                   Icon(Icons.calendar_month_outlined, size: 18),
                   SizedBox(width: 4),
-                  Text('Chọn Khoảng ngày'),
+                  Text('Chọn khoảng ngày'),
                 ],
               ),
             ),
             const SizedBox(height: AppSizes.defaultSpace),
-
             SpendingOverviewCard(
               startDate: startDate,
               endDate: endDate,
@@ -136,7 +172,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
-            AppSectionHeading(title: "Hạn mực chi tiêu"),
+
+            AppSectionHeading(title: "Hạn mức chi tiêu"),
             const SizedBox(height: AppSizes.defaultSpace),
 
             SpendingLimitCard(
@@ -147,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
               isOverLimit: false,
             ),
             SpendingLimitCard(
-              title: "ào tạo",
+              title: "Đào tạo",
               limitText: "2,000,000",
               spentText: "1,200,000",
               iconPath: AppIcons.education,

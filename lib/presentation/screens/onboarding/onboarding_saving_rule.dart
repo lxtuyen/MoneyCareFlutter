@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/image_string.dart';
 import 'package:money_care/core/constants/text_string.dart';
@@ -29,7 +30,6 @@ class OnboardingSavingRuleScreen extends StatelessWidget {
             
                 const SizedBox(height: 32),
             
-                // Mô tả
                 Text(
                   AppTexts.savingRuleDescription1,
                   textAlign: TextAlign.center,
@@ -51,16 +51,13 @@ class OnboardingSavingRuleScreen extends StatelessWidget {
                 ),
                 const Spacer(),
             
-                // Nút hành động
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool('hasSeenOnboarding', true);
-                      if (context.mounted) {
-                        context.go('/select_method_login');
-                      }
+                      Get.toNamed('/select_saving_fund');
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
