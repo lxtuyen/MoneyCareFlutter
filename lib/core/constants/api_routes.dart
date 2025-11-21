@@ -18,4 +18,8 @@ class ApiRoutes {
   static const transaction = 'transactions';
   static const getTransactionsByUser = 'transactions/me';
   static const totalTransactions = 'transactions/totals';
+
+  // --- Notification ---
+  static const getNotificationsByUser = 'notifications/me';
+  static const notification = 'notifications';
 }
