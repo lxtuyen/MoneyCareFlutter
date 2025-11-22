@@ -6,8 +6,8 @@ import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
 import 'package:money_care/data/storage_service.dart';
-import 'package:money_care/models/dto/transaction_load_dto.dart';
 import 'package:money_care/models/user_model.dart';
+import 'package:money_care/presentation/screens/home/widgets/search_anchor.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_limit_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_overview_card.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_summary.dart';
@@ -27,16 +27,16 @@ class _HomeScreenState extends State<HomeScreen> {
   final now = DateTime.now();
   late DateTime startDate = DateTime(now.year, now.month, 1);
   late DateTime endDate = DateTime(now.year, now.month + 1, 0);
-  String fullName = '';
   final TransactionController transactionController =
       Get.find<TransactionController>();
   late int userId;
+  String fullName = '';
+  late int? monthlyIncome;
 
   @override
   void initState() {
     super.initState();
     initUserInfo();
-    loadSavingFundData();
   }
 
   Future<void> initUserInfo() async {
@@ -45,16 +45,15 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       fullName = user.profile.fullName;
       userId = user.id;
+      monthlyIncome = user.profile.monthlyIncome;
     });
+    loadSavingFundData();
   }
 
   Future<void> loadSavingFundData() async {
-    final dto = TransactionLoadDto(
-      userId: userId,
-      startDate: startDate.toIso8601String(),
-      endDate: endDate.toIso8601String(),
-    );
-    transactionController.getTotals(dto);
+    transactionController.getTotalByType(userId);
+    transactionController.getTotalByCate(userId);
+    transactionController.getTransactionByType(userId);
   }
 
   void _pickDateRange() async {
@@ -64,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
         startDate = picked.first!;
         endDate = (picked.length > 1 ? picked.last : picked.first)!;
       });
+      loadSavingFundData();
     }
   }
 
@@ -104,9 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: Container(
-                                  margin: const EdgeInsets.only(
-                                    top: 80,
-                                  ),
+                                  margin: const EdgeInsets.only(top: 80),
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   child: SearchAnchorCustom(),
@@ -130,8 +128,22 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
+            Obx(() {
+              final totals = transactionController.totalByType.value;
 
-            SpendingSummary(balance: '1.000.000', spending: '250.000'),
+              if (transactionController.isLoading.value) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              return SpendingSummary(
+                //onPressed: () => Get.toNamed(page),
+                incomeTotal: totals!.incomeTotal,
+                expenseTotal: totals.expenseTotal,
+              );
+            }),
 
             const SizedBox(height: AppSizes.defaultSpace),
 
@@ -142,13 +154,37 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: AppSizes.defaultSpace),
 
-            CategorySection(),
+            Obx(() {
+              final categories = transactionController.totalByCate;
+              if (transactionController.isLoading.value) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              return CategorySection(categories: categories);
+            }),
 
             const SizedBox(height: AppSizes.defaultSpace),
 
             AppSectionHeading(title: "Giao dịch gần đây"),
             const SizedBox(height: AppSizes.defaultSpace),
-            TransactionSection(),
+            Obx(() {
+              final transactions =
+                  transactionController.transactionByType.value;
+              if (transactions == null) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              return TransactionSection(
+                incomeTransactions: transactions.incomeTransactions,
+                expenseTransactions: transactions.expenseTransactions,
+              );
+            }),
 
             const SizedBox(height: AppSizes.defaultSpace),
 
@@ -176,48 +212,34 @@ class _HomeScreenState extends State<HomeScreen> {
             AppSectionHeading(title: "Hạn mức chi tiêu"),
             const SizedBox(height: AppSizes.defaultSpace),
 
-            SpendingLimitCard(
-              title: "Cần thiết",
-              limitText: "5,000,000",
-              spentText: "3,200,000",
-              iconPath: AppIcons.essential,
-              isOverLimit: false,
-            ),
-            SpendingLimitCard(
-              title: "Đào tạo",
-              limitText: "2,000,000",
-              spentText: "1,200,000",
-              iconPath: AppIcons.education,
-              isOverLimit: false,
-            ),
-            SpendingLimitCard(
-              title: "Hưởng thụ",
-              limitText: "1,000,000",
-              spentText: "800,000",
-              iconPath: AppIcons.pleasure,
-              isOverLimit: false,
-            ),
-            SpendingLimitCard(
-              title: "Tiết kiệm",
-              limitText: "3,000,000",
-              spentText: "1,000,000",
-              iconPath: AppIcons.savings,
-              isOverLimit: false,
-            ),
-            SpendingLimitCard(
-              title: "Từ thiện",
-              limitText: "500,000",
-              spentText: "300,000",
-              iconPath: AppIcons.charity,
-              isOverLimit: false,
-            ),
-            SpendingLimitCard(
-              title: "Tự do",
-              limitText: "2,500,000",
-              spentText: "5,700,000",
-              iconPath: AppIcons.freedom,
-              isOverLimit: true,
-            ),
+            Obx(() {
+              final categories = transactionController.totalByCate;
+              if (transactionController.isLoading.value) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (categories.isEmpty) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: Text('Không có dữ liệu')),
+                );
+              }
+
+              return Column(
+                children:
+                    categories.map((category) {
+                      return SpendingLimitCard(
+                        title: category.categoryName,
+                        limit: (category.percentage) * (monthlyIncome ?? 0),
+                        spent: category.total,
+                        iconPath: 'icons/${category.categoryIcon}.svg',
+                      );
+                    }).toList(),
+              );
+            }),
           ],
         ),
       ),

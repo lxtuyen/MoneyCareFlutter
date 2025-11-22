@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
-import 'package:money_care/presentation/screens/home/widgets/transaction_item.dart';
 
 class SearchAnchorCustom extends StatefulWidget {
   const SearchAnchorCustom({super.key});
@@ -14,7 +12,6 @@ class SearchAnchorCustom extends StatefulWidget {
 class _SearchAnchorCustomState extends State<SearchAnchorCustom> {
   final SearchController _searchController = SearchController();
 
-  // 🧩 Dữ liệu giả test
   final List<Map<String, dynamic>> _searchResults = [
     {
       'id': '1',
@@ -120,7 +117,7 @@ class _SearchAnchorCustomState extends State<SearchAnchorCustom> {
               ),
             );
       
-            for (var item in items) {
+            /*for (var item in items) {
               widgets.add(Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 child: TransactionItem(
@@ -133,7 +130,7 @@ class _SearchAnchorCustomState extends State<SearchAnchorCustom> {
                   onTap: () => context.push('/detail/${item['id']}'),
                 ),
               ));
-            }
+            }*/
           }
           return widgets;
         },

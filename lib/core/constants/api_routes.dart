@@ -17,7 +17,7 @@ class ApiRoutes {
   // --- Transaction ---
   static const transaction = 'transactions';
   static const getTransactionsByUser = 'transactions/me';
-  static const totalTransactions = 'transactions/totals';
+  static const getTransactionsByType = 'transactions/latest-per-type';
 
   // --- Notification ---
   static const getNotificationsByUser = 'notifications/me';

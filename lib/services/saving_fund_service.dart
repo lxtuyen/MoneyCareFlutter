@@ -31,6 +31,8 @@ class SavingFundService {
       },
     );
 
+    if (!res.success || res.data == null) throw Exception(res.message);
+
     return res.data ?? [];
   }
 

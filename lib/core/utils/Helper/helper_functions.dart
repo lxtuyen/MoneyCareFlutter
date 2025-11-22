@@ -48,10 +48,7 @@ class AppHelperFunction {
           title: Text(title),
           content: Text(message),
           actions: [
-            TextButton(
-              onPressed: () => Get.back(),
-              child: const Text("OK"),
-            ),
+            TextButton(onPressed: () => Get.back(), child: const Text("OK")),
           ],
         );
       },
@@ -108,4 +105,10 @@ class AppHelperFunction {
     }
     return wrappedList;
   }
+
+  static String formatCurrency(String number) {
+    final formatter = NumberFormat('#,###', 'vi_VN');
+    return formatter.format(int.tryParse(number) ?? 0);
+  }
+  static int clampZero(int value) => value < 0 ? 0 : value;
 }

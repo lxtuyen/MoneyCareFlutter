@@ -4,17 +4,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class SpendingSummary extends StatelessWidget {
   const SpendingSummary({
     super.key,
-    required this.balance,
-    required this.spending,
+    required this.incomeTotal,
+    required this.expenseTotal,
     this.onPressed,
   });
 
-  final String balance;
-  final String spending;
+  final int incomeTotal;
+  final int expenseTotal;
   final VoidCallback? onPressed;
 
   @override
@@ -83,7 +84,7 @@ class SpendingSummary extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    spending,
+                    AppHelperFunction.formatCurrency(expenseTotal.toString()),
                     style: const TextStyle(
                       color: AppColors.secondaryOrange,
                       fontWeight: FontWeight.bold,
@@ -92,7 +93,7 @@ class SpendingSummary extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Số dư: $balance',
+                    'Số dư: ${AppHelperFunction.formatCurrency(AppHelperFunction.clampZero(incomeTotal - expenseTotal).toString())}',
                     style: const TextStyle(
                       color: AppColors.text3,
                       fontSize: 12,

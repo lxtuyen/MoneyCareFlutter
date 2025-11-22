@@ -15,7 +15,10 @@ class UserProfileModel {
       UserProfileModel(
         firstName: json['first_name'] ?? '',
         lastName: json['last_name'] ?? '',
-        monthlyIncome: json['monthly_income'],
+        monthlyIncome:
+            json['monthly_income'] != null
+                ? double.tryParse(json['monthly_income'].toString())?.toInt()
+                : null,
       );
 
   Map<String, dynamic> toJson() => {
