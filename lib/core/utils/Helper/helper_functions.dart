@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -17,10 +19,6 @@ class AppHelperFunction {
         return Colors.grey;
       case 'Purple':
         return Colors.purple;
-      case 'Black':
-        return Colors.black;
-      case 'White':
-        return Colors.white;
       case 'Orange':
         return Colors.orange;
       case 'Brown':
@@ -29,9 +27,56 @@ class AppHelperFunction {
         return Colors.teal;
       case 'Indigo':
         return Colors.indigo;
+      case 'Cyan':
+        return Colors.cyan;
+      case 'Lime':
+        return Colors.lime;
+      case 'Amber':
+        return Colors.amber;
+      case 'DeepOrange':
+        return Colors.deepOrange;
+      case 'DeepPurple':
+        return Colors.deepPurple;
+      case 'LightBlue':
+        return Colors.lightBlue;
+      case 'LightGreen':
+        return Colors.lightGreen;
+      case 'Yellow':
+        return Colors.yellow;
+      case 'BlueGrey':
+        return Colors.blueGrey;
+      case 'Black':
+        return Colors.black;
+      // màu tùy chỉnh
+      case 'Custom1':
+        return const Color(0xFFB39DDB);
+      case 'Custom2':
+        return const Color(0xFFFFCC80);
+      case 'Custom3':
+        return const Color(0xFF80CBC4);
       default:
-        return null;
+        return Colors.grey;
     }
+  }
+
+  static final List<String> _colorNames = [
+    'Green', 'Red', 'Blue', 'Pink', 'Grey',
+    'Purple', 'Orange', 'Brown', 'Teal', 'Indigo',
+    'Cyan', 'Lime', 'Amber', 'DeepOrange', 'DeepPurple',
+    'LightBlue', 'LightGreen', 'Yellow', 'BlueGrey', 'Black',
+    'Custom1', 'Custom2', 'Custom3',
+  ];
+
+  static Color getRandomColor() {
+    final random = Random();
+    final colorName = _colorNames[random.nextInt(_colorNames.length)];
+    return getColor(colorName)!;
+  }
+
+  static Color getColorFromCategory(String categoryName) {
+    final index = categoryName.hashCode % _colorNames.length;
+    final colorName = _colorNames[index];
+    return getColor(colorName)!;
   }
 
   static void showSnackBar(String message) {
@@ -110,5 +155,6 @@ class AppHelperFunction {
     final formatter = NumberFormat('#,###', 'vi_VN');
     return formatter.format(int.tryParse(number) ?? 0);
   }
+
   static int clampZero(int value) => value < 0 ? 0 : value;
 }

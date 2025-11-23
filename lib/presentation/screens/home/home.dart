@@ -6,6 +6,7 @@ import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
 import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/dto/transaction_totals_dto.dart';
 import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/search_anchor.dart';
 import 'package:money_care/presentation/screens/home/widgets/spending_summary/spending_limit_card.dart';
@@ -25,8 +26,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final now = DateTime.now();
-  late DateTime startDate = DateTime(now.year, now.month, 1);
-  late DateTime endDate = DateTime(now.year, now.month + 1, 0);
+  late DateTime startDate = now.subtract(const Duration(days: 6));
+  late DateTime endDate = now;
   final TransactionController transactionController =
       Get.find<TransactionController>();
   late int userId;
@@ -51,9 +52,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> loadSavingFundData() async {
+    transactionController.filterTransactions(userId);
     transactionController.getTotalByType(userId);
     transactionController.getTotalByCate(userId);
     transactionController.getTransactionByType(userId);
+    transactionController.getTotalByDate(
+      userId,
+      TransactionTotalsDto(
+        startDate: startDate.toIso8601String(),
+        endDate: endDate.toIso8601String(),
+      ),
+    );
   }
 
   void _pickDateRange() async {
@@ -63,7 +72,13 @@ class _HomeScreenState extends State<HomeScreen> {
         startDate = picked.first!;
         endDate = (picked.length > 1 ? picked.last : picked.first)!;
       });
-      loadSavingFundData();
+      transactionController.getTotalByDate(
+        userId,
+        TransactionTotalsDto(
+          startDate: startDate.toIso8601String(),
+          endDate: endDate.toIso8601String(),
+        ),
+      );
     }
   }
 
@@ -107,7 +122,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   margin: const EdgeInsets.only(top: 80),
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
-                                  child: SearchAnchorCustom(),
+                                  child: Obx(() {
+                                    final transactions =
+                                        transactionController.transactions;
+
+                                    if (transactionController.isLoading.value) {
+                                      return const SizedBox(
+                                        height: 120,
+                                        child: Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                      );
+                                    }
+
+                                    return SearchAnchorCustom(
+                                      listData: transactions,
+                                    );
+                                  }),
                                 ),
                               ),
                             );
@@ -139,7 +170,6 @@ class _HomeScreenState extends State<HomeScreen> {
               }
 
               return SpendingSummary(
-                //onPressed: () => Get.toNamed(page),
                 incomeTotal: totals!.incomeTotal,
                 expenseTotal: totals.expenseTotal,
               );
@@ -201,11 +231,23 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: AppSizes.defaultSpace),
-            SpendingOverviewCard(
-              startDate: startDate,
-              endDate: endDate,
-              amountSpent: '2,000,000',
-            ),
+            Obx(() {
+              final totals = transactionController.totalByDate;
+
+              if (transactionController.isLoading.value) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+              double totalSpent = totals.fold(0, (sum, t) => sum + t.total);
+              return SpendingOverviewCard(
+                startDate: startDate,
+                endDate: endDate,
+                totals: totals,
+                amountSpent: totalSpent.toString(),
+              );
+            }),
 
             const SizedBox(height: AppSizes.defaultSpace),
 

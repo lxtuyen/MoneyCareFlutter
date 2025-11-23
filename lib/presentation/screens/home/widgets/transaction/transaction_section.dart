@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/models/transaction_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 
@@ -69,7 +70,11 @@ class _TransactionSectionState extends State<TransactionSection> {
             ...currentList.map(
               (item) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
-                child: TransactionItem(item: item, onTap: () {}),
+                child: TransactionItem(
+                  item: item,
+                  onTap: () {},
+                  color: AppHelperFunction.getRandomColor(),
+                ),
               ),
             ),
         ],

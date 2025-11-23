@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/models/transaction_model.dart';
 
 class TransactionItem extends StatelessWidget {
@@ -9,13 +10,14 @@ class TransactionItem extends StatelessWidget {
     required this.item,
     required this.onTap,
     this.isShowDate = true,
-    this.isShowDivider = true,
+    this.isShowDivider = true, this.color,
   });
 
   final TransactionModel item;
   final bool isShowDate;
   final bool isShowDivider;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class TransactionItem extends StatelessWidget {
                 width: 12,
                 height: 12,
                 decoration: BoxDecoration(
-                  color: Colors.blue,
+                  color: color,
                   shape: BoxShape.circle,
                 ),
               ),
@@ -71,7 +73,7 @@ class TransactionItem extends StatelessWidget {
                       ),
                     ),
                   Text(
-                    item.amount.toString(),
+                    AppHelperFunction.formatCurrency(item.amount.toString()),
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeMd,
                       fontWeight: FontWeight.w600,

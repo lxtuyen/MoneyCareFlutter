@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/models/response/total_by_category.dart';
 import 'package:money_care/presentation/screens/home/widgets/category/category_card.dart';
 
@@ -78,6 +79,7 @@ class CategorySection extends StatelessWidget {
                 title: item.categoryName,
                 amount: item.total.toString(),
                 percent: item.percentage.toString(),
+                color: AppHelperFunction.getRandomColor(),
               );
             }),
           ],
