@@ -38,12 +38,13 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
   }
 
   final List<CategoryModel> _categories = [
-    CategoryModel(icon: 'essential_icon', name: "Cần thiết"),
-    CategoryModel(icon: 'education_icon', name: "Đào tạo"),
-    CategoryModel(icon: 'pleasure_icon', name: "Hưởng thụ"),
-    CategoryModel(icon: 'savings_icon', name: "Tiết kiệm"),
-    CategoryModel(icon: 'charity_icon', name: "Từ thiện"),
-    CategoryModel(icon: 'freedom_icon', name: "Tự do"),
+    CategoryModel(icon: 'charity_icon', name: "Ăn uống"),
+    CategoryModel(icon: 'pleasure_icon', name: "Mua sắm"),
+    CategoryModel(icon: 'savings_icon', name: "Di chuyển"),
+
+    CategoryModel(icon: 'essential_icon', name: "Hóa đơn"),
+    CategoryModel(icon: 'education_icon', name: "Giáo dục"),
+    CategoryModel(icon: 'freedom_icon', name: "Khác"),
   ];
 
   Future<void> _createSavingFund() async {
@@ -182,3 +183,4 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
     );
   }
 }
+  
