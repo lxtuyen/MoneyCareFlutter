@@ -1,14 +1,14 @@
-class TransactionTotals {
-  final double incomeTotal;
-  final double expenseTotal;
+class TotalByType {
+  final int incomeTotal;
+  final int expenseTotal;
 
-  TransactionTotals({
+  TotalByType({
     required this.incomeTotal,
     required this.expenseTotal,
   });
 
-  factory TransactionTotals.fromJson(Map<String, dynamic> json) {
-    return TransactionTotals(
+  factory TotalByType.fromJson(Map<String, dynamic> json) {
+    return TotalByType(
       incomeTotal: (json['income_total'] ?? 0).toDouble(),
       expenseTotal: (json['expense_total'] ?? 0).toDouble(),
     );

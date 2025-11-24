@@ -3,25 +3,29 @@ import 'package:money_care/presentation/screens/home/widgets/budget_detail_dialo
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/presentation/widgets/icon/rounded_icon.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class SpendingLimitCard extends StatelessWidget {
   final String title;
-  final String limitText;
-  final String spentText;
+  final int limit;
+  final int spent;
   final String iconPath;
-  final bool isOverLimit;
 
   const SpendingLimitCard({
     super.key,
     required this.title,
-    required this.limitText,
-    required this.spentText,
+    required this.limit,
+    required this.spent,
     required this.iconPath,
-    required this.isOverLimit,
   });
 
   @override
   Widget build(BuildContext context) {
+
+    String limitText = AppHelperFunction.formatCurrency(limit.toString());
+    String spentText = AppHelperFunction.formatCurrency(spent.toString());
+    bool isOverLimit = spent >= limit;
+
     return GestureDetector(
       onTap:
           () => showDialog(
@@ -117,7 +121,9 @@ class SpendingLimitCard extends StatelessWidget {
                               fontSize: AppSizes.fontSizeSm,
                               fontWeight: FontWeight.w400,
                               color:
-                                  isOverLimit ? AppColors.error : AppColors.success,
+                                  isOverLimit
+                                      ? AppColors.error
+                                      : AppColors.success,
                             ),
                           ),
                         ],

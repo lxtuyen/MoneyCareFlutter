@@ -9,7 +9,7 @@ class CircularIcon extends StatelessWidget {
     this.height,
     this.width,
     this.size = AppSizes.lg,
-    this.onPressed,
+    this.onTap,
     this.icon,
     this.iconPath,
     this.backgroundColor,
@@ -17,7 +17,7 @@ class CircularIcon extends StatelessWidget {
   });
 
   final double? height, width, size;
-  final VoidCallback? onPressed;
+  final VoidCallback? onTap;
   final IconData? icon;
   final String? iconPath;
   final Color? backgroundColor;
@@ -26,26 +26,29 @@ class CircularIcon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(100),
-        color: backgroundColor != null
-            ? backgroundColor!
-            : AppColors.white.withOpacity(0.9),
-      ),
-      child: iconPath != null
-              ? SvgPicture.asset(
-                  iconPath!,
-                  width: width,
-                  height: height,
-                  color: color,
-                )
-              : Icon(
-                  icon,
-                  color: color,
-                  size: size,
-                ));
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(100),
+          color: backgroundColor != null
+              ? backgroundColor!
+              : AppColors.white.withOpacity(0.9),
+        ),
+        child: iconPath != null
+                ? SvgPicture.asset(
+                    iconPath!,
+                    width: width,
+                    height: height,
+                    color: color,
+                  )
+                : Icon(
+                    icon,
+                    color: color,
+                    size: size,
+                  )),
+    );
   }
 }

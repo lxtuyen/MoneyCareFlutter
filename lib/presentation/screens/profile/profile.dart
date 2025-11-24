@@ -63,7 +63,9 @@ class ProfileScreen extends StatelessWidget {
                     BuildMenuItem(
                       icon: Icons.person_outline,
                       title: AppTexts.profile,
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed('/onboarding_income');
+                      },
                     ),
                     BuildMenuItem(
                       icon: Icons.insert_chart_outlined,

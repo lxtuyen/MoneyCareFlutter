@@ -3,9 +3,19 @@ import 'package:flutter_svg/svg.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
+import 'package:money_care/models/transaction_model.dart';
+import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 
 class TransactionSection extends StatefulWidget {
-  const TransactionSection({super.key});
+  const TransactionSection({
+    super.key,
+    required this.incomeTransactions,
+    required this.expenseTransactions,
+  });
+
+  final List<TransactionModel> incomeTransactions;
+  final List<TransactionModel> expenseTransactions;
 
   @override
   State<TransactionSection> createState() => _TransactionSectionState();
@@ -14,35 +24,10 @@ class TransactionSection extends StatefulWidget {
 class _TransactionSectionState extends State<TransactionSection> {
   bool isExpense = true;
 
-  final transactions = [
-    {
-      "iconColor": Colors.purple,
-      "title": "Tiền siêu thị",
-      "subtitle": "Chi tiêu hằng ngày",
-      "date": "03/06/23",
-      "amount": "250.000",
-      "type": "expense",
-    },
-    {
-      "iconColor": Colors.lightBlue,
-      "title": "Tiền cà phê",
-      "subtitle": "Giải trí",
-      "date": "04/06/23",
-      "amount": "80.000",
-      "type": "expense",
-    },
-    {
-      "iconColor": Colors.green,
-      "title": "Lương tháng 6",
-      "subtitle": "Công ty ABC",
-      "date": "01/06/23",
-      "amount": "10.000.000",
-      "type": "income",
-    },
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final currentList =
+        isExpense ? widget.expenseTransactions : widget.incomeTransactions;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(AppSizes.spaceBtwItems),
@@ -61,10 +46,10 @@ class _TransactionSectionState extends State<TransactionSection> {
               ],
             ),
           ),
-      
+
           const SizedBox(height: AppSizes.defaultSpace),
-      
-          if (transactions.isEmpty)
+
+          if (currentList.isEmpty)
             Center(
               child: Column(
                 children: [
@@ -81,6 +66,17 @@ class _TransactionSectionState extends State<TransactionSection> {
                 ],
               ),
             )
+          else
+            ...currentList.map(
+              (item) => Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: TransactionItem(
+                  item: item,
+                  onTap: () {},
+                  color: AppHelperFunction.getRandomColor(),
+                ),
+              ),
+            ),
         ],
       ),
     );

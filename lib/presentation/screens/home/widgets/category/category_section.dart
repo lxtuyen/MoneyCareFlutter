@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
+import 'package:money_care/models/response/total_by_category.dart';
 import 'package:money_care/presentation/screens/home/widgets/category/category_card.dart';
 
 class CategorySection extends StatelessWidget {
-  const CategorySection({super.key, this.onAddCategory});
+  const CategorySection({
+    super.key,
+    this.onAddCategory,
+    required this.categories,
+  });
 
   final VoidCallback? onAddCategory;
+  final List<TotalByCategory> categories;
 
   @override
   Widget build(BuildContext context) {
-    final categories = [
-      {
-        "title": "Cần thiết",
-        "amount": "1.000.000",
-        "percent": "55%",
-        "color": const Color(0xFF6A4DFF),
-      },
-    ];
-
     if (categories.isEmpty) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -76,14 +74,14 @@ class CategorySection extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 12),
-            ...categories.map(
-              (item) => CategoryCard(
-                title: item['title'] as String,
-                amount: item['amount'] as String,
-                percent: item['percent'] as String,
-                color: item['color'] as Color,
-              ),
-            ),
+            ...categories.map((item) {
+              return CategoryCard(
+                title: item.categoryName,
+                amount: item.total.toString(),
+                percent: item.percentage.toString(),
+                color: AppHelperFunction.getRandomColor(),
+              );
+            }),
           ],
         ),
       ),
