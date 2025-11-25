@@ -159,7 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
-            Obx(() {
+           Obx(() {
               final totals = transactionController.totalByType.value;
 
               if (transactionController.isLoading.value) {
@@ -168,9 +168,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
+              
+              if (totals == null) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: Text('Không có dữ liệu')),
+                );
+              }
 
               return SpendingSummary(
-                incomeTotal: totals!.incomeTotal,
+                incomeTotal: totals.incomeTotal,
                 expenseTotal: totals.expenseTotal,
               );
             }),
@@ -186,6 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             Obx(() {
               final categories = transactionController.totalByCate;
+
               if (transactionController.isLoading.value) {
                 return const SizedBox(
                   height: 120,
@@ -203,10 +211,17 @@ class _HomeScreenState extends State<HomeScreen> {
             Obx(() {
               final transactions =
                   transactionController.transactionByType.value;
-              if (transactions == null) {
+              if (transactionController.isLoading.value) {
                 return const SizedBox(
                   height: 120,
                   child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (transactions == null) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: Text('Không có dữ liệu')),
                 );
               }
 

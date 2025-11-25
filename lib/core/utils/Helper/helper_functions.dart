@@ -47,7 +47,6 @@ class AppHelperFunction {
         return Colors.blueGrey;
       case 'Black':
         return Colors.black;
-      // màu tùy chỉnh
       case 'Custom1':
         return const Color(0xFFB39DDB);
       case 'Custom2':

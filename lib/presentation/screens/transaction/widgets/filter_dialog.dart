@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/presentation/widgets/choice_chip/choice_chips.dart';
 import 'package:get/get.dart';
 
@@ -46,7 +47,7 @@ class _FilterDialogState extends State<FilterDialog> {
       });
 
       final formatted =
-          "Tùy chỉnh: ${DateFormat('dd/MM/yyyy').format(startDate!)} - ${DateFormat('dd/MM/yyyy').format(endDate!)}";
+          "Tùy chỉnh: ${AppHelperFunction.getFormattedDate(startDate!)} - ${AppHelperFunction.getFormattedDate(startDate!)}";
 
       setState(() {
         if (widget.multiSelect) {

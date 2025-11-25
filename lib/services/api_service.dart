@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'package:money_care/data/storage_service.dart';
 import 'package:money_care/models/response/api_response.dart';
 
@@ -28,6 +29,39 @@ class ApiService {
       headers: _headers(),
       body: jsonEncode(body ?? {}),
     );
+
+    return _handleResponse(response, fromJsonT);
+  }
+
+  Future<ApiResponse<T>> postMultipart<T>(
+    String path, {
+    Map<String, dynamic>? fields,
+    required XFile file,
+    T Function(dynamic)? fromJsonT,
+  }) async {
+    final token = _storage.getToken();
+    final uri = Uri.parse('$baseUrl/$path');
+    final request = http.MultipartRequest('POST', uri);
+
+    final headers = {'Accept': 'application/json'};
+    if (token != null && token.isNotEmpty) {
+      headers['Authorization'] = 'Bearer $token';
+    }
+    request.headers.addAll(headers);
+
+    if (fields != null) {
+      request.fields.addAll(
+        fields.map((key, value) => MapEntry(key, value.toString())),
+      );
+    }
+
+    final bytes = await file.readAsBytes();
+    request.files.add(
+      http.MultipartFile.fromBytes('file', bytes, filename: file.name),
+    );
+
+    final streamed = await request.send();
+    final response = await http.Response.fromStream(streamed);
 
     return _handleResponse(response, fromJsonT);
   }

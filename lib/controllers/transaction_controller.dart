@@ -16,8 +16,10 @@ class TransactionController extends GetxController {
   var transactionByType = Rxn<TransactionByType>();
   RxList<TotalByCategory> totalByCate = <TotalByCategory>[].obs;
   RxList<TotalByDate> totalByDate = <TotalByDate>[].obs;
+  
   var isLoading = false.obs;
   var errorMessage = RxnString();
+
   final now = DateTime.now();
   late DateTime monthStartDate = DateTime(now.year, now.month, 1);
   late DateTime monthEndDate = DateTime(now.year, now.month + 1, 0);

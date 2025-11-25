@@ -1,13 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 
 import 'package:money_care/controllers/saving_fund_controller.dart';
+import 'package:money_care/controllers/scan_receipt_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/utils/Helper/helper_functions.dart';
@@ -15,7 +12,6 @@ import 'package:money_care/core/utils/validatiors/validation.dart';
 import 'package:money_care/data/storage_service.dart';
 import 'package:money_care/models/category_model.dart';
 import 'package:money_care/models/dto/transaction_create_dto.dart';
-import 'package:money_care/models/saving_fund_model.dart';
 import 'package:money_care/models/user_model.dart';
 import 'package:money_care/models/transaction_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/category_sheet.dart';
@@ -52,14 +48,10 @@ class _TransactionFormState extends State<TransactionForm> {
       Get.find<TransactionController>();
   final SavingFundController savingFundController =
       Get.find<SavingFundController>();
+  final ScanReceiptController scanReceiptController =
+      Get.find<ScanReceiptController>();
 
   late int userId;
-  late SavingFundModel savingFunds;
-
-
-  bool _isScanning = false;
-  final ImagePicker _picker = ImagePicker();
-
 
   @override
   void initState() {
@@ -73,11 +65,13 @@ class _TransactionFormState extends State<TransactionForm> {
       _amountController.text = item.amount.toString();
       _categoryController.text = item.category?.name ?? "";
       _noteController.text = item.note ?? "";
+      selectedCategoryId = item.category?.id;
     }
   }
 
   Future<void> initData() async {
-    Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
+    final userInfoJson = StorageService().getUserInfo();
+    if (userInfoJson == null) return;
     UserModel user = UserModel.fromJson(userInfoJson, '');
     savingFundController.loadFundById(user.savingFund!.id);
     setState(() {
@@ -85,10 +79,8 @@ class _TransactionFormState extends State<TransactionForm> {
     });
   }
 
-
-
   Future<void> _openScanOptions() async {
-    if (_isScanning) return;
+    if (scanReceiptController.isScanning.value) return;
 
     final source = await showModalBottomSheet<ImageSource>(
       context: context,
@@ -120,104 +112,31 @@ class _TransactionFormState extends State<TransactionForm> {
     await _scanBill(source);
   }
 
-  // Quét hoá đơn -> call API -> auto-fill form
   Future<void> _scanBill(ImageSource source) async {
-    final image = await _picker.pickImage(source: source, imageQuality: 80);
-    if (image == null) return;
+    final data = await scanReceiptController.scan(source);
+    if (data != null) {
+      setState(() {
+        _amountController.text = data.totalAmount.toString();
+        selectedDate = DateTime.parse(data.date);
+        if (widget.showCategory) {
+          final categories =
+              savingFundController.currentFund.value?.categories ?? [];
 
-    setState(() => _isScanning = true);
+          final matched = categories.firstWhere(
+            (c) =>
+                c.name.toLowerCase().trim() ==
+                data.categoryName.toLowerCase().trim(),
+            orElse: () => CategoryModel(id: -1, name: "", icon: "default.png"),
+          );
 
-    try {
-      final token = StorageService().getToken();
-
-      final uri = Uri.parse('http://localhost:3000/receipt/scan');
-
-      final request = http.MultipartRequest('POST', uri);
-
-      if (token != null) {
-        request.headers['Authorization'] = 'Bearer $token';
-      }
-
-      final bytes = await image.readAsBytes();
-      final multipartFile = http.MultipartFile.fromBytes(
-        'file',
-        bytes,
-        filename: image.name,
-      );
-      request.files.add(multipartFile);
-
-      final streamedResponse = await request.send();
-      final response = await http.Response.fromStream(streamedResponse);
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        final body = jsonDecode(response.body);
-        final data = (body['data'] ?? body) as Map<String, dynamic>;
-
-        final int? totalAmount = data['total_amount'];
-        final String? dateStr = data['date'];
-        final int? categoryId = data['category_id'];
-        final String? categoryName = data['category_name'];
-        final String? merchantName = data['merchant_name'];
-
-        setState(() {
-          if (totalAmount != null) {
-            _amountController.text = totalAmount.toString();
+          if (matched.id != -1) {
+            selectedCategoryId = matched.id;
+            _categoryController.text = matched.name;
           }
-
-          if (dateStr != null) {
-            try {
-              selectedDate = DateTime.parse(dateStr);
-            } catch (_) {}
-          }
-
-          if (widget.showCategory && categoryName != null) {
-            final categories =
-                savingFundController.currentFund.value?.categories ?? [];
-
-            final matched = categories.firstWhere(
-              (c) =>
-                  c.name.toLowerCase().trim() ==
-                  categoryName.toLowerCase().trim(),
-              orElse:
-                  () => CategoryModel(
-                    id: -1,
-                    name: "",
-                    icon: "default.png", // hoặc "" nếu bạn dùng string rỗng
-                  ),
-            );
-
-            if (matched.id != -1) {
-              selectedCategoryId = matched.id;
-              _categoryController.text = matched.name;
-            }
-          }
-
-          if (merchantName != null && merchantName.trim().isNotEmpty) {
-            if (_noteController.text.trim().isEmpty) {
-              _noteController.text = merchantName;
-            } else if (!_noteController.text.contains(merchantName)) {
-              _noteController.text = '${_noteController.text} · $merchantName';
-            }
-          }
-        });
-
-        AppHelperFunction.showSnackBar(
-          'Đã quét hoá đơn, kiểm tra lại thông tin trước khi lưu nhé!',
-        );
-      } else {
-        AppHelperFunction.showSnackBar(
-          'Quét hoá đơn thất bại (${response.statusCode})',
-        );
-      }
-    } catch (e) {
-      AppHelperFunction.showSnackBar('Lỗi quét hoá đơn: $e');
-    } finally {
-      if (mounted) {
-        setState(() => _isScanning = false);
-      }
+        }
+      });
     }
   }
-
 
   Future<void> _selectDate() async {
     final DateTime? picked = await showDatePicker(
@@ -309,7 +228,6 @@ class _TransactionFormState extends State<TransactionForm> {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Row(
                         children: [
-                          // Back
                           GestureDetector(
                             onTap: () {
                               if (Navigator.canPop(context)) {
@@ -325,7 +243,6 @@ class _TransactionFormState extends State<TransactionForm> {
                             ),
                           ),
 
-                          // Title ở giữa
                           Expanded(
                             child: Center(
                               child: Text(
@@ -338,46 +255,11 @@ class _TransactionFormState extends State<TransactionForm> {
                               ),
                             ),
                           ),
-
-                          // Nút Scan bill bên phải
-                          TextButton.icon(
-                            onPressed: _isScanning ? null : _openScanOptions,
-                            icon:
-                                _isScanning
-                                    ? const SizedBox(
-                                      width: 16,
-                                      height: 16,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        color: Colors.white,
-                                      ),
-                                    )
-                                    : const Icon(
-                                      Icons.document_scanner_outlined,
-                                      color: Colors.white,
-                                      size: 20,
-                                    ),
-                            label: const Text(
-                              'Scan bill',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                              ),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8,
-                              ),
-                              minimumSize: const Size(0, 0),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                            ),
-                          ),
                         ],
                       ),
                     ),
                   ),
 
-                  // ----------- FORM -------------
                   Padding(
                     padding: const EdgeInsets.all(16),
                     child: Form(
@@ -385,7 +267,6 @@ class _TransactionFormState extends State<TransactionForm> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Ngày giao dịch
                           GestureDetector(
                             onTap: _selectDate,
                             child: Container(
@@ -412,10 +293,9 @@ class _TransactionFormState extends State<TransactionForm> {
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
-                                        DateFormat(
-                                          'EEEE, dd/MM/yy',
-                                          'vi',
-                                        ).format(selectedDate),
+                                        AppHelperFunction.getFormattedDate(
+                                          selectedDate,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -430,7 +310,6 @@ class _TransactionFormState extends State<TransactionForm> {
 
                           const SizedBox(height: 20),
 
-                          // Số tiền + icon scan ở bên phải (tuỳ chọn)
                           TextFormField(
                             controller: _amountController,
                             decoration: InputDecoration(
@@ -439,14 +318,6 @@ class _TransactionFormState extends State<TransactionForm> {
                               prefixIcon: const Icon(Icons.attach_money),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                              ),
-                              suffixIcon: IconButton(
-                                icon: const Icon(
-                                  Icons.document_scanner_outlined,
-                                ),
-                                tooltip: 'Quét hoá đơn',
-                                onPressed:
-                                    _isScanning ? null : _openScanOptions,
                               ),
                             ),
                             keyboardType: TextInputType.number,
@@ -478,7 +349,6 @@ class _TransactionFormState extends State<TransactionForm> {
 
                           const SizedBox(height: 20),
 
-                          // Ghi chú
                           TextFormField(
                             controller: _noteController,
                             decoration: InputDecoration(
@@ -501,7 +371,6 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
             ),
 
-            // --------- BUTTON BOTTOM ----------
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
@@ -518,9 +387,11 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
                 child: Row(
                   children: [
-                    // Nút scan bill nhanh ở dưới (dùng chung logic)
                     GestureDetector(
-                      onTap: _isScanning ? null : _openScanOptions,
+                      onTap:
+                          scanReceiptController.isScanning.value
+                              ? null
+                              : _openScanOptions,
                       child: Container(
                         height: 55,
                         width: 55,
@@ -529,7 +400,7 @@ class _TransactionFormState extends State<TransactionForm> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child:
-                            _isScanning
+                            scanReceiptController.isScanning.value
                                 ? const Padding(
                                   padding: EdgeInsets.all(12),
                                   child: CircularProgressIndicator(
@@ -551,7 +422,7 @@ class _TransactionFormState extends State<TransactionForm> {
                                   ? null
                                   : _createTransaction,
                           style: ElevatedButton.styleFrom(
-                            minimumSize: const Size.fromHeight(50), // chiều cao
+                            minimumSize: const Size.fromHeight(50),
                             backgroundColor: AppColors.primary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15),
