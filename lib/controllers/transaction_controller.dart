@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:money_care/models/dto/transaction_filter_dto.dart';
 import 'package:money_care/models/dto/transaction_totals_dto.dart';
 import 'package:money_care/models/response/total_by_category.dart';
 import 'package:money_care/models/response/total_by_date.dart';
@@ -11,12 +12,12 @@ import '../models/dto/transaction_create_dto.dart';
 class TransactionController extends GetxController {
   final TransactionService service;
 
-  var transactions = <TransactionModel>[].obs;
   var totalByType = Rxn<TotalByType>();
   var transactionByType = Rxn<TransactionByType>();
+  var transactionByfilter = Rxn<TransactionByType>();
   RxList<TotalByCategory> totalByCate = <TotalByCategory>[].obs;
   RxList<TotalByDate> totalByDate = <TotalByDate>[].obs;
-  
+
   var isLoading = false.obs;
   var errorMessage = RxnString();
 
@@ -40,20 +41,6 @@ class TransactionController extends GetxController {
       errorMessage.value = null;
     } catch (e) {
       totalByType.value = null;
-      errorMessage.value = e.toString();
-    }
-
-    isLoading.value = false;
-  }
-
-  Future<void> getTransactionByType(int userId) async {
-    isLoading.value = true;
-
-    try {
-      transactionByType.value = await service.findLatest4ByTypePerUser(userId);
-      errorMessage.value = null;
-    } catch (e) {
-      transactionByType.value = null;
       errorMessage.value = e.toString();
     }
 
@@ -107,17 +94,19 @@ class TransactionController extends GetxController {
 
   Future<void> createTransaction(TransactionCreateDto dto) async {
     try {
-      final newTransaction = await service.createTransaction(dto);
-      transactions.insert(0, newTransaction);
+      await service.createTransaction(dto);
 
       await getTotalByType(dto.userId!);
       await getTotalByCate(dto.userId!);
-      await getTransactionByType(dto.userId!);
-
       final dateDto = TransactionTotalsDto(
         startDate: weekStartDate.toIso8601String(),
         endDate: weekEndDate.toIso8601String(),
       );
+      final filterDto = TransactionFilterDto(
+        startDate: weekStartDate.toIso8601String(),
+        endDate: weekEndDate.toIso8601String(),
+      );
+      await filterTransactions(dto.userId!, filterDto);
       await getTotalByDate(dto.userId!, dateDto);
     } catch (e) {
       rethrow;
@@ -126,42 +115,53 @@ class TransactionController extends GetxController {
 
   Future<void> updateTransaction(TransactionCreateDto dto, int id) async {
     try {
-      final updated = await service.updateTransaction(dto, id);
-      final index = transactions.indexWhere((t) => t.id == id);
-      if (index != -1) transactions[index] = updated;
+      await service.updateTransaction(dto, id);
 
       await getTotalByType(dto.userId!);
       await getTotalByCate(dto.userId!);
-      await getTransactionByType(dto.userId!);
-
       final dateDto = TransactionTotalsDto(
         startDate: weekStartDate.toIso8601String(),
         endDate: weekEndDate.toIso8601String(),
       );
       await getTotalByDate(dto.userId!, dateDto);
+      final filterDto = TransactionFilterDto(
+        startDate: weekStartDate.toIso8601String(),
+        endDate: weekEndDate.toIso8601String(),
+      );
+      await filterTransactions(dto.userId!, filterDto);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> deleteTransaction(int id) async {
+  Future<void> deleteTransaction(int id, int userId) async {
     try {
-      final success = await service.deleteTransaction(id);
-      if (success) transactions.removeWhere((t) => t.id == id);
+      await service.deleteTransaction(id);
+
+      await getTotalByType(userId);
+      await getTotalByCate(userId);
+      final dateDto = TransactionTotalsDto(
+        startDate: weekStartDate.toIso8601String(),
+        endDate: weekEndDate.toIso8601String(),
+      );
+      await getTotalByDate(userId, dateDto);
+      final filterDto = TransactionFilterDto(
+        startDate: weekStartDate.toIso8601String(),
+        endDate: weekEndDate.toIso8601String(),
+      );
+      await filterTransactions(userId, filterDto);
     } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> filterTransactions(int userId) async {
+  Future<void> filterTransactions(int userId, TransactionFilterDto dto) async {
     isLoading.value = true;
 
     try {
-      final list = await service.findAllByFilter(userId);
-      transactions.assignAll(list);
+      transactionByfilter.value = await service.findAllByFilter(userId, dto);
       errorMessage.value = null;
     } catch (e) {
-      transactions.clear();
       errorMessage.value = e.toString();
     }
 

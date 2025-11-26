@@ -19,14 +19,12 @@ import 'package:money_care/presentation/screens/transaction/widgets/sheet/catego
 class TransactionForm extends StatefulWidget {
   final String title;
   final bool showCategory;
-  final VoidCallback onSubmit;
   final TransactionModel? item;
 
   const TransactionForm({
     super.key,
     required this.title,
     this.showCategory = true,
-    required this.onSubmit,
     this.item,
   });
 
@@ -197,6 +195,26 @@ class _TransactionFormState extends State<TransactionForm> {
         await transactionController.createTransaction(dto);
         Get.back();
         AppHelperFunction.showSnackBar('Tạo giao dịch thành công');
+      } catch (e) {
+        AppHelperFunction.showSnackBar(e.toString());
+      }
+    }
+  }
+
+  Future<void> _updateTransaction() async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        final dto = TransactionCreateDto(
+          amount: int.parse(_amountController.text),
+          type: widget.showCategory ? "expense" : "income",
+          note: _noteController.text.trim(),
+          categoryId: selectedCategoryId,
+          transactionDate: selectedDate,
+          userId: userId,
+        );
+        await transactionController.updateTransaction(dto, widget.item!.id);
+        Get.back();
+        AppHelperFunction.showSnackBar('Cập nhật giao dịch thành công');
       } catch (e) {
         AppHelperFunction.showSnackBar(e.toString());
       }
@@ -418,8 +436,8 @@ class _TransactionFormState extends State<TransactionForm> {
                       child: Obx(() {
                         return ElevatedButton(
                           onPressed:
-                              transactionController.isLoading.value
-                                  ? null
+                              widget.item != null
+                                  ? _updateTransaction
                                   : _createTransaction,
                           style: ElevatedButton.styleFrom(
                             minimumSize: const Size.fromHeight(50),

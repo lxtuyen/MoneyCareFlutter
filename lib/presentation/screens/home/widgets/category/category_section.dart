@@ -17,39 +17,6 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (categories.isEmpty) {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          GestureDetector(
-            onTap: onAddCategory,
-            child: Container(
-              width: 50,
-              height: 100,
-              decoration: BoxDecoration(
-                color: AppColors.backgroundPrimary,
-                borderRadius: BorderRadius.circular(AppSizes.cardRadiusLg),
-              ),
-              child: const Center(
-                child: Icon(Icons.add, color: AppColors.text5, size: 28),
-              ),
-            ),
-          ),
-
-          const SizedBox(width: AppSizes.defaultSpace),
-          Expanded(
-            child: Text(
-              "Tạo hoặc lựa chọn quỹ tiết kiệm để chúng tôi giúp bạn quản lý tài chính hiệu quả",
-              style: TextStyle(
-                color: AppColors.text4,
-                fontSize: AppSizes.fontSizeSm,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
 
     return Align(
       alignment: Alignment.centerLeft,

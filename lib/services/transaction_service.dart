@@ -1,5 +1,6 @@
 import 'package:money_care/core/constants/api_routes.dart';
 import 'package:money_care/models/dto/transaction_create_dto.dart';
+import 'package:money_care/models/dto/transaction_filter_dto.dart';
 import 'package:money_care/models/dto/transaction_totals_dto.dart';
 import 'package:money_care/models/response/total_by_category.dart';
 import 'package:money_care/models/response/total_by_date.dart';
@@ -13,31 +14,14 @@ class TransactionService {
 
   TransactionService({required this.api});
 
-  Future<List<TransactionModel>> findAllByFilter(
-    int userId 
-  ) async {
-    final res = await api.get<List<TransactionModel>>(
-      "${ApiRoutes.getTransactionsByUser}/$userId",
-      fromJsonT: (json) {
-        final list = (json as List<dynamic>);
-        return list.map((e) => TransactionModel.fromJson(e)).toList();
-      },
-    );
-
-    if (!res.success || res.data == null) throw Exception(res.message);
-    return res.data!;
-  }
-
-  Future<TransactionByType> findLatest4ByTypePerUser(int userId) async {
+  Future<TransactionByType> findAllByFilter(int userId, TransactionFilterDto dto) async {
     final res = await api.get<TransactionByType>(
-      "${ApiRoutes.getTransactionsByType}/$userId",
+     "${ApiRoutes.getTransactionsFilter}/$userId",
+      queryParameters: dto.toQueryParams(),
       fromJsonT: (json) => TransactionByType.fromJson(json),
     );
 
-    if (!res.success || res.data == null) {
-      throw Exception(res.message);
-    }
-
+    if (!res.success || res.data == null) throw Exception(res.message);
     return res.data!;
   }
 
@@ -88,7 +72,7 @@ class TransactionService {
     return res.data ?? [];
   }
 
-    Future<List<TotalByDate>> getTotalByDate(
+  Future<List<TotalByDate>> getTotalByDate(
     int userId,
     TransactionTotalsDto dto,
   ) async {

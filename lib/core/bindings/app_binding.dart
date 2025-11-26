@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_care/controllers/auth_controller.dart';
+import 'package:money_care/controllers/filter_controller.dart';
 import 'package:money_care/controllers/notification_controller.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
 import 'package:money_care/controllers/scan_receipt_controller.dart';
@@ -49,9 +50,9 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () =>
-          ScanReceiptController(service: ScanReceiptService(api: apiService)),
+      () => ScanReceiptController(service: ScanReceiptService(api: apiService)),
       fenix: true,
     );
+    Get.lazyPut(() => FilterController(), fenix: true);
   }
 }

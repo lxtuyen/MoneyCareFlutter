@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class StatisticsHeader extends StatelessWidget {
   final String selected;
@@ -45,7 +46,11 @@ class StatisticsHeader extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.calendar_today, color: Colors.white, size: 16),
+                  const Icon(
+                    Icons.calendar_today,
+                    color: Colors.white,
+                    size: 16,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     monthText,
@@ -59,14 +64,14 @@ class StatisticsHeader extends StatelessWidget {
                 children: [
                   _buildSelectCard(
                     label: "Tiền chi",
-                    value: spendText,
+                    value: AppHelperFunction.formatCurrency(spendText),
                     isActive: selected == 'chi',
                     onTap: () => onSelected('chi'),
                   ),
                   const SizedBox(width: 12),
                   _buildSelectCard(
                     label: "Tiền thu",
-                    value: incomeText,
+                    value: AppHelperFunction.formatCurrency(incomeText),
                     isActive: selected == 'thu',
                     onTap: () => onSelected('thu'),
                   ),

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_care/controllers/filter_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
 import 'package:money_care/core/utils/date_picker_util.dart';
 import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/dto/transaction_filter_dto.dart';
 import 'package:money_care/models/dto/transaction_totals_dto.dart';
 import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/search_anchor.dart';
@@ -30,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime endDate = now;
   final TransactionController transactionController =
       Get.find<TransactionController>();
+  final FilterController filterController = Get.find<FilterController>();
   late int userId;
   String fullName = '';
   late int? monthlyIncome;
@@ -52,10 +55,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> loadSavingFundData() async {
-    transactionController.filterTransactions(userId);
     transactionController.getTotalByType(userId);
     transactionController.getTotalByCate(userId);
-    transactionController.getTransactionByType(userId);
+    transactionController.filterTransactions(
+      userId,
+      TransactionFilterDto(
+        startDate: filterController.startDate.toString(),
+        endDate: filterController.endDate.toString(),
+      ),
+    );
     transactionController.getTotalByDate(
       userId,
       TransactionTotalsDto(
@@ -124,7 +132,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MediaQuery.of(context).size.width * 0.9,
                                   child: Obx(() {
                                     final transactions =
-                                        transactionController.transactions;
+                                        transactionController
+                                            .transactionByType
+                                            .value!
+                                            .expenseTransactions;
 
                                     if (transactionController.isLoading.value) {
                                       return const SizedBox(
@@ -159,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: AppSizes.defaultSpace),
-           Obx(() {
+            Obx(() {
               final totals = transactionController.totalByType.value;
 
               if (transactionController.isLoading.value) {
@@ -168,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
-              
+
               if (totals == null) {
                 return const SizedBox(
                   height: 120,
@@ -201,6 +212,46 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
 
+              if (categories.isEmpty) {
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      onTap: () {},
+                      child: Container(
+                        width: 50,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: AppColors.backgroundPrimary,
+                          borderRadius: BorderRadius.circular(
+                            AppSizes.cardRadiusLg,
+                          ),
+                        ),
+                        child: const Center(
+                          child: Icon(
+                            Icons.add,
+                            color: AppColors.text5,
+                            size: 28,
+                          ),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(width: AppSizes.defaultSpace),
+                    Expanded(
+                      child: Text(
+                        "Tạo hoặc lựa chọn quỹ tiết kiệm để chúng tôi giúp bạn quản lý tài chính hiệu quả",
+                        style: TextStyle(
+                          color: AppColors.text4,
+                          fontSize: AppSizes.fontSizeSm,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              }
+
               return CategorySection(categories: categories);
             }),
 
@@ -210,7 +261,7 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: AppSizes.defaultSpace),
             Obx(() {
               final transactions =
-                  transactionController.transactionByType.value;
+                  transactionController.transactionByfilter.value;
               if (transactionController.isLoading.value) {
                 return const SizedBox(
                   height: 120,
