@@ -7,7 +7,7 @@ import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class SpendingLimitCard extends StatelessWidget {
   final String title;
-  final int limit;
+  final double limit;
   final int spent;
   final String iconPath;
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class DescriptionItem extends StatelessWidget {
   const DescriptionItem({
@@ -52,7 +53,7 @@ class DescriptionItem extends StatelessWidget {
             const SizedBox(width: 4),
             Icon(_percentIcon, color: _percentColor, size: 20),
             Text(
-              percent,
+              '${AppHelperFunction.formatCurrency(percent)} %',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

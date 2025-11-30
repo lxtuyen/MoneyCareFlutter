@@ -71,7 +71,6 @@ class _TransactionFormState extends State<TransactionForm> {
     final userInfoJson = StorageService().getUserInfo();
     if (userInfoJson == null) return;
     UserModel user = UserModel.fromJson(userInfoJson, '');
-    savingFundController.loadFundById(user.savingFund!.id);
     setState(() {
       userId = user.id;
     });
@@ -158,7 +157,7 @@ class _TransactionFormState extends State<TransactionForm> {
       ),
       builder: (context) {
         return Obx(() {
-          if (savingFundController.isLoading.value ||
+          if (savingFundController.isLoadingCurrent.value ||
               savingFundController.currentFund.value == null) {
             return const SizedBox(
               height: 200,
@@ -251,7 +250,7 @@ class _TransactionFormState extends State<TransactionForm> {
                               if (Navigator.canPop(context)) {
                                 Get.back();
                               } else {
-                                Get.toNamed('/home');
+                                Get.toNamed('/main');
                               }
                             },
                             child: const Icon(
@@ -405,33 +404,34 @@ class _TransactionFormState extends State<TransactionForm> {
                 ),
                 child: Row(
                   children: [
-                    GestureDetector(
-                      onTap:
-                          scanReceiptController.isScanning.value
-                              ? null
-                              : _openScanOptions,
-                      child: Container(
-                        height: 55,
-                        width: 55,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.borderPrimary),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child:
+                    if (widget.showCategory)
+                      GestureDetector(
+                        onTap:
                             scanReceiptController.isScanning.value
-                                ? const Padding(
-                                  padding: EdgeInsets.all(12),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2,
+                                ? null
+                                : _openScanOptions,
+                        child: Container(
+                          height: 55,
+                          width: 55,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: AppColors.borderPrimary),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child:
+                              scanReceiptController.isScanning.value
+                                  ? const Padding(
+                                    padding: EdgeInsets.all(12),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                  : const Icon(
+                                    Icons.document_scanner_outlined,
+                                    color: Colors.grey,
                                   ),
-                                )
-                                : const Icon(
-                                  Icons.document_scanner_outlined,
-                                  color: Colors.grey,
-                                ),
+                        ),
                       ),
-                    ),
-                    const SizedBox(width: 12),
+                    if (widget.showCategory) const SizedBox(width: 12),
                     Expanded(
                       child: Obx(() {
                         return ElevatedButton(

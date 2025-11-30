@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class SavingsLineChart extends StatelessWidget {
   final List<FlSpot> thisMonthSpots;
@@ -16,6 +17,23 @@ class SavingsLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String formatCurrencyShort(int value) {
+      if (value >= 1000000) {
+        double val = value / 1000000;
+        if (val == val.roundToDouble()) {
+          return '${val.toInt()}M';
+        }
+        return '${val.toStringAsFixed(1)}M';
+      } else if (value >= 1000) {
+        double val = value / 1000;
+        if (val == val.roundToDouble()) {
+          return '${val.toInt()}K';
+        }
+        return '${val.toStringAsFixed(1)}K';
+      }
+      return value.toString();
+    }
+
     return Column(
       children: [
         Row(
@@ -57,7 +75,7 @@ class SavingsLineChart extends StatelessWidget {
                     reservedSize: 35,
                     getTitlesWidget:
                         (value, meta) => Text(
-                          value.toInt().toString(),
+                          formatCurrencyShort(value.toInt()),
                           style: const TextStyle(
                             fontSize: 10,
                             color: AppColors.text1,
@@ -104,7 +122,9 @@ class SavingsLineChart extends StatelessWidget {
                   getTooltipItems: (items) {
                     return items.map((item) {
                       return LineTooltipItem(
-                        item.y.toInt().toString(),
+                        AppHelperFunction.formatCurrency(
+                          item.y.toInt().toString(),
+                        ),
                         const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,

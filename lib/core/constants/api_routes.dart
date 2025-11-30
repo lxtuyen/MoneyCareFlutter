@@ -16,7 +16,6 @@ class ApiRoutes {
 
   // --- Transaction ---
   static const transaction = 'transactions';
-  static const getTransactionsByUser = 'transactions/me';
   static const getTransactionsFilter = 'transactions/filter';
 
   // --- Notification ---

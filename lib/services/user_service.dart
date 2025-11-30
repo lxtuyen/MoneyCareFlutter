@@ -1,6 +1,6 @@
 import 'package:money_care/core/constants/api_routes.dart';
 import 'package:money_care/models/dto/profile_update_dto.dart';
-import 'package:money_care/models/user_profile.dart';
+import 'package:money_care/models/user_model.dart';
 import 'api_service.dart';
 
 class UserService {
@@ -8,11 +8,11 @@ class UserService {
 
   UserService({required this.api});
 
-  Future<UserProfileModel> updateMyProfile(ProfileUpdateDto dto) async {
-    final res = await api.patch<UserProfileModel>(
+  Future<UserModel> updateMyProfile(ProfileUpdateDto dto) async {
+    final res = await api.patch<UserModel>(
       ApiRoutes.userProfile,
       body: dto.toJson(),
-      fromJsonT: (json) => UserProfileModel.fromJson(json),
+      fromJsonT: (json) => UserModel.fromJsonUpdate(json),
     );
 
     if (!res.success || res.data == null) {

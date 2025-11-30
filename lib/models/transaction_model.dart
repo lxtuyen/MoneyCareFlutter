@@ -53,6 +53,21 @@ class TransactionModel {
     );
   }
 
+  factory TransactionModel.fromJsonSummary(Map<String, dynamic> json) {
+    return TransactionModel(
+      id: json['id'],
+      amount: (json['amount'] ?? 0).toDouble(),
+      type: json['type'] ?? '',
+      transactionDate:
+          json['transaction_date'] != null
+              ? DateTime.parse(json['transaction_date'])
+              : null,
+      note: json['note'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+    );
+  }
+
   Map<String, dynamic> toJson() => {
     'id': id,
     'amount': amount,

@@ -16,6 +16,7 @@ import 'package:money_care/presentation/screens/select_saving_fund/select_saving
 import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/transaction/Income.dart';
 import 'package:money_care/presentation/screens/transaction/expense.dart';
+import 'package:money_care/presentation/screens/user_center/profile.dart';
 
 final List<GetPage> appPages = [
   GetPage(name: '/splash', page: () => const SplashScreen()),
@@ -43,7 +44,7 @@ final List<GetPage> appPages = [
     name: '/onboarding_saving_rule',
     page: () => const OnboardingSavingRuleScreen(),
   ),
-    GetPage(
+  GetPage(
     name: '/onboarding_income',
     page: () => const OnboardingIncomeScreen(),
   ),
@@ -51,18 +52,10 @@ final List<GetPage> appPages = [
     name: '/select_saving_fund',
     page: () => const SelectSavingFundScreen(),
   ),
-  GetPage(
-    name: '/create_saving_fund',
-    page: () => const CreateSavingFund(),
-  ),
-  GetPage(
-    name: '/expense',
-    page: () => const ExpenseScreen(),
-  ),
-    GetPage(
-    name: '/income',
-    page: () => const IncomeScreen(),
-  ),
+  GetPage(name: '/create_saving_fund', page: () => const CreateSavingFund()),
+  GetPage(name: '/expense', page: () => const ExpenseScreen()),
+  GetPage(name: '/income', page: () => const IncomeScreen()),
+  GetPage(name: '/profile', page: () => const ProfileScreen()),
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];

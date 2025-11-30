@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/controllers/filter_controller.dart';
+import 'package:money_care/controllers/saving_fund_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
+import 'package:money_care/controllers/user_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
@@ -30,12 +33,17 @@ class _HomeScreenState extends State<HomeScreen> {
   final now = DateTime.now();
   late DateTime startDate = now.subtract(const Duration(days: 6));
   late DateTime endDate = now;
+
   final TransactionController transactionController =
       Get.find<TransactionController>();
   final FilterController filterController = Get.find<FilterController>();
+  final SavingFundController fundController = Get.find<SavingFundController>();
+  final UserController userController = Get.find<UserController>();
+  final SavingFundController savingFundController =
+      Get.find<SavingFundController>();
+  final AuthController authController = Get.find<AuthController>();
+
   late int userId;
-  String fullName = '';
-  late int? monthlyIncome;
 
   @override
   void initState() {
@@ -47,19 +55,23 @@ class _HomeScreenState extends State<HomeScreen> {
     Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
     UserModel user = UserModel.fromJson(userInfoJson, '');
     setState(() {
-      fullName = user.profile.fullName;
       userId = user.id;
-      monthlyIncome = user.profile.monthlyIncome;
     });
-    loadSavingFundData();
+    loadData();
+    userController.currentProlife(user.profile);
+    savingFundController.updateFundId(user.savingFund!.id);
   }
 
-  Future<void> loadSavingFundData() async {
+  Future<void> loadData() async {
     transactionController.getTotalByType(userId);
     transactionController.getTotalByCate(userId);
     transactionController.filterTransactions(
       userId,
       TransactionFilterDto(
+        fundId:
+            fundController.currentFundId > 0
+                ? fundController.currentFundId
+                : null,
         startDate: filterController.startDate.toString(),
         endDate: filterController.endDate.toString(),
       ),
@@ -67,6 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
     transactionController.getTotalByDate(
       userId,
       TransactionTotalsDto(
+        fundId:
+            fundController.currentFundId > 0
+                ? fundController.currentFundId
+                : null,
         startDate: startDate.toIso8601String(),
         endDate: endDate.toIso8601String(),
       ),
@@ -83,6 +99,10 @@ class _HomeScreenState extends State<HomeScreen> {
       transactionController.getTotalByDate(
         userId,
         TransactionTotalsDto(
+          fundId:
+              fundController.fundId.value > 0
+                  ? fundController.fundId.value
+                  : null,
           startDate: startDate.toIso8601String(),
           endDate: endDate.toIso8601String(),
         ),
@@ -100,14 +120,39 @@ class _HomeScreenState extends State<HomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Chào Mừng, $fullName",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16,
-                    color: AppColors.text4,
-                  ),
-                ),
+                Obx(() {
+                  final profile = userController.userProfile.value;
+
+                  if (userController.isLoading.value) {
+                    return const SizedBox(
+                      height: 120,
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+
+                  if (profile == null) {
+                    return const Text(
+                      "Chào Mừng!",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        color: AppColors.text4,
+                      ),
+                    );
+                  }
+
+                  final fullName = profile.fullName;
+
+                  return Text(
+                    "Chào Mừng, $fullName",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16,
+                      color: AppColors.text4,
+                    ),
+                  );
+                }),
+
                 Row(
                   children: [
                     CircularIcon(
@@ -133,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   child: Obx(() {
                                     final transactions =
                                         transactionController
-                                            .transactionByType
+                                            .transactionByfilter
                                             .value!
                                             .expenseTransactions;
 
@@ -158,12 +203,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(width: AppSizes.spaceBtwItems),
-                    CircularIcon(
-                      iconPath: AppIcons.notification,
-                      backgroundColor: const Color(0XFFF5FAFE),
-                      height: 36,
-                      width: 36,
-                    ),
+                    /*NotificationBell(
+                      userId: userId,
+                    ),*/
                   ],
                 ),
               ],
@@ -298,7 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: AppSizes.defaultSpace),
             Obx(() {
-              final totals = transactionController.totalByDate;
+              final totalsData = transactionController.totalByDate.value;
 
               if (transactionController.isLoading.value) {
                 return const SizedBox(
@@ -306,7 +348,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Center(child: CircularProgressIndicator()),
                 );
               }
+
+              if (totalsData == null || totalsData.expense.isEmpty) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: Text('Không có dữ liệu')),
+                );
+              }
+
+              final totals = totalsData.expense;
               double totalSpent = totals.fold(0, (sum, t) => sum + t.total);
+
               return SpendingOverviewCard(
                 startDate: startDate,
                 endDate: endDate,
@@ -322,6 +374,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
             Obx(() {
               final categories = transactionController.totalByCate;
+              final monthlyIncome =
+                  userController.userProfile.value!.monthlyIncome;
               if (transactionController.isLoading.value) {
                 return const SizedBox(
                   height: 120,
@@ -341,7 +395,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     categories.map((category) {
                       return SpendingLimitCard(
                         title: category.categoryName,
-                        limit: (category.percentage) * (monthlyIncome ?? 0),
+                        limit:
+                            ((category.percentage) * (monthlyIncome ?? 0)) /
+                            100,
                         spent: category.total,
                         iconPath: 'icons/${category.categoryIcon}.svg',
                       );

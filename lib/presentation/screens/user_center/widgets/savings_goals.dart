@@ -16,7 +16,28 @@ class SavingsGoals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double percent = currentSaving / targetSaving;
+    double percent = 0;
+
+    if (targetSaving > 0) {
+      percent = currentSaving / targetSaving;
+    }
+
+    percent = percent.clamp(0.0, 1.0);
+
+    String getStatus(double percent) {
+      if (percent < 0.3) return "Kém";
+      if (percent < 0.6) return "Trung bình";
+      if (percent < 1.0) return "Tốt";
+      return "Xuất sắc";
+    }
+
+    Color getStatusColor(double percent) {
+      if (percent < 0.3) return Colors.red;
+      if (percent < 0.6) return Colors.orange;
+      if (percent < 1.0) return Colors.blue;
+      return Colors.green;
+    }
+
     final formatter = NumberFormat.decimalPattern('vi');
 
     return Container(
@@ -37,10 +58,7 @@ class SavingsGoals extends StatelessWidget {
         children: [
           const Text(
             AppTexts.targetTitle,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           LinearProgressIndicator(
@@ -77,10 +95,7 @@ class SavingsGoals extends StatelessWidget {
               center: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Tài khoản",
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  const Text("Tài khoản", style: TextStyle(fontSize: 14)),
                   Text(
                     formatter.format(currentSaving),
                     style: const TextStyle(
@@ -88,11 +103,12 @@ class SavingsGoals extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
-                    "Tốt",
+                  Text(
+                    getStatus(percent),
                     style: TextStyle(
-                      color: Colors.green,
+                      color: getStatusColor(percent),
                       fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

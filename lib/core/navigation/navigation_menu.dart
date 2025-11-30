@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/navigation/nav_controller.dart';
 import 'package:money_care/presentation/screens/home/home.dart';
-import 'package:money_care/presentation/screens/profile/profile.dart';
+import 'package:money_care/presentation/screens/user_center/user_center.dart';
 import 'package:money_care/presentation/screens/statistics/statistics.dart';
 import 'package:money_care/presentation/screens/transaction/transaction.dart';
 
@@ -20,7 +20,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
       HomeScreen(),
       TransactionScreen(),
       StatisticsScreen(),
-      ProfileScreen(),
+      UserCenterScreen(),
     ];
 
     return Obx(() {

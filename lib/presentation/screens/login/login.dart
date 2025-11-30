@@ -38,14 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
           AppHelperFunction.showSnackBar(message!);
           return;
         }
-
         if (user.role == 'user') {
-          if (user.savingFund != null) {
-            Get.offAllNamed('/main');
-          } else {
-            Get.offAllNamed('/onboarding_welcome');
-          }
-          return;
+          Get.offAllNamed(
+            user.savingFund != null ? '/main' : '/onboarding_welcome',
+          );
         }
 
         if (user.role == 'admin') {

@@ -19,9 +19,8 @@ class AuthController extends GetxController {
       final res = await authService.login(email, password);
 
       user.value = res;
-
       await storage.saveUserInfo(res.toJson());
-      await storage.saveToken(res.accessToken);
+      await storage.saveToken(res.accessToken!);
 
       return null;
     } catch (e) {

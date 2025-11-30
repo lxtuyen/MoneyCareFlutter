@@ -59,22 +59,34 @@ class AppHelperFunction {
   }
 
   static final List<String> _colorNames = [
-    'Green', 'Red', 'Blue', 'Pink', 'Grey',
-    'Purple', 'Orange', 'Brown', 'Teal', 'Indigo',
-    'Cyan', 'Lime', 'Amber', 'DeepOrange', 'DeepPurple',
-    'LightBlue', 'LightGreen', 'Yellow', 'BlueGrey', 'Black',
-    'Custom1', 'Custom2', 'Custom3',
+    'Green',
+    'Red',
+    'Blue',
+    'Pink',
+    'Grey',
+    'Purple',
+    'Orange',
+    'Brown',
+    'Teal',
+    'Indigo',
+    'Cyan',
+    'Lime',
+    'Amber',
+    'DeepOrange',
+    'DeepPurple',
+    'LightBlue',
+    'LightGreen',
+    'Yellow',
+    'BlueGrey',
+    'Black',
+    'Custom1',
+    'Custom2',
+    'Custom3',
   ];
 
   static Color getRandomColor() {
     final random = Random();
     final colorName = _colorNames[random.nextInt(_colorNames.length)];
-    return getColor(colorName)!;
-  }
-
-  static Color getColorFromCategory(String categoryName) {
-    final index = categoryName.hashCode % _colorNames.length;
-    final colorName = _colorNames[index];
     return getColor(colorName)!;
   }
 

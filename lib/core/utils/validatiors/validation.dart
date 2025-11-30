@@ -56,9 +56,6 @@ class AppValidator {
     return null;
   }
 
-  // =====================
-  // 🟩 NAME / TEXT INPUT
-  // =====================
 
   static String? validateFirstName(String? value) {
     if (value == null || value.isEmpty) return "First name is required.";
@@ -96,17 +93,6 @@ class AppValidator {
   static String? validateNote(String? value) {
     if (value != null && value.length > 200) {
       return 'Ghi chú quá dài (tối đa 200 kí tự).';
-    }
-    return null;
-  }
-
-  static String? validateUsername(String? value) {
-    if (value == null || value.trim().isEmpty) {
-      return 'Vui lòng nhập username.';
-    }
-    if (value.length < 4) return 'Username phải dài hơn 4 ký tự.';
-    if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
-      return 'Username chỉ chứa chữ, số và dấu gạch dưới.';
     }
     return null;
   }
@@ -159,16 +145,6 @@ class AppValidator {
   static String? validateDouble(String? value) {
     if (value == null || value.isEmpty) return 'Vui lòng nhập số';
     if (double.tryParse(value) == null) return 'Phải là số hợp lệ';
-    return null;
-  }
-
-  static String? validateBirthDate(int? day, int? month, int? year) {
-    if (day == null || month == null || year == null) {
-      return 'Vui lòng chọn ngày sinh đầy đủ.';
-    }
-    if (year > DateTime.now().year || year < 1950) {
-      return 'Năm sinh không hợp lệ.';
-    }
     return null;
   }
 

@@ -25,10 +25,8 @@ class AppBinding extends Bindings {
   void dependencies() {
     final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? '');
 
-    final authService = AuthService(api: apiService);
-
     Get.lazyPut(
-      () => AuthController(authService: authService, storage: storage),
+      () => AuthController(authService: AuthService(api: apiService), storage: storage),
       fenix: true,
     );
 
@@ -37,7 +35,7 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => UserController(service: UserService(api: apiService)),
+      () => UserController(service: UserService(api: apiService), storage: storage),
       fenix: true,
     );
     Get.lazyPut(

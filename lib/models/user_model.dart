@@ -5,7 +5,7 @@ class UserModel {
   final int id;
   final String email;
   final String role;
-  final String accessToken;
+  final String? accessToken;
   final UserProfileModel profile;
   final SavingFundModel? savingFund;
 
@@ -14,7 +14,7 @@ class UserModel {
     required this.email,
     required this.role,
     required this.profile,
-    required this.accessToken,
+    this.accessToken,
     this.savingFund,
   });
 
@@ -24,6 +24,17 @@ class UserModel {
         email: json['email'],
         role: json['role'],
         accessToken: token,
+        profile: UserProfileModel.fromJson(json['profile']),
+        savingFund: json['savingFund'] != null
+            ? SavingFundModel.fromMap(json['savingFund'])
+            : null,
+      );
+
+    factory UserModel.fromJsonUpdate(Map<String, dynamic> json) =>
+      UserModel(
+        id: json['id'],
+        email: json['email'],
+        role: json['role'],
         profile: UserProfileModel.fromJson(json['profile']),
         savingFund: json['savingFund'] != null
             ? SavingFundModel.fromMap(json['savingFund'])

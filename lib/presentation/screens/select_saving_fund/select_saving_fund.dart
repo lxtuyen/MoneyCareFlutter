@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
+import 'package:money_care/controllers/user_controller.dart';
 import 'package:money_care/data/storage_service.dart';
 import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/widgets/icon/rounded_icon.dart';
@@ -14,21 +15,26 @@ class SelectSavingFundScreen extends StatefulWidget {
 
 class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
   final SavingFundController controller = Get.find<SavingFundController>();
+  final UserController userController = Get.find<UserController>();
   int selectedIndex = 0;
   late int userId;
 
   @override
   void initState() {
     super.initState();
-    loadSavingFundData();
+    loadData();
   }
 
-  Future<void> loadSavingFundData() async {
+  Future<void> loadData() async {
     Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
     UserModel user = UserModel.fromJson(userInfoJson, '');
-    controller.loadFunds(user.id);
+    await controller.loadFunds(user.id);
     setState(() {
       userId = user.id;
+      selectedIndex = controller.savingFunds.indexWhere(
+        (f) => f.id == controller.fundId.value,
+      );
+      if (selectedIndex == -1) selectedIndex = 0;
     });
   }
 
@@ -52,7 +58,7 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
 
                 Expanded(
                   child: Obx(() {
-                    if (controller.isLoading.value) {
+                    if (controller.isLoadingFunds.value) {
                       return const Center(child: CircularProgressIndicator());
                     }
 
@@ -77,8 +83,7 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
                                 color:
-                                    (fund.isSelected == true ||
-                                            selectedIndex == index)
+                                    (selectedIndex == index)
                                         ? Colors.blue
                                         : Colors.grey.shade300,
 
@@ -157,40 +162,46 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                   label: const Text('Tự tạo quỹ tiết kiệm'),
                 ),
                 const SizedBox(height: 12),
+                Obx(() {
+                  final monthlyIncome =
+                      userController.userProfile.value!.monthlyIncome;
+                  return SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (controller.savingFunds.isNotEmpty) {
+                          final selectedFund =
+                              controller.savingFunds[selectedIndex];
 
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      if (controller.savingFunds.isNotEmpty) {
-                        final selectedFund =
-                            controller.savingFunds[selectedIndex];
-
-                        await controller.selectSavingFund(
-                          userId,
-                          selectedFund.id,
-                        );
-
-                        Get.offAllNamed('/onboarding_income');
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                          await controller.selectSavingFund(
+                            userId,
+                            selectedFund.id,
+                          );
+                          if (monthlyIncome == null) {
+                            Get.offAllNamed('/onboarding_income');
+                          } else {
+                            Get.offAllNamed('/main');
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        backgroundColor: Colors.blue,
                       ),
-                      backgroundColor: Colors.blue,
-                    ),
-                    child: const Text(
-                      "Xác nhận",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                      child: const Text(
+                        "Xác nhận",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
 
                 const SizedBox(height: 12),
               ],

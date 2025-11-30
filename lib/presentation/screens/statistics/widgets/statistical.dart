@@ -6,13 +6,15 @@ import 'package:money_care/models/category_model.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/tag_item.dart';
 
 class StatisticalWidgets extends StatelessWidget {
-  final String dateRange;
+  final String startDate;
+  final String endDate;
   final String totalAmount;
   final List<CategoryModel> categories;
 
   const StatisticalWidgets({
     super.key,
-    required this.dateRange,
+    required this.startDate,
+    required this.endDate,
     required this.totalAmount,
     required this.categories,
   });
@@ -48,13 +50,16 @@ class StatisticalWidgets extends StatelessWidget {
                       startDegreeOffset: -90,
                       centerSpaceRadius: 25,
                       sectionsSpace: 2,
-                      sections: categories.map(
-                        (e) => PieChartSectionData(
-                          /*color: e.color,
-                          value: e.percentage,
-                          title: '',*/
-                        ),
-                      ).toList(),
+                      sections:
+                          categories
+                              .map(
+                                (e) => PieChartSectionData(
+                                  color: e.color,
+                                  value: e.percentage.toDouble(),
+                                  title: '',
+                                ),
+                              )
+                              .toList(),
                     ),
                   ),
                 ),
@@ -68,10 +73,8 @@ class StatisticalWidgets extends StatelessWidget {
             Wrap(
               spacing: 8,
               runSpacing: 8,
-              children: categories.map(
-                (e) => TagItem(category: e),
-              ).toList(),
-            )
+              children: categories.map((e) => TagItem(category: e)).toList(),
+            ),
           ],
         ),
       ),
@@ -84,23 +87,17 @@ class StatisticalWidgets extends StatelessWidget {
       children: [
         const Text(
           AppTexts.statisticsTitle,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         Text(
-          dateRange,
+          '$startDate - $endDate',
           style: const TextStyle(color: Colors.grey),
         ),
         const SizedBox(height: 8),
         Text(
           totalAmount,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ],
     );

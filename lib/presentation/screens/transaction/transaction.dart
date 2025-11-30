@@ -36,6 +36,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
   final SavingFundController savingFundController =
       Get.find<SavingFundController>();
   final FilterController filterController = Get.find<FilterController>();
+  final SavingFundController fundController = Get.find<SavingFundController>();
 
   @override
   void initState() {
@@ -46,17 +47,17 @@ class _TransactionScreenState extends State<TransactionScreen> {
   Future<void> initUserInfo() async {
     Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
     UserModel user = UserModel.fromJson(userInfoJson, '');
-    savingFundController.loadFundById(user.savingFund!.id);
     setState(() {
       userId = user.id;
     });
-    loadSavingFundData();
+    loadData();
   }
 
-  Future<void> loadSavingFundData() async {
+  Future<void> loadData() async {
     transactionController.filterTransactions(
       userId,
       TransactionFilterDto(
+        fundId: fundController.fundId.value > 0 ? fundController.fundId.value : null,
         startDate: filterController.startDate.toString(),
         endDate: filterController.endDate.toString(),
       ),
@@ -247,7 +248,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           (context) => Obx(() {
             final data = savingFundController.currentFund.value;
 
-            if (savingFundController.isLoading.value) {
+            if (savingFundController.isLoadingCurrent.value) {
               return const Center(
                 child: Padding(
                   padding: EdgeInsets.only(top: 50),

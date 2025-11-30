@@ -40,6 +40,23 @@ class SpendingOverviewCard extends StatelessWidget {
     return days;
   }
 
+  String formatCurrencyShort(int value) {
+    if (value >= 1000000) {
+      double val = value / 1000000;
+      if (val == val.roundToDouble()) {
+        return '${val.toInt()}M';
+      }
+      return '${val.toStringAsFixed(1)}M';
+    } else if (value >= 1000) {
+      double val = value / 1000;
+      if (val == val.roundToDouble()) {
+        return '${val.toInt()}K';
+      }
+      return '${val.toStringAsFixed(1)}K';
+    }
+    return value.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     final spendingData =
@@ -123,7 +140,9 @@ class SpendingOverviewCard extends StatelessWidget {
                           final index = value.toInt();
                           if (index >= 0 && index < dateRange.length) {
                             final date = dateRange[index];
-                            final label = AppHelperFunction.getFormattedDate(date);
+                            final label = AppHelperFunction.getFormattedDate(
+                              date,
+                            );
                             return Text(
                               label,
                               style: const TextStyle(
@@ -139,12 +158,10 @@ class SpendingOverviewCard extends StatelessWidget {
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        interval: 1000000,
                         reservedSize: 32,
                         getTitlesWidget: (value, meta) {
-                          if (value == 0) return const Text("0");
                           return Text(
-                            "${(value ~/ 1000000)}M",
+                            formatCurrencyShort(value.toInt()),
                             style: const TextStyle(
                               fontSize: 10,
                               color: AppColors.text4,

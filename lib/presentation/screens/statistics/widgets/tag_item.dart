@@ -10,7 +10,7 @@ class TagItem extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
-        //color: category.color.withOpacity(0.12),
+        color: category.color!.withOpacity(0.12),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -18,10 +18,9 @@ class TagItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            //'${category.percentage.toStringAsFixed(0)}%',
-            '',
+            '${category.percentage.toStringAsFixed(0)}%',
             style: TextStyle(
-              //color: category.color,
+              color: category.color,
               fontSize: 13,
               fontWeight: FontWeight.bold,
             ),
@@ -29,10 +28,9 @@ class TagItem extends StatelessWidget {
           const SizedBox(width: 6),
           Flexible(
             child: Text(
-              //category.label,
-              '',
+              category.name,
               style: TextStyle(
-                //color: category.color,
+                color: category.color,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),

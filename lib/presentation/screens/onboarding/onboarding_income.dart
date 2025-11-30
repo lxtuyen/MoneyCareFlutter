@@ -101,21 +101,6 @@ class _OnboardingIncomeScreenState extends State<OnboardingIncomeScreen> {
                               ),
                     );
                   }),
-
-                  const SizedBox(height: 20),
-
-                  Center(
-                    child: TextButton(
-                      onPressed: () => Get.offAllNamed('/main'),
-                      child: Text(
-                        AppTexts.next,
-                        style: const TextStyle(
-                          color: AppColors.text3,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),
