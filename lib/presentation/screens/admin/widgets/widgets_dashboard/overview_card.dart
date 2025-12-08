@@ -63,7 +63,6 @@ class BuildOverviewCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 12),
-          // Chart placeholder
           AspectRatio(
             aspectRatio: 16 / 9,
             child: Container(
