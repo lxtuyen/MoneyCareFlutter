@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/presentation/screens/admin/dashboard.dart';
+import 'package:money_care/presentation/screens/admin/users.dart';
 import 'package:money_care/presentation/screens/select_saving_fund/select_saving_fund.dart';
 import 'package:money_care/presentation/screens/transaction/Income.dart';
 import 'package:money_care/presentation/screens/transaction/transaction.dart';
@@ -132,6 +134,24 @@ final GoRouter appRouter = GoRouter(
       name: 'select_saving_fund',
       path: '/select_saving_fund',
       builder: (context, state) => const SelectSavingFundScreen(),
+    ),
+    //shellRouter ADMIN
+    ShellRoute(
+      pageBuilder: (context, state, child) {
+        return NoTransitionPage(child: child);
+      },
+      routes: [
+        GoRoute(
+          name: 'dashboard',
+          path: '/dashboard',
+          builder: (context, state) => const DashboardScreen(),
+        ),
+        GoRoute(
+          name: 'users',
+          path: '/users',
+          builder: (context, state) => const UsersScreen(),
+        ),
+      ],
     ),
   ],
 );
