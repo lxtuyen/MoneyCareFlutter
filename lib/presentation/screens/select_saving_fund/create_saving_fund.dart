@@ -115,7 +115,7 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
                         child: Row(
                           children: [
                             SvgPicture.asset(
-                              'icons/${cat.icon}.svg',
+                              'assets/icons/${cat.icon}.svg',
                               width: 32,
                               height: 32,
                             ),

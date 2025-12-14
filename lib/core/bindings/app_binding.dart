@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_care/controllers/auth_controller.dart';
@@ -23,10 +24,14 @@ class AppBinding extends Bindings {
 
   @override
   void dependencies() {
-    final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? '');
-
+    final apiService = ApiService(
+      baseUrl: dotenv.env[kIsWeb ? 'API_LOCALHOST_URL' : 'API_BASE_URL'] ?? '',
+    );
     Get.lazyPut(
-      () => AuthController(authService: AuthService(api: apiService), storage: storage),
+      () => AuthController(
+        authService: AuthService(api: apiService),
+        storage: storage,
+      ),
       fenix: true,
     );
 
@@ -35,7 +40,10 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => UserController(service: UserService(api: apiService), storage: storage),
+      () => UserController(
+        service: UserService(api: apiService),
+        storage: storage,
+      ),
       fenix: true,
     );
     Get.lazyPut(

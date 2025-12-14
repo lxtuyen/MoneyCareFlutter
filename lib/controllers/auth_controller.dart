@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:money_care/services/auth_services.dart';
 import '../data/storage_service.dart';
 import '../models/user_model.dart';
@@ -11,12 +12,14 @@ class AuthController extends GetxController {
 
   var user = Rxn<UserModel>();
   var isLoading = false.obs;
+  var isGoogleLogin = false.obs;
 
   Future<String?> login(String email, String password) async {
     try {
       isLoading.value = true;
 
       final res = await authService.login(email, password);
+      isGoogleLogin.value = false;
 
       user.value = res;
       await storage.saveUserInfo(res.toJson());
@@ -25,6 +28,23 @@ class AuthController extends GetxController {
       return null;
     } catch (e) {
       return e.toString();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<UserModel> loginWithGoogle() async {
+    try {
+      isLoading.value = true;
+
+      final res = await authService.loginWithGoogle();
+      isGoogleLogin.value = true;
+
+      user.value = res;
+      await storage.saveUserInfo(res.toJson());
+      await storage.saveToken(res.accessToken!);
+
+      return res;
     } finally {
       isLoading.value = false;
     }
@@ -87,6 +107,10 @@ class AuthController extends GetxController {
   }
 
   Future<void> logout() async {
+    if (isGoogleLogin.value) {
+      await GoogleSignIn().signOut();
+    }
+    isGoogleLogin.value = false;
     user.value = null;
     await storage.logout();
   }

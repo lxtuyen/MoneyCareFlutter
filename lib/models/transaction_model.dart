@@ -29,7 +29,7 @@ class TransactionModel {
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
       id: json['id'],
-      amount: (json['amount'] ?? 0).toDouble(),
+      amount: (json['amount'] ?? 0),
       type: json['type'] ?? '',
       transactionDate:
           json['transaction_date'] != null
@@ -56,7 +56,7 @@ class TransactionModel {
   factory TransactionModel.fromJsonSummary(Map<String, dynamic> json) {
     return TransactionModel(
       id: json['id'],
-      amount: (json['amount'] ?? 0).toDouble(),
+      amount: (json['amount'] ?? 0),
       type: json['type'] ?? '',
       transactionDate:
           json['transaction_date'] != null

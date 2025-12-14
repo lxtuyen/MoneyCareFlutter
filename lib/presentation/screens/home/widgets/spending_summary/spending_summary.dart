@@ -88,7 +88,7 @@ class SpendingSummary extends StatelessWidget {
                     style: const TextStyle(
                       color: AppColors.secondaryOrange,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 22,
                     ),
                   ),
                   const SizedBox(height: 4),

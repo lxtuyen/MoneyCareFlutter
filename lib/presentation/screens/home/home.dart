@@ -259,7 +259,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed('/expense');
+                      },
                       child: Container(
                         width: 50,
                         height: 100,
@@ -294,7 +296,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
 
-              return CategorySection(categories: categories);
+              return CategorySection(
+                categories: categories
+              );
             }),
 
             const SizedBox(height: AppSizes.defaultSpace),
@@ -399,7 +403,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             ((category.percentage) * (monthlyIncome ?? 0)) /
                             100,
                         spent: category.total,
-                        iconPath: 'icons/${category.categoryIcon}.svg',
+                        iconPath: 'assets/icons/${category.categoryIcon}.svg',
                       );
                     }).toList(),
               );

@@ -16,6 +16,7 @@ import 'package:money_care/presentation/screens/select_saving_fund/select_saving
 import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/transaction/Income.dart';
 import 'package:money_care/presentation/screens/transaction/expense.dart';
+import 'package:money_care/presentation/screens/user_center/bank_mail_connect.dart';
 import 'package:money_care/presentation/screens/user_center/profile.dart';
 
 final List<GetPage> appPages = [
@@ -56,6 +57,7 @@ final List<GetPage> appPages = [
   GetPage(name: '/expense', page: () => const ExpenseScreen()),
   GetPage(name: '/income', page: () => const IncomeScreen()),
   GetPage(name: '/profile', page: () => const ProfileScreen()),
+  GetPage(name: '/mail_connect', page: () => const BankMailConnectScreen()),
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];

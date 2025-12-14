@@ -87,7 +87,7 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
   Widget buildNavIcon(String path, bool isActive) {
     return SvgPicture.asset(
-      isActive ? 'icons/$path-active.svg' : 'icons/$path.svg',
+      isActive ? 'assets/icons/$path-active.svg' : 'assets/icons/$path.svg',
       width: 24,
       height: 24,
     );

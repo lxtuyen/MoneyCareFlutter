@@ -2,6 +2,7 @@ class ApiRoutes {
   // --- Auth ---
   static const login = 'auth/login';
   static const register = 'auth/register';
+  static const googleLogin = 'auth/google-login';
   static const forgotPassword = 'otp/forgot-password';
   static const resetPassword = 'otp/reset-password';
   static const verifyOtp = 'otp/verify-otp';

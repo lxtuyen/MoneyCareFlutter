@@ -184,7 +184,7 @@ class _TransactionFormState extends State<TransactionForm> {
     if (_formKey.currentState!.validate()) {
       try {
         final dto = TransactionCreateDto(
-          amount: int.parse(_amountController.text),
+          amount: double.tryParse(_amountController.text)?.toInt() ?? 0,
           type: widget.showCategory ? "expense" : "income",
           note: _noteController.text.trim(),
           categoryId: selectedCategoryId,
@@ -204,7 +204,7 @@ class _TransactionFormState extends State<TransactionForm> {
     if (_formKey.currentState!.validate()) {
       try {
         final dto = TransactionCreateDto(
-          amount: int.parse(_amountController.text),
+          amount: double.parse(_amountController.text).toInt(),
           type: widget.showCategory ? "expense" : "income",
           note: _noteController.text.trim(),
           categoryId: selectedCategoryId,

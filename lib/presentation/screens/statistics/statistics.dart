@@ -325,7 +325,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   );
                 }
 
-                if (lstMonth == null || thisMonth == null) {
+                if (lstMonth == null || thisMonth == null || totalByType == null) {
                   return const SizedBox(
                     height: 120,
                     child: Center(child: Text('Không có dữ liệu')),
@@ -342,7 +342,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   monthlyBalanceChange:
                       transactionController.dailyIncomeChange.toString(),
                   monthlyBalance:
-                      (totalByType!.incomeTotal - totalByType.expenseTotal)
+                      (totalByType.incomeTotal - totalByType.expenseTotal)
                           .toString(),
                 );
               }),

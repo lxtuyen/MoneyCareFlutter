@@ -54,7 +54,7 @@ class TransactionItem extends StatelessWidget {
                       item.category?.name ?? 'Không có danh mục',
                       style: const TextStyle(
                         fontSize: 12,
-                        color: AppColors.text5,
+                        color: AppColors.text4,
                       ),
                     ),
                   ],
@@ -69,7 +69,7 @@ class TransactionItem extends StatelessWidget {
                       _formatDate(item.transactionDate),
                       style: const TextStyle(
                         fontSize: 12,
-                        color: AppColors.text5,
+                        color: AppColors.text4,
                       ),
                     ),
                   Text(

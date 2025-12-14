@@ -76,13 +76,13 @@ class TransactionDetail extends StatelessWidget {
 
                   icon: const Icon(
                     Icons.edit_outlined,
-                    color: AppColors.text4,
+                    color: AppColors.text3,
                     size: 22,
                   ),
                   label: const Text(
                     "Chỉnh sửa",
                     style: TextStyle(
-                      color: AppColors.text4,
+                      color: AppColors.text3,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -127,13 +127,13 @@ class TransactionDetail extends StatelessWidget {
                   },
                   icon: const Icon(
                     Icons.delete_outline,
-                    color: AppColors.text4,
+                    color: AppColors.text3,
                     size: 22,
                   ),
                   label: const Text(
                     "Xóa",
                     style: TextStyle(
-                      color: AppColors.text4,
+                      color: AppColors.text3,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),

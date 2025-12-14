@@ -104,8 +104,8 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     ),
                     BuildMenuItem(
                       icon: Icons.insert_chart_outlined,
-                      title: AppTexts.reportOfTheYear,
-                      onTap: () {},
+                      title: 'Kết nối ngân hàng',
+                      onTap: () => Get.toNamed('/mail_connect'),
                     ),
                     BuildMenuItem(
                       icon: Icons.category_outlined,
@@ -114,7 +114,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     ),
                     BuildMenuItem(
                       icon: Icons.account_balance_wallet_outlined,
-                      title: AppTexts.fixedCosts,
+                      title: 'Đăng ký VIP',
                       onTap: () {},
                     ),
                     BuildMenuItem(
@@ -122,7 +122,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       title: AppTexts.logout,
                       onTap: () {
                         authController.logout();
-                        Get.offAllNamed('/login');
+                        Get.offAllNamed('/select_method_login');
                       },
                     ),
                   ],

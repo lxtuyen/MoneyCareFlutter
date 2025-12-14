@@ -140,7 +140,7 @@ class SpendingOverviewCard extends StatelessWidget {
                           final index = value.toInt();
                           if (index >= 0 && index < dateRange.length) {
                             final date = dateRange[index];
-                            final label = AppHelperFunction.getFormattedDate(
+                            final label = AppHelperFunction.formatDayMonth(
                               date,
                             );
                             return Text(
@@ -204,7 +204,7 @@ class SpendingOverviewCard extends StatelessWidget {
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((barSpot) {
                           return LineTooltipItem(
-                            "${AppHelperFunction.getFormattedDate(dateRange[barSpot.x.toInt()])}\n${AppHelperFunction.formatCurrency(barSpot.y.toString())}",
+                            "${AppHelperFunction.getFormattedDate(dateRange[barSpot.x.toInt()])}\n${AppHelperFunction.formatCurrency(barSpot.y)}",
                             const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

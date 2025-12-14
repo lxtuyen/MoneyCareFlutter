@@ -28,28 +28,27 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     Future<void> onPressed() async {
       if (_formKey.currentState!.validate()) {
-        final message = await authController.login(
+        await authController.login(
           emailController.text.trim(),
           passwordController.text.trim(),
         );
 
         final user = authController.user.value;
         if (user == null) {
-          AppHelperFunction.showSnackBar(message!);
+          AppHelperFunction.showSnackBar('Đăng nhập thất bại');
           return;
         }
         if (user.role == 'user') {
           Get.offAllNamed(
             user.savingFund != null ? '/main' : '/onboarding_welcome',
           );
+          return;
         }
 
         if (user.role == 'admin') {
           Get.offAllNamed('/admin_dashboard');
           return;
         }
-
-        AppHelperFunction.showSnackBar('Đăng nhập thất bại');
       }
     }
 

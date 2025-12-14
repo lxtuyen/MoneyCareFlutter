@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/image_string.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/presentation/widgets/image/circular_image.dart';
 
 class LoginOptionScreen extends StatelessWidget {
@@ -10,6 +12,8 @@ class LoginOptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final AuthController authController = Get.find<AuthController>();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -20,11 +24,7 @@ class LoginOptionScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircularImages(
-                      image: AppImages.logo,
-                      height: 100,
-                      width: 100,
-                    ),
+                CircularImages(image: AppImages.logo, height: 100, width: 100),
 
                 const SizedBox(height: 40),
 
@@ -39,15 +39,27 @@ class LoginOptionScreen extends StatelessWidget {
                 const SizedBox(height: 10),
                 const Text(
                   AppTexts.loginDescription,
-                  style: TextStyle(
-                    fontSize: 15,
-                    color: AppColors.text3,
-                  ),
+                  style: TextStyle(fontSize: 15, color: AppColors.text3),
                 ),
                 const SizedBox(height: 30),
 
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final user = await authController.loginWithGoogle();
+                    if (user.role == 'user') {
+                      Get.offAllNamed(
+                        user.savingFund != null
+                            ? '/main'
+                            : '/onboarding_welcome',
+                      );
+                      return;
+                    }
+
+                    if (user.role == 'admin') {
+                      Get.offAllNamed('/admin_dashboard');
+                      return;
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     foregroundColor: AppColors.text1,
@@ -69,7 +81,10 @@ class LoginOptionScreen extends StatelessWidget {
                       const SizedBox(width: 16),
                       const Text(
                         AppTexts.loginWithGoogle,
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ],
                   ),
@@ -79,7 +94,11 @@ class LoginOptionScreen extends StatelessWidget {
 
                 ElevatedButton.icon(
                   onPressed: () {},
-                  icon: const Icon(Icons.facebook, color: Colors.white, size: 22),
+                  icon: const Icon(
+                    Icons.facebook,
+                    color: Colors.white,
+                    size: 22,
+                  ),
                   label: const Text(
                     AppTexts.loginWithFacebook,
                     style: TextStyle(fontSize: 16, color: Colors.white),

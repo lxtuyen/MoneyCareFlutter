@@ -18,6 +18,7 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
   final UserController userController = Get.find<UserController>();
   int selectedIndex = 0;
   late int userId;
+  int? monthlyIncome;
 
   @override
   void initState() {
@@ -31,6 +32,7 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
     await controller.loadFunds(user.id);
     setState(() {
       userId = user.id;
+      monthlyIncome = user.profile.monthlyIncome;
       selectedIndex = controller.savingFunds.indexWhere(
         (f) => f.id == controller.fundId.value,
       );
@@ -116,7 +118,8 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                                               height: 40,
                                               backgroundColor:
                                                   Colors.grey.shade200,
-                                              iconPath: 'icons/${cat.icon}.svg',
+                                              iconPath:
+                                                  'assets/icons/${cat.icon}.svg',
                                               size: 24,
                                             ),
                                             const SizedBox(height: 8),
@@ -162,46 +165,43 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                   label: const Text('Tự tạo quỹ tiết kiệm'),
                 ),
                 const SizedBox(height: 12),
-                Obx(() {
-                  final monthlyIncome =
-                      userController.userProfile.value!.monthlyIncome;
-                  return SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        if (controller.savingFunds.isNotEmpty) {
-                          final selectedFund =
-                              controller.savingFunds[selectedIndex];
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      if (controller.savingFunds.isNotEmpty) {
+                        final selectedFund =
+                            controller.savingFunds[selectedIndex];
 
-                          await controller.selectSavingFund(
-                            userId,
-                            selectedFund.id,
-                          );
-                          if (monthlyIncome == null) {
-                            Get.offAllNamed('/onboarding_income');
-                          } else {
-                            Get.offAllNamed('/main');
-                          }
+                        await controller.selectSavingFund(
+                          userId,
+                          selectedFund.id,
+                        );
+
+                        if (monthlyIncome == null) {
+                          Get.offAllNamed('/onboarding_income');
+                        } else {
+                          Get.offAllNamed('/main');
                         }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 14),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        backgroundColor: Colors.blue,
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text(
-                        "Xác nhận",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
+                      backgroundColor: Colors.blue,
+                    ),
+                    child: const Text(
+                      "Xác nhận",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
                       ),
                     ),
-                  );
-                }),
+                  ),
+                ),
 
                 const SizedBox(height: 12),
               ],

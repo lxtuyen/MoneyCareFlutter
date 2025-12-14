@@ -65,7 +65,7 @@ class EditCategorySheet extends StatelessWidget {
                       child: Row(
                         children: [
                           SvgPicture.asset(
-                            'icons/${item.icon}.svg',
+                            'assets/icons/${item.icon}.svg',
                             width: 26,
                             height: 26,
                           ),

@@ -141,9 +141,13 @@ class AppHelperFunction {
 
   static String getFormattedDate(
     DateTime date, {
-    String format = 'dd MMM yyyy',
+    String format = 'dd/MM/yyyy',
   }) {
     return DateFormat(format).format(date);
+  }
+
+  static String formatDayMonth(DateTime date) {
+    return DateFormat('dd/MM').format(date);
   }
 
   static List<T> removeDuplicates<T>(List<T> list) {
@@ -162,9 +166,18 @@ class AppHelperFunction {
     return wrappedList;
   }
 
-  static String formatCurrency(String number) {
+  static String formatCurrency(dynamic number) {
     final formatter = NumberFormat('#,###', 'vi_VN');
-    return formatter.format(int.tryParse(number) ?? 0);
+
+    if (number is num) {
+      return formatter.format(number);
+    }
+
+    if (number is String) {
+      return formatter.format(double.tryParse(number) ?? 0);
+    }
+
+    return '0';
   }
 
   static int clampZero(int value) => value < 0 ? 0 : value;
