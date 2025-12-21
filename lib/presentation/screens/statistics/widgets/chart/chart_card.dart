@@ -30,7 +30,7 @@ class ChartCard extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(right: 12),
       child: Container(
-        width: 210,
+        width: 220,
         height: 130,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -87,7 +87,7 @@ class ChartCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    AppHelperFunction.formatCurrency(amount.toString()),
+                    AppHelperFunction.formatAmount(amount.toDouble(), 'VND'),
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeLg,
                       fontWeight: FontWeight.bold,
@@ -96,9 +96,9 @@ class ChartCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'Hạn mức ${AppHelperFunction.formatCurrency(limit.toString())}',
+                    'Hạn mức ${AppHelperFunction.formatAmount(limit.toDouble(), 'VND')}',
                     style: TextStyle(
-                      fontSize: AppSizes.fontSizeSm,
+                      fontSize: 12,
                       color: Colors.grey.shade600,
                     ),
                   ),

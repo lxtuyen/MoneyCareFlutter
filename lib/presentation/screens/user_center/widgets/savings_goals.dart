@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:intl/intl.dart';
 
 class SavingsGoals extends StatelessWidget {
   final double currentSaving;
@@ -38,8 +38,6 @@ class SavingsGoals extends StatelessWidget {
       return Colors.green;
     }
 
-    final formatter = NumberFormat.decimalPattern('vi');
-
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -73,14 +71,14 @@ class SavingsGoals extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                formatter.format(currentSaving),
+                AppHelperFunction.formatAmount(currentSaving, 'VND'),
                 style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
-                formatter.format(targetSaving),
+                AppHelperFunction.formatAmount(targetSaving, 'VND'),
                 style: const TextStyle(color: Colors.grey),
               ),
             ],
@@ -97,9 +95,9 @@ class SavingsGoals extends StatelessWidget {
                 children: [
                   const Text("Tài khoản", style: TextStyle(fontSize: 14)),
                   Text(
-                    formatter.format(currentSaving),
+                    AppHelperFunction.formatAmount(currentSaving, 'VND'),
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),

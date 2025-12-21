@@ -113,6 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppSizes.md),
         child: Column(
@@ -203,9 +204,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                     ),
                     const SizedBox(width: AppSizes.spaceBtwItems),
-                    /*NotificationBell(
-                      userId: userId,
-                    ),*/
+                    Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        CircularIcon(
+                          onTap: () => Get.toNamed('/pending_transaction'),
+                          iconPath: AppIcons.notification,
+                          backgroundColor: const Color(0XFFF5FAFE),
+                          height: 36,
+                          width: 36,
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.white,
+                                width: 1.5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ],
@@ -296,9 +322,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               }
 
-              return CategorySection(
-                categories: categories
-              );
+              return CategorySection(categories: categories);
             }),
 
             const SizedBox(height: AppSizes.defaultSpace),
@@ -367,7 +391,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 startDate: startDate,
                 endDate: endDate,
                 totals: totals,
-                amountSpent: totalSpent.toString(),
+                amountSpent: totalSpent,
               );
             }),
 

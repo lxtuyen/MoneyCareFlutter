@@ -54,7 +54,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         );
         await userController.updateProfile(dto);
         AppHelperFunction.showSnackBar('Cập nhật thành công');
-        Get.toNamed('/main');
       } catch (e) {
         AppHelperFunction.showSnackBar(e.toString());
       }

@@ -10,9 +10,9 @@ class DescriptionTotal extends StatelessWidget {
     required this.monthlyBalance,
     required this.monthlyBalanceChange,
   });
-  final String dailyAverage;
+  final double dailyAverage;
   final String dailyAverageChange;
-  final String monthlyBalance;
+  final double monthlyBalance;
   final String monthlyBalanceChange;
   @override
   Widget build(BuildContext context) {
@@ -23,14 +23,14 @@ class DescriptionTotal extends StatelessWidget {
         children: [
           DescriptionItem(
             title: 'Trung bình chi theo ngày',
-            value: AppHelperFunction.formatCurrency(dailyAverage),
+            value: AppHelperFunction.formatAmount(dailyAverage, 'VND'),
             percent: dailyAverageChange,
           ),
           const SizedBox(height: 8),
 
           DescriptionItem(
             title: 'Số dư tháng này',
-            value: AppHelperFunction.formatCurrency(monthlyBalance),
+            value: AppHelperFunction.formatAmount(monthlyBalance, 'VND'),
             percent: monthlyBalanceChange,
           ),
         ],

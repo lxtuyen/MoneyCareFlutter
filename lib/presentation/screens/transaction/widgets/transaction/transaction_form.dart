@@ -211,7 +211,7 @@ class _TransactionFormState extends State<TransactionForm> {
           transactionDate: selectedDate,
           userId: userId,
         );
-        await transactionController.updateTransaction(dto, widget.item!.id);
+        await transactionController.updateTransaction(dto, widget.item!.id!);
         Get.back();
         AppHelperFunction.showSnackBar('Cập nhật giao dịch thành công');
       } catch (e) {
@@ -436,7 +436,7 @@ class _TransactionFormState extends State<TransactionForm> {
                       child: Obx(() {
                         return ElevatedButton(
                           onPressed:
-                              widget.item != null
+                              widget.item?.id != null
                                   ? _updateTransaction
                                   : _createTransaction,
                           style: ElevatedButton.styleFrom(
@@ -452,7 +452,7 @@ class _TransactionFormState extends State<TransactionForm> {
                                     color: Colors.white,
                                   )
                                   : Text(
-                                    widget.item == null ? 'Tạo' : 'Cập nhật',
+                                    widget.item?.id == null ? 'Tạo' : 'Cập nhật',
                                     style: const TextStyle(
                                       fontSize: 25,
                                       color: Colors.white,

@@ -14,7 +14,7 @@ class AuthController extends GetxController {
   var isLoading = false.obs;
   var isGoogleLogin = false.obs;
 
-  Future<String?> login(String email, String password) async {
+  Future<void> login(String email, String password) async {
     try {
       isLoading.value = true;
 
@@ -24,10 +24,6 @@ class AuthController extends GetxController {
       user.value = res;
       await storage.saveUserInfo(res.toJson());
       await storage.saveToken(res.accessToken!);
-
-      return null;
-    } catch (e) {
-      return e.toString();
     } finally {
       isLoading.value = false;
     }
@@ -106,6 +102,16 @@ class AuthController extends GetxController {
     }
   }
 
+  Future<void> connectGmail() async {
+    try {
+      isLoading.value = true;
+
+      await authService.connectGmail();
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   Future<void> logout() async {
     if (isGoogleLogin.value) {
       await GoogleSignIn().signOut();
@@ -113,5 +119,9 @@ class AuthController extends GetxController {
     isGoogleLogin.value = false;
     user.value = null;
     await storage.logout();
+  }
+
+  UserModel? getUserInfo() {
+    return user.value;
   }
 }

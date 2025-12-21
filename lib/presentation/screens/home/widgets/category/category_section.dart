@@ -25,7 +25,7 @@ class CategorySection extends StatelessWidget {
             ...categories.map((item) {
               return CategoryCard(
                 title: item.categoryName,
-                amount: item.total.toString(),
+                amount: item.total,
                 percent: item.percentage.toString(),
                 color: AppHelperFunction.getRandomColor(),
               );

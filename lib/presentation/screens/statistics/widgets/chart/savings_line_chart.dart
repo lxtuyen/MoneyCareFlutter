@@ -122,8 +122,8 @@ class SavingsLineChart extends StatelessWidget {
                   getTooltipItems: (items) {
                     return items.map((item) {
                       return LineTooltipItem(
-                        AppHelperFunction.formatCurrency(
-                          item.y.toInt().toString(),
+                        AppHelperFunction.formatAmount(
+                          item.y,'VND'
                         ),
                         const TextStyle(
                           color: Colors.white,

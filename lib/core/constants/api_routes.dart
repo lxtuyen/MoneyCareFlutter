@@ -3,6 +3,7 @@ class ApiRoutes {
   static const login = 'auth/login';
   static const register = 'auth/register';
   static const googleLogin = 'auth/google-login';
+  static const googleLogin2 = 'auth/google/gmail/connect';
   static const forgotPassword = 'otp/forgot-password';
   static const resetPassword = 'otp/reset-password';
   static const verifyOtp = 'otp/verify-otp';
@@ -18,6 +19,7 @@ class ApiRoutes {
   // --- Transaction ---
   static const transaction = 'transactions';
   static const getTransactionsFilter = 'transactions/filter';
+  static const pendingTransactions = 'pending-transactions';
 
   // --- Notification ---
   static const getNotificationsByUser = 'notifications/me';

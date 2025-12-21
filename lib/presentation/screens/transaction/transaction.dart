@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:money_care/controllers/filter_controller.dart';
@@ -73,7 +74,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
           Container(
             height: 195,
             decoration: const BoxDecoration(
-              color: Color(0xFF0B84FF),
+                  color: kIsWeb ? Colors.white : Color(0xFF0B84FF),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40),
@@ -94,8 +95,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                   selected: selected,
                   onSelected: (value) => setState(() => selected = value),
                   title: "Thu - Chi",
-                  spendText: "0",
-                  incomeText: "0",
+                  spendText: 0,
+                  incomeText: 0,
                 );
               }
 
@@ -103,8 +104,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
                 selected: selected,
                 onSelected: (value) => setState(() => selected = value),
                 title: "Thu - Chi",
-                spendText: data.expenseTotal.toString(),
-                incomeText: data.incomeTotal.toString(),
+                spendText: data.expenseTotal,
+                incomeText: data.incomeTotal,
               );
             }),
           ),

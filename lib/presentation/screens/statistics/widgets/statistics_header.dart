@@ -1,22 +1,22 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class StatisticsHeader extends StatelessWidget {
   final String selected;
   final Function(String) onSelected;
   final String title;
-  final String monthText;
-  final String spendText;
-  final String incomeText;
+  final int spendText;
+  final int incomeText;
 
   const StatisticsHeader({
     super.key,
     required this.selected,
     required this.onSelected,
     this.title = "Thống kê",
-    this.monthText = "Tháng này",
-    this.spendText = "10.000.000",
-    this.incomeText = "12.000.000",
+    this.spendText = 0,
+    this.incomeText = 0,
   });
 
   @override
@@ -33,7 +33,7 @@ class StatisticsHeader extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Colors.white,
+                  color: kIsWeb ? AppColors.text2 : Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -44,34 +44,23 @@ class StatisticsHeader extends StatelessWidget {
           Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(
-                    Icons.calendar_today,
-                    color: Colors.white,
-                    size: 16,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    monthText,
-                    style: const TextStyle(color: Colors.white, fontSize: 16),
-                  ),
-                  const Icon(Icons.keyboard_arrow_down, color: Colors.white),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Row(
                 children: [
                   _buildSelectCard(
                     label: "Tiền chi",
-                    value: AppHelperFunction.formatCurrency(spendText),
+                    value: AppHelperFunction.formatAmount(
+                      spendText.toDouble(),
+                      'VND',
+                    ),
                     isActive: selected == 'chi',
                     onTap: () => onSelected('chi'),
                   ),
                   const SizedBox(width: 12),
                   _buildSelectCard(
                     label: "Tiền thu",
-                    value: AppHelperFunction.formatCurrency(incomeText),
+                    value: AppHelperFunction.formatAmount(
+                      incomeText.toDouble(),
+                      'VND',
+                    ),
                     isActive: selected == 'thu',
                     onTap: () => onSelected('thu'),
                   ),
@@ -90,35 +79,48 @@ class StatisticsHeader extends StatelessWidget {
     required bool isActive,
     required VoidCallback onTap,
   }) {
+    final bool isWeb = kIsWeb;
+
     return Expanded(
       child: GestureDetector(
         onTap: onTap,
         child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF1976D2),
-            borderRadius: BorderRadius.circular(10),
-            border: Border(
-              bottom: BorderSide(
-                color: isActive ? Colors.white : Colors.transparent,
-                width: 3,
-              ),
-            ),
-          ),
           padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: isWeb ? Colors.white : const Color(0xFF1976D2),
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: isActive ? const Color(0xFF1976D2) : Colors.grey.shade300,
+              width: 2,
+            ),
+            boxShadow:
+                isWeb
+                    ? [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
+                      ),
+                    ]
+                    : null,
+          ),
           child: Column(
             children: [
               Text(
                 label,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.8),
+                  color:
+                      isWeb
+                          ? const Color(0xFF1976D2)
+                          : Colors.white.withOpacity(0.8),
                   fontSize: 14,
                 ),
               ),
               const SizedBox(height: 6),
               Text(
                 value,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: isWeb ? const Color(0xFF1976D2) : Colors.white,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),

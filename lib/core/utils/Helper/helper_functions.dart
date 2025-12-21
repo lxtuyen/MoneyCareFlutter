@@ -146,6 +146,19 @@ class AppHelperFunction {
     return DateFormat(format).format(date);
   }
 
+  static  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final diff = now.difference(dateTime);
+
+    if (diff.inDays == 0) {
+      return 'Hôm nay';
+    } else if (diff.inDays == 1) {
+      return 'Hôm qua';
+    } else {
+      return DateFormat('dd/MM/yyyy').format(dateTime);
+    }
+  }
+
   static String formatDayMonth(DateTime date) {
     return DateFormat('dd/MM').format(date);
   }
@@ -166,18 +179,9 @@ class AppHelperFunction {
     return wrappedList;
   }
 
-  static String formatCurrency(dynamic number) {
+  static String formatAmount(double amount, String currency) {
     final formatter = NumberFormat('#,###', 'vi_VN');
-
-    if (number is num) {
-      return formatter.format(number);
-    }
-
-    if (number is String) {
-      return formatter.format(double.tryParse(number) ?? 0);
-    }
-
-    return '0';
+    return '${formatter.format(amount)} $currency';
   }
 
   static int clampZero(int value) => value < 0 ? 0 : value;

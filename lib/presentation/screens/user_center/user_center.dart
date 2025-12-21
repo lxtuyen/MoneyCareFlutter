@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/controllers/auth_controller.dart';
@@ -44,26 +45,27 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
-                height: 140,
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(40),
-                    bottomRight: Radius.circular(40),
+              if (!kIsWeb)
+                Container(
+                  height: 140,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40),
+                      bottomRight: Radius.circular(40),
+                    ),
                   ),
-                ),
-                child: const Center(
-                  child: Text(
-                    AppTexts.profileTitle,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                  child: const Center(
+                    child: Text(
+                      AppTexts.profileTitle,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
                   ),
                 ),
-              ),
 
               Padding(
                 padding: const EdgeInsets.all(16),
@@ -72,7 +74,8 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                   children: [
                     Obx(() {
                       final data = transactionController.totalByType.value;
-                      final monthlyIncome = userController.userProfile.value!.monthlyIncome;
+                      final monthlyIncome =
+                          userController.userProfile.value!.monthlyIncome;
 
                       if (transactionController.isLoading.value ||
                           monthlyIncome == null) {
@@ -83,14 +86,12 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       }
 
                       if (data == null) {
-                        return SavingsGoals(
-                          currentSaving: 0,
-                          targetSaving: 0,
-                        );
+                        return SavingsGoals(currentSaving: 0, targetSaving: 0);
                       }
 
                       return SavingsGoals(
-                        currentSaving: (data.incomeTotal - data.expenseTotal).toDouble(),
+                        currentSaving:
+                            (data.incomeTotal - data.expenseTotal).toDouble(),
                         targetSaving: monthlyIncome.toDouble(),
                       );
                     }),
@@ -102,21 +103,40 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       title: AppTexts.profile,
                       onTap: () => Get.toNamed('/profile'),
                     ),
-                    BuildMenuItem(
-                      icon: Icons.insert_chart_outlined,
-                      title: 'Kết nối ngân hàng',
-                      onTap: () => Get.toNamed('/mail_connect'),
-                    ),
+                    Obx(() {
+                      final user = authController.user.value;
+
+                      if (user == null || user.isVip == true) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return BuildMenuItem(
+                        icon: Icons.insert_chart_outlined,
+                        title: 'Kết nối Gmail',
+                        onTap: () async {
+                          await authController.connectGmail();
+                        },
+                      );
+                    }),
+
                     BuildMenuItem(
                       icon: Icons.category_outlined,
                       title: AppTexts.savingFunds,
                       onTap: () => Get.toNamed('/select_saving_fund'),
                     ),
-                    BuildMenuItem(
-                      icon: Icons.account_balance_wallet_outlined,
-                      title: 'Đăng ký VIP',
-                      onTap: () {},
-                    ),
+                    Obx(() {
+                      final user = authController.user.value;
+
+                      if (user == null || user.isVip == false) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return BuildMenuItem(
+                        icon: Icons.account_balance_wallet_outlined,
+                        title: 'Đăng ký VIP',
+                        onTap: () {},
+                      );
+                    }),
                     BuildMenuItem(
                       icon: Icons.exit_to_app,
                       title: AppTexts.logout,

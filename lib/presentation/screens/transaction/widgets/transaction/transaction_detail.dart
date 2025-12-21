@@ -110,7 +110,7 @@ class TransactionDetail extends StatelessWidget {
                             onConfirm: () {
                               Get.back();
                               Get.back();
-                              transactionController.deleteTransaction(item.id, userId);
+                              transactionController.deleteTransaction(item.id!, userId);
                               showDialog(
                                 context: context,
                                 builder:

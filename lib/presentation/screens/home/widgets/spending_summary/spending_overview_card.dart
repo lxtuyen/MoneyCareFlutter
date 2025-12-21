@@ -10,7 +10,7 @@ import 'package:money_care/presentation/widgets/icon/rounded_icon.dart';
 class SpendingOverviewCard extends StatelessWidget {
   final DateTime? startDate;
   final DateTime? endDate;
-  final String amountSpent;
+  final double amountSpent;
   final List<TotalByDate> totals;
 
   const SpendingOverviewCard({
@@ -91,7 +91,7 @@ class SpendingOverviewCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppHelperFunction.formatCurrency(amountSpent),
+                  AppHelperFunction.formatAmount(amountSpent.toDouble(), 'VND'),
                   style: const TextStyle(
                     fontSize: AppSizes.lg,
                     fontWeight: FontWeight.bold,
@@ -204,7 +204,7 @@ class SpendingOverviewCard extends StatelessWidget {
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((barSpot) {
                           return LineTooltipItem(
-                            "${AppHelperFunction.getFormattedDate(dateRange[barSpot.x.toInt()])}\n${AppHelperFunction.formatCurrency(barSpot.y)}",
+                            "${AppHelperFunction.getFormattedDate(dateRange[barSpot.x.toInt()])}\n${AppHelperFunction.formatAmount(barSpot.y, 'VND')}",
                             const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,

@@ -1,4 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -122,7 +123,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
               Container(
                 height: 195,
                 decoration: const BoxDecoration(
-                  color: Color(0xFF0B84FF),
+                  color: kIsWeb ? Colors.white : Color(0xFF0B84FF),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(40),
                     bottomRight: Radius.circular(40),
@@ -143,8 +144,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       selected: selected,
                       onSelected: (value) => setState(() => selected = value),
                       title: "Thống kê",
-                      spendText: "0",
-                      incomeText: "0",
+                      spendText: 0,
+                      incomeText: 0,
                     );
                   }
 
@@ -152,8 +153,8 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                     selected: selected,
                     onSelected: (value) => setState(() => selected = value),
                     title: "Thống kê",
-                    spendText: data.expenseTotal.toString(),
-                    incomeText: data.incomeTotal.toString(),
+                    spendText: data.expenseTotal,
+                    incomeText: data.incomeTotal,
                   );
                 }),
               ),
@@ -257,8 +258,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 return StatisticalWidgets(
                   startDate: AppHelperFunction.getFormattedDate(monthStartDate),
                   endDate: AppHelperFunction.getFormattedDate(now),
-                  totalAmount: AppHelperFunction.formatCurrency(
-                    data.expenseTotal.toString(),
+                  totalAmount: AppHelperFunction.formatAmount(
+                    data.expenseTotal.toDouble(),
+                    'VND',
                   ),
                   categories: currentFund.categories,
                 );
@@ -325,7 +327,9 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                   );
                 }
 
-                if (lstMonth == null || thisMonth == null || totalByType == null) {
+                if (lstMonth == null ||
+                    thisMonth == null ||
+                    totalByType == null) {
                   return const SizedBox(
                     height: 120,
                     child: Center(child: Text('Không có dữ liệu')),
@@ -333,8 +337,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                 }
 
                 return DescriptionTotal(
-                  dailyAverage:
-                      transactionController.dailyAverage.toInt().toString(),
+                  dailyAverage: transactionController.dailyAverage,
                   dailyAverageChange:
                       transactionController.dailyAverageChange
                           .toInt()
@@ -343,7 +346,7 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       transactionController.dailyIncomeChange.toString(),
                   monthlyBalance:
                       (totalByType.incomeTotal - totalByType.expenseTotal)
-                          .toString(),
+                          .toDouble(),
                 );
               }),
             ],

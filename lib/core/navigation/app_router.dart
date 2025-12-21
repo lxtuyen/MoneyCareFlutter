@@ -10,13 +10,13 @@ import 'package:money_care/presentation/screens/login/login_option.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_income.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_welcome.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_saving_rule.dart';
+import 'package:money_care/presentation/screens/pending_transaction/pending_transaction.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
 import 'package:money_care/presentation/screens/select_saving_fund/create_saving_fund.dart';
 import 'package:money_care/presentation/screens/select_saving_fund/select_saving_fund.dart';
 import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/transaction/Income.dart';
 import 'package:money_care/presentation/screens/transaction/expense.dart';
-import 'package:money_care/presentation/screens/user_center/bank_mail_connect.dart';
 import 'package:money_care/presentation/screens/user_center/profile.dart';
 
 final List<GetPage> appPages = [
@@ -57,7 +57,7 @@ final List<GetPage> appPages = [
   GetPage(name: '/expense', page: () => const ExpenseScreen()),
   GetPage(name: '/income', page: () => const IncomeScreen()),
   GetPage(name: '/profile', page: () => const ProfileScreen()),
-  GetPage(name: '/mail_connect', page: () => const BankMailConnectScreen()),
+  GetPage(name: '/pending_transaction', page: () => const PendingTransactionsScreen()),
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];
