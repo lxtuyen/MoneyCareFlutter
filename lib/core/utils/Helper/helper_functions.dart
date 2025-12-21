@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class AppHelperFunction {
@@ -18,10 +19,6 @@ class AppHelperFunction {
         return Colors.grey;
       case 'Purple':
         return Colors.purple;
-      case 'Black':
-        return Colors.black;
-      case 'White':
-        return Colors.white;
       case 'Orange':
         return Colors.orange;
       case 'Brown':
@@ -30,9 +27,67 @@ class AppHelperFunction {
         return Colors.teal;
       case 'Indigo':
         return Colors.indigo;
+      case 'Cyan':
+        return Colors.cyan;
+      case 'Lime':
+        return Colors.lime;
+      case 'Amber':
+        return Colors.amber;
+      case 'DeepOrange':
+        return Colors.deepOrange;
+      case 'DeepPurple':
+        return Colors.deepPurple;
+      case 'LightBlue':
+        return Colors.lightBlue;
+      case 'LightGreen':
+        return Colors.lightGreen;
+      case 'Yellow':
+        return Colors.yellow;
+      case 'BlueGrey':
+        return Colors.blueGrey;
+      case 'Black':
+        return Colors.black;
+      case 'Custom1':
+        return const Color(0xFFB39DDB);
+      case 'Custom2':
+        return const Color(0xFFFFCC80);
+      case 'Custom3':
+        return const Color(0xFF80CBC4);
       default:
-        return null;
+        return Colors.grey;
     }
+  }
+
+  static final List<String> _colorNames = [
+    'Green',
+    'Red',
+    'Blue',
+    'Pink',
+    'Grey',
+    'Purple',
+    'Orange',
+    'Brown',
+    'Teal',
+    'Indigo',
+    'Cyan',
+    'Lime',
+    'Amber',
+    'DeepOrange',
+    'DeepPurple',
+    'LightBlue',
+    'LightGreen',
+    'Yellow',
+    'BlueGrey',
+    'Black',
+    'Custom1',
+    'Custom2',
+    'Custom3',
+  ];
+
+  static Color getRandomColor() {
+    final random = Random();
+    final colorName = _colorNames[random.nextInt(_colorNames.length)];
+    return getColor(colorName)!;
   }
 
   static void showSnackBar(String message) {
@@ -49,18 +104,11 @@ class AppHelperFunction {
           title: Text(title),
           content: Text(message),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("OK"),
-            ),
+            TextButton(onPressed: () => Get.back(), child: const Text("OK")),
           ],
         );
       },
     );
-  }
-
-  static void navigateScreen(BuildContext context, Widget screen) {
-    Navigator.push(context, MaterialPageRoute(builder: (_) => screen));
   }
 
   static String truncateText(String text, int maxlength) {
@@ -86,16 +134,33 @@ class AppHelperFunction {
   static double screenWith() {
     BuildContext? context = Get.context;
     if (context == null) {
-      return 375.0; // Giá trị mặc định, tránh lỗi null
+      return 375.0;
     }
     return MediaQuery.of(context).size.width;
   }
 
   static String getFormattedDate(
     DateTime date, {
-    String format = 'dd MMM yyyy',
+    String format = 'dd/MM/yyyy',
   }) {
     return DateFormat(format).format(date);
+  }
+
+  static  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final diff = now.difference(dateTime);
+
+    if (diff.inDays == 0) {
+      return 'Hôm nay';
+    } else if (diff.inDays == 1) {
+      return 'Hôm qua';
+    } else {
+      return DateFormat('dd/MM/yyyy').format(dateTime);
+    }
+  }
+
+  static String formatDayMonth(DateTime date) {
+    return DateFormat('dd/MM').format(date);
   }
 
   static List<T> removeDuplicates<T>(List<T> list) {
@@ -114,22 +179,10 @@ class AppHelperFunction {
     return wrappedList;
   }
 
-  static CustomTransitionPage slidePage({
-    required Widget child,
-    required GoRouterState state,
-    Offset begin = const Offset(1.0, 0.0),
-  }) {
-    const end = Offset.zero;
-    const curve = Curves.easeInOut;
-
-    final tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-
-    return CustomTransitionPage(
-      key: state.pageKey,
-      child: child,
-      transitionsBuilder:
-          (context, animation, secondaryAnimation, child) =>
-              SlideTransition(position: animation.drive(tween), child: child),
-    );
+  static String formatAmount(double amount, String currency) {
+    final formatter = NumberFormat('#,###', 'vi_VN');
+    return '${formatter.format(amount)} $currency';
   }
+
+  static int clampZero(int value) => value < 0 ? 0 : value;
 }

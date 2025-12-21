@@ -1,27 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class CategoryItem extends StatelessWidget {
   final String title;
-  final String percent;
-  final IconData icon;
+  final int percentage;
+  final String icon;
+  final bool isSelected;
 
   const CategoryItem({
     super.key,
     required this.title,
-    required this.percent,
+    required this.percentage,
     required this.icon,
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       width: 145,
       height: 105,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade300, width: 1),
+        border: Border.all(
+          color: isSelected ? Colors.blue : Colors.grey.shade300,
+          width: isSelected ? 2 : 1,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.03),
@@ -33,7 +40,12 @@ class CategoryItem extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: Colors.deepPurple, size: 28),
+          SvgPicture.asset(
+            'assets/icons/$icon.svg',
+            color: isSelected ? Colors.blue : Colors.grey,
+            width: 28,
+            height: 28,
+          ),
           const SizedBox(height: 6),
           Text(
             title,
@@ -42,8 +54,11 @@ class CategoryItem extends StatelessWidget {
           ),
           const SizedBox(height: 3),
           Text(
-            percent,
-            style: const TextStyle(color: Colors.grey, fontSize: 13),
+            percentage.toString(),
+            style: TextStyle(
+              color: isSelected ? Colors.blue : Colors.grey,
+              fontSize: 13,
+            ),
           ),
         ],
       ),

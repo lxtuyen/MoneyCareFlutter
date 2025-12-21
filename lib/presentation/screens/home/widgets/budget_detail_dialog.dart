@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:money_care/core/constants/colors.dart';
 
@@ -9,12 +10,12 @@ class BudgetDetailDialog extends StatelessWidget {
   final bool isOverLimit;
 
   const BudgetDetailDialog({
-    Key? key,
+    super.key,
     required this.title,
     required this.limit,
     required this.spent,
     required this.isOverLimit,
-  }) : super(key: key);
+  });
 
   double _parseNumber(String s) =>
       double.tryParse(s.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
@@ -37,7 +38,6 @@ class BudgetDetailDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -46,7 +46,7 @@ class BudgetDetailDialog extends StatelessWidget {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () => Get.back(),
                   child: const Icon(Icons.close, color: AppColors.text1),
                 ),
               ],
@@ -107,9 +107,10 @@ class BudgetDetailDialog extends StatelessWidget {
                         Text(
                           spent,
                           style: TextStyle(
-                            color: isOverLimit
-                                ? AppColors.error
-                                : AppColors.success,
+                            color:
+                                isOverLimit
+                                    ? AppColors.error
+                                    : AppColors.success,
                             fontWeight: FontWeight.bold,
                           ),
                         ),

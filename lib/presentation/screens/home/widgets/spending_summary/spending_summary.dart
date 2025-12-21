@@ -4,17 +4,18 @@ import 'package:flutter_svg/svg.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class SpendingSummary extends StatelessWidget {
   const SpendingSummary({
     super.key,
-    required this.balance,
-    required this.spending,
+    required this.incomeTotal,
+    required this.expenseTotal,
     this.onPressed,
   });
 
-  final String balance;
-  final String spending;
+  final int incomeTotal;
+  final int expenseTotal;
   final VoidCallback? onPressed;
 
   @override
@@ -28,7 +29,6 @@ class SpendingSummary extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // bên trái
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -68,7 +68,6 @@ class SpendingSummary extends StatelessWidget {
               ),
             ],
           ),
-          // bên phải
           DottedBorder(
             borderType: BorderType.RRect,
             radius: const Radius.circular(AppSizes.borderRadiusLg),
@@ -85,16 +84,16 @@ class SpendingSummary extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    spending,
+                    AppHelperFunction.formatAmount(expenseTotal.toDouble(),'VND'),
                     style: const TextStyle(
                       color: AppColors.secondaryOrange,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 22,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Số dư: $balance',
+                    'Số dư: ${AppHelperFunction.formatAmount(AppHelperFunction.clampZero(incomeTotal - expenseTotal).toDouble(),'VND')}',
                     style: const TextStyle(
                       color: AppColors.text3,
                       fontSize: 12,

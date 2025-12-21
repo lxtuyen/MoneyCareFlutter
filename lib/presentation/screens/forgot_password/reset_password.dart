@@ -1,8 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/core/utils/validatiors/validation.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -19,9 +21,24 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   bool isLoading = false;
   final _formKey = GlobalKey<FormState>();
   bool _isObscure = true;
+  final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
+    Future<void> onPressed() async {
+      if (_formKey.currentState!.validate()) {
+        try {
+          final message = await authController.resetPassword(
+            passwordController.text,
+          );
+          Get.offAllNamed('/login');
+          AppHelperFunction.showSnackBar(message);
+        } catch (e) {
+          AppHelperFunction.showSnackBar(e.toString());
+        }
+      }
+    }
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Center(
@@ -36,7 +53,6 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 children: [
                   const SizedBox(height: 80),
 
-                  // Tiêu đề
                   RichText(
                     text: const TextSpan(
                       style: TextStyle(
@@ -122,26 +138,31 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const SizedBox(height: 10),
 
                   const Spacer(),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.push('/');
-                      }
-                    },
-
-                    label: const Text(
-                      AppTexts.confirmButton,
-                      style: TextStyle(fontSize: 25, color: Colors.white),
-                    ),
-
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size.fromHeight(50),
-                      backgroundColor: AppColors.primary,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
+                  Obx(() {
+                    return ElevatedButton(
+                      onPressed:
+                          authController.isLoading.value ? null : onPressed,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size.fromHeight(50),
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
                       ),
-                    ),
-                  ),
+                      child:
+                          authController.isLoading.value
+                              ? const CircularProgressIndicator(
+                                color: Colors.white,
+                              )
+                              : const Text(
+                                AppTexts.confirmButton,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  color: Colors.white,
+                                ),
+                              ),
+                    );
+                  }),
                   const SizedBox(height: 20),
                   Center(
                     child: RichText(
@@ -161,7 +182,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                             recognizer:
                                 TapGestureRecognizer()
                                   ..onTap = () {
-                                    context.push('/login');
+                                    Get.toNamed('/login');
                                   },
                           ),
                         ],

@@ -1,10 +1,10 @@
 class AppImages{
   // splash, onboarding, select method
-  static const String logo = 'images/logo.png';
-  static const String welcome = 'images/welcome.png';
-  static const String savingRule = 'images/saving_rule.png';
-  static const String google = 'images/google.png';
-  static const String expenseManagement = 'images/expense_management.png';
-  static const String financialFreedom = 'images/financial_freedom.png';
-  static const String splash = 'images/splash.png';
+  static const String logo = 'assets/images/logo.png';
+  static const String welcome = 'assets/images/welcome.png';
+  static const String savingRule = 'assets/images/saving_rule.png';
+  static const String google = 'assets/images/google.png';
+  static const String expenseManagement = 'assets/images/expense_management.png';
+  static const String financialFreedom = 'assets/images/financial_freedom.png';
+  static const String splash = 'assets/images/splash.png';
 }

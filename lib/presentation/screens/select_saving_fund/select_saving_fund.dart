@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/core/constants/colors.dart';
-import 'package:money_care/core/constants/icon_string.dart';
-import 'package:money_care/core/constants/sizes.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/saving_fund_controller.dart';
+import 'package:money_care/controllers/user_controller.dart';
+import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/widgets/icon/rounded_icon.dart';
 
 class SelectSavingFundScreen extends StatefulWidget {
@@ -12,26 +14,31 @@ class SelectSavingFundScreen extends StatefulWidget {
 }
 
 class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
+  final SavingFundController controller = Get.find<SavingFundController>();
+  final UserController userController = Get.find<UserController>();
   int selectedIndex = 0;
+  late int userId;
+  int? monthlyIncome;
 
-  final List<List<Map<String, dynamic>>> fundGroups = [
-    [
-      {"icon": AppIcons.essential, "label": "Cần thiết", "percent": "50%"},
-      {"icon": AppIcons.education, "label": "Đào tạo", "percent": "10%"},
-      {"icon": AppIcons.pleasure, "label": "Hưởng thụ", "percent": "10%"},
-      {"icon": AppIcons.savings, "label": "Tiết kiệm", "percent": "10%"},
-      {"icon": AppIcons.charity, "label": "Từ thiện", "percent": "5%"},
-      {"icon": AppIcons.freedom, "label": "Tự do", "percent": "10%"},
-    ],
-    [
-      {"icon": AppIcons.essential, "label": "Cần thiết", "percent": "55%"},
-      {"icon": AppIcons.education, "label": "Đào tạo", "percent": "5%"},
-      {"icon": AppIcons.pleasure, "label": "Hưởng thụ", "percent": "10%"},
-      {"icon": AppIcons.savings, "label": "Tiết kiệm", "percent": "28%"},
-      {"icon": AppIcons.charity, "label": "Từ thiện", "percent": "2%"},
-      {"icon": AppIcons.freedom, "label": "Tự do", "percent": "5%"},
-    ],
-  ];
+  @override
+  void initState() {
+    super.initState();
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
+    UserModel user = UserModel.fromJson(userInfoJson, '');
+    await controller.loadFunds(user.id);
+    setState(() {
+      userId = user.id;
+      monthlyIncome = user.profile.monthlyIncome;
+      selectedIndex = controller.savingFunds.indexWhere(
+        (f) => f.id == controller.fundId.value,
+      );
+      if (selectedIndex == -1) selectedIndex = 0;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,77 +59,100 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                 const SizedBox(height: 16),
 
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: fundGroups.length,
-                    itemBuilder: (context, index) {
-                      final group = fundGroups[index];
-                      final isSelected = selectedIndex == index;
+                  child: Obx(() {
+                    if (controller.isLoadingFunds.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
 
-                      return GestureDetector(
-                        onTap: () => setState(() => selectedIndex = index),
-                        child: Container(
-                          margin: const EdgeInsets.only(bottom: 16),
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.blue.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color:
-                                  isSelected
-                                      ? Colors.blue
-                                      : Colors.grey.shade300,
-                              width: 1.5,
+                    if (controller.savingFunds.isEmpty) {
+                      return const Center(
+                        child: Text("Chưa có quỹ tiết kiệm nào"),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: controller.savingFunds.length,
+                      itemBuilder: (context, index) {
+                        final fund = controller.savingFunds[index];
+
+                        return GestureDetector(
+                          onTap: () => setState(() => selectedIndex = index),
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.blue.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                color:
+                                    (selectedIndex == index)
+                                        ? Colors.blue
+                                        : Colors.grey.shade300,
+
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  fund.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Wrap(
+                                  spacing: 12,
+                                  runSpacing: 12,
+                                  children:
+                                      fund.categories.map((cat) {
+                                        return Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            RoundedIcon(
+                                              padding: const EdgeInsets.all(8),
+                                              applyIconRadius: true,
+                                              width: 40,
+                                              height: 40,
+                                              backgroundColor:
+                                                  Colors.grey.shade200,
+                                              iconPath:
+                                                  'assets/icons/${cat.icon}.svg',
+                                              size: 24,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              cat.name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                            Text(
+                                              '${cat.percentage}%',
+                                              style: TextStyle(
+                                                color: Colors.grey.shade600,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      }).toList(),
+                                ),
+                              ],
                             ),
                           ),
-                          child: GridView.count(
-                            crossAxisCount: 3,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            children:
-                                group.map((item) {
-                                  return Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      RoundedIcon(
-                                        padding: const EdgeInsets.all(
-                                          AppSizes.sm,
-                                        ),
-                                        applyIconRadius: true,
-                                        width: 40,
-                                        height: 40,
-                                        backgroundColor:
-                                            AppColors.backgroundSecondary,
-                                        iconPath: item["icon"] as String,
-                                        size: AppSizes.lg,
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Text(
-                                        item["label"],
-                                        style: const TextStyle(
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      Text(
-                                        item["percent"],
-                                        style: TextStyle(
-                                          color: Colors.grey.shade600,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }).toList(),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
+                        );
+                      },
+                    );
+                  }),
                 ),
 
                 ElevatedButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed('/create_saving_fund');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFEEF0F5),
                     foregroundColor: Colors.black,
@@ -135,17 +165,32 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                   label: const Text('Tự tạo quỹ tiết kiệm'),
                 ),
                 const SizedBox(height: 12),
-
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      if (controller.savingFunds.isNotEmpty) {
+                        final selectedFund =
+                            controller.savingFunds[selectedIndex];
+
+                        await controller.selectSavingFund(
+                          userId,
+                          selectedFund.id,
+                        );
+
+                        if (monthlyIncome == null) {
+                          Get.offAllNamed('/onboarding_income');
+                        } else {
+                          Get.offAllNamed('/main');
+                        }
+                      }
+                    },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      backgroundColor: AppColors.primary,
+                      backgroundColor: Colors.blue,
                     ),
                     child: const Text(
                       "Xác nhận",
@@ -157,30 +202,8 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 12),
 
-                SizedBox(
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () => Navigator.pop(context),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 14),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      side: BorderSide(color: AppColors.backgroundPrimary),
-                    ),
-                    child: const Text(
-                      "Quay lại",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.text1,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 12),
               ],
             ),
           ),

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/models/category_model.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/sheet/edit_category.dart';
 
 class EditCategorySheet extends StatelessWidget {
-  final List<Map<String, dynamic>> categories;
+  final List<CategoryModel> categories;
 
   const EditCategorySheet({super.key, required this.categories});
 
@@ -33,7 +35,7 @@ class EditCategorySheet extends StatelessWidget {
                     style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   IconButton(
-                    onPressed: () => context.pop(),
+                    onPressed: () => Get.back(),
                     icon: const Icon(Icons.close, color: Colors.grey),
                   ),
                 ],
@@ -62,10 +64,10 @@ class EditCategorySheet extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Icon(
-                            item['icon'],
-                            color: AppColors.primary,
-                            size: 26,
+                          SvgPicture.asset(
+                            'assets/icons/${item.icon}.svg',
+                            width: 26,
+                            height: 26,
                           ),
                           const SizedBox(width: 12),
                           Expanded(
@@ -73,14 +75,14 @@ class EditCategorySheet extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  item['name'],
+                                  item.name,
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w600,
                                     fontSize: 15,
                                   ),
                                 ),
                                 Text(
-                                  item['percent'],
+                                  item.percentage.toString(),
                                   style: const TextStyle(
                                     fontSize: 13,
                                     color: Colors.grey,
@@ -96,8 +98,8 @@ class EditCategorySheet extends StatelessWidget {
                                 isScrollControlled: true,
                                 builder:
                                     (context) => EditCategory(
-                                      namecategory: item['name'],
-                                      percent: item['percent'],
+                                      namecategory: item.name,
+                                      percent: item.percentage.toString(),
                                     ),
                               );
                             },

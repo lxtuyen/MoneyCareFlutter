@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/presentation/widgets/container/rounded_container.dart';
 
 class CategoryCard extends StatelessWidget {
@@ -8,13 +9,13 @@ class CategoryCard extends StatelessWidget {
     required this.title,
     required this.amount,
     required this.percent,
-    required this.color,
+    this.color,
   });
 
   final String title;
-  final String amount;
+  final int amount;
   final String percent;
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -44,10 +45,10 @@ class CategoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  amount,
+                  AppHelperFunction.formatAmount(amount.toDouble(), 'VND'),
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: AppSizes.fontSizeMd,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -58,13 +59,13 @@ class CategoryCard extends StatelessWidget {
                   ),
                   backgroundColor: Colors.white.withOpacity(0.15),
                   child: Text(
-                    percent,
+                    '$percent%',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: AppSizes.fontSizeSm,
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ],

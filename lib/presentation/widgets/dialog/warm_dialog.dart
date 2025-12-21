@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/core/constants/colors.dart'; // nếu có AppColors của bạn
+import 'package:money_care/core/constants/colors.dart';
 
 class WarningDialog extends StatelessWidget {
   final String message;
@@ -39,7 +39,6 @@ class WarningDialog extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Nội dung cảnh báo
             Text(
               message,
               textAlign: TextAlign.center,
@@ -51,7 +50,6 @@ class WarningDialog extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Hai nút hành động
             Row(
               children: [
                 Expanded(

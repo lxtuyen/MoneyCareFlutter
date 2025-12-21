@@ -1,30 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
+import 'package:money_care/models/transaction_model.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
     super.key,
-    required this.title,
-    this.subtitle,
-    this.date,
-    this.color,
-    required this.amount,
-    required this.isShowDate,
+    required this.item,
     required this.onTap,
-    this.isShowDivider = true,
-    this.isExpense = true,
+    this.isShowDate = true,
+    this.isShowDivider = true, this.color,
   });
 
-  final String title;
-  final String? subtitle;
-  final String? date;
-  final Color? color;
-  final String amount;
+  final TransactionModel item;
   final bool isShowDate;
   final bool isShowDivider;
-  final bool isExpense;
   final VoidCallback onTap;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {
@@ -35,38 +28,35 @@ class TransactionItem extends StatelessWidget {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              if (isExpense)
-                Container(
-                  width: 12,
-                  height: 12,
-                  decoration: BoxDecoration(
-                    color: color,
-                    shape: BoxShape.circle,
-                  ),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: color,
+                  shape: BoxShape.circle,
                 ),
-              if (isExpense)
-                const SizedBox(width: AppSizes.spaceBtwItems),
+              ),
+              const SizedBox(width: AppSizes.spaceBtwItems),
 
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      title,
+                      item.note ?? "",
                       style: const TextStyle(
                         fontSize: AppSizes.fontSizeSm,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
 
-                    if (isExpense)
-                      Text(
-                        subtitle ?? "",
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.text5,
-                        ),
+                    Text(
+                      item.category?.name ?? 'Không có danh mục',
+                      style: const TextStyle(
+                        fontSize: 12,
+                        color: AppColors.text4,
                       ),
+                    ),
                   ],
                 ),
               ),
@@ -76,14 +66,14 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   if (isShowDate)
                     Text(
-                      date ?? '',
-                      style: const TextStyle(
+                      AppHelperFunction.formatDateTime(item.transactionDate!),
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.text5,
+                        color: AppColors.text4,
                       ),
                     ),
                   Text(
-                    amount,
+                    AppHelperFunction.formatAmount(item.amount.toDouble(), 'VND'),
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeMd,
                       fontWeight: FontWeight.w600,

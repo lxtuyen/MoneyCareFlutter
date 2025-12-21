@@ -1,11 +1,23 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:money_care/controllers/filter_controller.dart';
+import 'package:money_care/controllers/saving_fund_controller.dart';
+import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
+import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/models/dto/transaction_filter_dto.dart';
+import 'package:money_care/models/transaction_model.dart';
+import 'package:get/get.dart';
+import 'package:money_care/models/user_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/statistics/widgets/statistics_header.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/filter_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/search_filter.dart';
-import 'package:money_care/presentation/screens/transaction/widgets/transaction_detail.dart';
+import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_detail.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({super.key});
@@ -18,6 +30,40 @@ class _TransactionScreenState extends State<TransactionScreen> {
   String selected = 'chi';
   TextEditingController searchController = TextEditingController();
   String searchKeyword = '';
+  late int userId;
+
+  final TransactionController transactionController =
+      Get.find<TransactionController>();
+  final SavingFundController savingFundController =
+      Get.find<SavingFundController>();
+  final FilterController filterController = Get.find<FilterController>();
+  final SavingFundController fundController = Get.find<SavingFundController>();
+
+  @override
+  void initState() {
+    super.initState();
+    initUserInfo();
+  }
+
+  Future<void> initUserInfo() async {
+    Map<String, dynamic> userInfoJson = StorageService().getUserInfo()!;
+    UserModel user = UserModel.fromJson(userInfoJson, '');
+    setState(() {
+      userId = user.id;
+    });
+    loadData();
+  }
+
+  Future<void> loadData() async {
+    transactionController.filterTransactions(
+      userId,
+      TransactionFilterDto(
+        fundId: fundController.fundId.value > 0 ? fundController.fundId.value : null,
+        startDate: filterController.startDate.toString(),
+        endDate: filterController.endDate.toString(),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +74,40 @@ class _TransactionScreenState extends State<TransactionScreen> {
           Container(
             height: 195,
             decoration: const BoxDecoration(
-              color: Color(0xFF0B84FF),
+                  color: kIsWeb ? Colors.white : Color(0xFF0B84FF),
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(40),
                 bottomRight: Radius.circular(40),
               ),
             ),
-            child: StatisticsHeader(
-              selected: selected,
-              onSelected: (value) => setState(() => selected = value),
-              title: "Thu - Chi",
-              spendText: "5.500.000",
-              incomeText: "9.900.000",
-            ),
+            child: Obx(() {
+              final data = transactionController.totalByType.value;
+
+              if (transactionController.isLoading.value) {
+                return const SizedBox(
+                  height: 120,
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (data == null) {
+                return StatisticsHeader(
+                  selected: selected,
+                  onSelected: (value) => setState(() => selected = value),
+                  title: "Thu - Chi",
+                  spendText: 0,
+                  incomeText: 0,
+                );
+              }
+
+              return StatisticsHeader(
+                selected: selected,
+                onSelected: (value) => setState(() => selected = value),
+                title: "Thu - Chi",
+                spendText: data.expenseTotal,
+                incomeText: data.incomeTotal,
+              );
+            }),
           ),
 
           SearchWithFilter(
@@ -66,88 +133,111 @@ class _TransactionScreenState extends State<TransactionScreen> {
   }
 
   Widget _buildExpenseList() {
-    return ListView(
-      key: const ValueKey('chi'),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        Text(
-          'Hôm nay',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text1),
-        ),
-        SizedBox(height: 8),
-        TransactionItem(
-          onTap: () => _showTransactionDetail(context, true),
-          isShowDate: false,
-          title: 'Tiền siêu thị',
-          subtitle: 'Chi tiêu hàng ngày',
-          date: 'Hôm nay',
-          color: Colors.purple,
-          amount: '250.000',
-        ),
-        TransactionItem(
-          onTap: () {},
-          isShowDate: false,
-          title: 'Học tiếng Anh',
-          subtitle: 'Đào tạo',
-          date: 'Hôm nay',
-          color: Colors.orange,
-          amount: '250.000',
-        ),
-        TransactionItem(
-          onTap: () {},
-          isShowDate: false,
-          title: 'Tiền tiết kiệm',
-          subtitle: 'Tiết kiệm',
-          date: 'Hôm nay',
-          color: Colors.blue,
-          amount: '250.000',
-        ),
-        TransactionItem(
-          onTap: () {},
-          isShowDate: false,
-          title: 'Du lịch Mộc Châu',
-          subtitle: 'Hưởng thụ',
-          date: 'Hôm nay',
-          color: Colors.green,
-          amount: '250.000',
-        ),
-      ],
-    );
+    return Obx(() {
+      if (transactionController.isLoading.value) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 50),
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      final data = transactionController.transactionByfilter.value;
+
+      if (data == null || data.expenseTransactions.isEmpty) {
+        return _buildEmptyView();
+      }
+      final filtered =
+          data.expenseTransactions.where((t) {
+            final note = t.note?.toLowerCase() ?? '';
+            final keyword = searchKeyword.toLowerCase();
+            return note.contains(keyword);
+          }).toList();
+
+      if (filtered.isEmpty) {
+        return _buildEmptyView();
+      }
+
+      return ListView(
+        key: const ValueKey('chi'),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children:
+            filtered.map((item) {
+              return TransactionItem(
+                color: AppHelperFunction.getRandomColor(),
+                item: item,
+                isShowDate: true,
+                onTap: () => _showTransactionDetail(context, item),
+              );
+            }).toList(),
+      );
+    });
   }
 
   Widget _buildIncomeList() {
-    return ListView(
-      key: const ValueKey('thu'),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      children: [
-        const Text(
-          'Hôm nay',
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.text1),
-        ),
-        const SizedBox(height: 8),
-        TransactionItem(
-          onTap: () => _showTransactionDetail(context, false),
-          isShowDate: true,
-          title: 'Nhặt được',
-          amount: '250.000',
-          isExpense: false,
-        ),
-        TransactionItem(
-          onTap: () {},
-          isExpense: false,
-          title: 'Mẹ cho',
-          amount: '500.000',
-          isShowDate: true,
-        ),
-      ],
+    return Obx(() {
+      if (transactionController.isLoading.value) {
+        return const Center(
+          child: Padding(
+            padding: EdgeInsets.only(top: 50),
+            child: CircularProgressIndicator(),
+          ),
+        );
+      }
+
+      final data = transactionController.transactionByfilter.value;
+
+      if (data == null || data.incomeTransactions.isEmpty) {
+        return _buildEmptyView();
+      }
+
+      final filtered =
+          data.incomeTransactions.where((t) {
+            final note = t.note?.toLowerCase() ?? '';
+            final keyword = searchKeyword.toLowerCase();
+            return note.contains(keyword);
+          }).toList();
+
+      if (filtered.isEmpty) return _buildEmptyView();
+
+      return ListView(
+        key: const ValueKey('thu'),
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        children:
+            filtered.map((item) {
+              return TransactionItem(
+                color: AppHelperFunction.getRandomColor(),
+                item: item,
+                isShowDate: true,
+                onTap: () => _showTransactionDetail(context, item),
+              );
+            }).toList(),
+      );
+    });
+  }
+
+  Widget _buildEmptyView() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(AppIcons.emptyFolder, width: 150, height: 150),
+          const SizedBox(height: AppSizes.spaceBtwItems),
+          const Text(
+            'Không có giao dịch nào gần đây',
+            style: TextStyle(fontSize: 16, color: AppColors.text5),
+          ),
+        ],
+      ),
     );
   }
 
-  void _showTransactionDetail(BuildContext context, bool isExpense) {
+  void _showTransactionDetail(BuildContext context, TransactionModel item) {
     showDialog(
       context: context,
       builder: (context) {
-        return TransactionDetail(isExpense: isExpense);
+        return TransactionDetail(item: item, isExpense: selected == 'chi', userId: userId);
       },
     );
   }
@@ -156,29 +246,55 @@ class _TransactionScreenState extends State<TransactionScreen> {
     showDialog(
       context: context,
       builder:
-          (context) => FilterDialog(
-            title: "Lọc theo phân loại",
-            items: const ['Ăn uống', 'Mua sắm', 'Giải trí', 'Đi lại'],
-            multiSelect: true,
-            onApply: (selectedCategories) {
-              print("Chọn: $selectedCategories");
+          (context) => Obx(() {
+            final data = savingFundController.currentFund.value;
+
+            if (savingFundController.isLoadingCurrent.value) {
+              return const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 50),
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            }
+
+            if (data != null) {
+              return FilterDialog(
+                title: "Lọc theo phân loại",
+                categories: data.categories,
+                onApply: (result) {
+                  _applyFilter();
+                },
+              );
+            }
+
+            return const SizedBox.shrink();
+          }),
+    );
+  }
+
+  void _showTimeFilterDialog(context) {
+    showDialog(
+      context: context,
+      builder:
+          (_) => FilterDialog(
+            title: 'Lọc theo thời gian',
+            items: const ['Hôm nay', 'Tuần này', 'Tháng này'],
+            onApply: (result) {
+              _applyFilter();
             },
           ),
     );
   }
 
-  void _showTimeFilterDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder:
-          (context) => FilterDialog(
-            title: "Lọc theo thời gian",
-            items: const ['Hôm nay', 'Tuần này', 'Tháng này', 'Tùy chỉnh...'],
-            multiSelect: false,
-            onApply: (selectedTime) {
-              print("Chọn: $selectedTime");
-            },
-          ),
+  void _applyFilter() {
+    transactionController.filterTransactions(
+      userId,
+      TransactionFilterDto(
+        categoryId: filterController.categoryId.toInt(),
+        startDate: filterController.startDate.toString(),
+        endDate: filterController.endDate.toString(),
+      ),
     );
   }
 
@@ -207,7 +323,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               leading: const Icon(Icons.category_outlined),
               title: const Text('Lọc theo phân loại'),
               onTap: () {
-                Navigator.pop(context);
+                Get.back();
                 _showCategoryFilterDialog(context);
               },
             ),
@@ -215,7 +331,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
               leading: const Icon(Icons.access_time_outlined),
               title: const Text('Lọc theo thời gian'),
               onTap: () {
-                Navigator.pop(context);
+                Get.back();
                 _showTimeFilterDialog(context);
               },
             ),
