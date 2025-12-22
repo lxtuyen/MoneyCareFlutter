@@ -52,7 +52,7 @@ class DescriptionItem extends StatelessWidget {
             const SizedBox(width: 4),
             Icon(_percentIcon, color: _percentColor, size: 20),
             Text(
-              percent,
+              '$percent %',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w600,

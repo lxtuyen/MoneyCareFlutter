@@ -5,7 +5,8 @@ class UserModel {
   final int id;
   final String email;
   final String role;
-  final String accessToken;
+  final bool isVip;
+  final String? accessToken;
   final UserProfileModel profile;
   final SavingFundModel? savingFund;
 
@@ -13,29 +14,45 @@ class UserModel {
     required this.id,
     required this.email,
     required this.role,
+    required this.isVip,
     required this.profile,
-    required this.accessToken,
+    this.accessToken,
     this.savingFund,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json, String token) =>
+  factory UserModel.fromJson(Map<String, dynamic> json, String? token) =>
       UserModel(
         id: json['id'],
         email: json['email'],
         role: json['role'],
+        isVip: json['isVip'],
         accessToken: token,
         profile: UserProfileModel.fromJson(json['profile']),
-        savingFund: json['savingFund'] != null
-            ? SavingFundModel.fromMap(json['savingFund'])
-            : null,
+        savingFund:
+            json['savingFund'] != null
+                ? SavingFundModel.fromMap(json['savingFund'])
+                : null,
       );
 
+  factory UserModel.fromJsonUpdate(Map<String, dynamic> json) => UserModel(
+    id: json['id'],
+    email: json['email'],
+    role: json['role'],
+    isVip: json['isVip'],
+    profile: UserProfileModel.fromJson(json['profile']),
+    savingFund:
+        json['savingFund'] != null
+            ? SavingFundModel.fromMap(json['savingFund'])
+            : null,
+  );
+
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        'role': role,
-        'accessToken': accessToken,
-        'profile': profile.toJson(),
-        'savingFund': savingFund?.toMap(),
-      };
+    'id': id,
+    'email': email,
+    'role': role,
+    'isVip': isVip,
+    'accessToken': accessToken,
+    'profile': profile.toJson(),
+    'savingFund': savingFund?.toMap(),
+  };
 }

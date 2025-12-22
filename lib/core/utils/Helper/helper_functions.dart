@@ -47,7 +47,6 @@ class AppHelperFunction {
         return Colors.blueGrey;
       case 'Black':
         return Colors.black;
-      // màu tùy chỉnh
       case 'Custom1':
         return const Color(0xFFB39DDB);
       case 'Custom2':
@@ -60,22 +59,34 @@ class AppHelperFunction {
   }
 
   static final List<String> _colorNames = [
-    'Green', 'Red', 'Blue', 'Pink', 'Grey',
-    'Purple', 'Orange', 'Brown', 'Teal', 'Indigo',
-    'Cyan', 'Lime', 'Amber', 'DeepOrange', 'DeepPurple',
-    'LightBlue', 'LightGreen', 'Yellow', 'BlueGrey', 'Black',
-    'Custom1', 'Custom2', 'Custom3',
+    'Green',
+    'Red',
+    'Blue',
+    'Pink',
+    'Grey',
+    'Purple',
+    'Orange',
+    'Brown',
+    'Teal',
+    'Indigo',
+    'Cyan',
+    'Lime',
+    'Amber',
+    'DeepOrange',
+    'DeepPurple',
+    'LightBlue',
+    'LightGreen',
+    'Yellow',
+    'BlueGrey',
+    'Black',
+    'Custom1',
+    'Custom2',
+    'Custom3',
   ];
 
   static Color getRandomColor() {
     final random = Random();
     final colorName = _colorNames[random.nextInt(_colorNames.length)];
-    return getColor(colorName)!;
-  }
-
-  static Color getColorFromCategory(String categoryName) {
-    final index = categoryName.hashCode % _colorNames.length;
-    final colorName = _colorNames[index];
     return getColor(colorName)!;
   }
 
@@ -130,9 +141,26 @@ class AppHelperFunction {
 
   static String getFormattedDate(
     DateTime date, {
-    String format = 'dd MMM yyyy',
+    String format = 'dd/MM/yyyy',
   }) {
     return DateFormat(format).format(date);
+  }
+
+  static  String formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final diff = now.difference(dateTime);
+
+    if (diff.inDays == 0) {
+      return 'Hôm nay';
+    } else if (diff.inDays == 1) {
+      return 'Hôm qua';
+    } else {
+      return DateFormat('dd/MM/yyyy').format(dateTime);
+    }
+  }
+
+  static String formatDayMonth(DateTime date) {
+    return DateFormat('dd/MM').format(date);
   }
 
   static List<T> removeDuplicates<T>(List<T> list) {
@@ -151,9 +179,9 @@ class AppHelperFunction {
     return wrappedList;
   }
 
-  static String formatCurrency(String number) {
+  static String formatAmount(double amount, String currency) {
     final formatter = NumberFormat('#,###', 'vi_VN');
-    return formatter.format(int.tryParse(number) ?? 0);
+    return '${formatter.format(amount)} $currency';
   }
 
   static int clampZero(int value) => value < 0 ? 0 : value;

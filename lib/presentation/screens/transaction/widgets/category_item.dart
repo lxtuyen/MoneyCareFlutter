@@ -41,7 +41,7 @@ class CategoryItem extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SvgPicture.asset(
-            'icons/$icon.svg',
+            'assets/icons/$icon.svg',
             color: isSelected ? Colors.blue : Colors.grey,
             width: 28,
             height: 28,

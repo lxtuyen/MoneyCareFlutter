@@ -7,42 +7,17 @@ class SavingFundDto {
 
   SavingFundDto({this.name, this.categories, this.id});
 
-  // Map<String, dynamic> toJsonCreate() {
-  //   return {
-  //     'name': name,
-  //     'categories': categories!.map((e) => e.toJson()).toList(),
-  //     'userId': id,
-  //   };
-  // }
-  // Map<String, dynamic> toJsonUpdate() {
-  //   return {
-  //     'name': name,
-  //     'categories': categories!.map((e) => e.toJson()).toList(),
-  //   };
-  // }
   Map<String, dynamic> toJsonCreate() {
-  return {
-    'name': name,
-    'userId': id,
-    'categories': categories!.map((c) => {
-      'name': c.name,               // bắt buộc
-      'percentage': c.percentage,   // bắt buộc
-      'icon': c.icon,               // optional
-    }).toList(),
-  };
-}
-
-
-Map<String, dynamic> toJsonUpdate() {
-  return {
-    'name': name,
-    'categories': categories!.map((c) => {
-      if (c.id != null) 'id': c.id,
-      'name': c.name,
-      'percentage': c.percentage,
-      'icon': c.icon,
-    }).toList(),
-  };
-}
-
+    return {
+      'name': name,
+      'categories': categories!.map((e) => e.toJsonCreate()).toList(),
+      'userId': id,
+    };
+  }
+  Map<String, dynamic> toJsonUpdate() {
+    return {
+      'name': name,
+      'categories': categories!.map((e) => e.toJson()).toList(),
+    };
+  }
 }

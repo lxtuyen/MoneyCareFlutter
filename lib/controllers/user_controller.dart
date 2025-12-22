@@ -1,29 +1,32 @@
 import 'package:get/get.dart';
+import 'package:money_care/data/storage_service.dart';
 import 'package:money_care/models/dto/profile_update_dto.dart';
 import 'package:money_care/models/user_profile.dart';
 import 'package:money_care/services/user_service.dart';
 
 class UserController extends GetxController {
   final UserService service;
+  final StorageService storage;
 
-  UserController({required this.service});
+  UserController({required this.service, required this.storage});
 
   var userProfile = Rxn<UserProfileModel>();
   var isLoading = false.obs;
 
-  Future<UserProfileModel> updateProfile(ProfileUpdateDto dto) async {
+  Future<void> updateProfile(ProfileUpdateDto dto) async {
     try {
       isLoading.value = true;
 
-      final updated =
-          await service.updateMyProfile(dto);
-
-      userProfile.value = updated;
-
-      return updated;
+      final updated = await service.updateMyProfile(dto);
+      await storage.saveUserInfo(updated.toJson());
+      userProfile.value = updated.profile;
     } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> currentProlife(UserProfileModel profile) async {
+    userProfile.value = profile;
   }
 
   Future<String> addMonthlyIncome(int monthlyIncome) async {

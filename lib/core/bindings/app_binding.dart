@@ -1,18 +1,24 @@
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:money_care/controllers/admin_controller.dart';
 import 'package:money_care/controllers/auth_controller.dart';
-import 'package:money_care/controllers/notification_controller.dart';
+import 'package:money_care/controllers/filter_controller.dart';
+import 'package:money_care/controllers/pending_transaction_controller.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
+import 'package:money_care/controllers/scan_receipt_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/controllers/user_controller.dart';
+import 'package:money_care/services/admin_service.dart';
 import 'package:money_care/services/api_service.dart';
 import 'package:money_care/services/auth_services.dart';
-import 'package:money_care/services/notification_service.dart';
+import 'package:money_care/services/pending_transaction_service.dart';
 import 'package:money_care/services/saving_fund_service.dart';
 import 'package:money_care/data/storage_service.dart';
+import 'package:money_care/services/scan_receipt_service.dart';
 import 'package:money_care/services/transaction_service.dart';
 import 'package:money_care/services/user_service.dart';
 
@@ -23,12 +29,18 @@ class AppBinding extends Bindings {
 
   @override
   void dependencies() {
+    final apiService = ApiService(
+      baseUrl: dotenv.env[kIsWeb ? 'API_LOCALHOST_URL' : 'API_BASE_URL'] ?? '',
+    );
     final apiService = ApiService(baseUrl: _resolveBaseUrl());
 
     final authService = AuthService(api: apiService);
 
     Get.lazyPut(
-      () => AuthController(authService: authService, storage: storage),
+      () => AuthController(
+        authService: AuthService(api: apiService),
+        storage: storage,
+      ),
       fenix: true,
     );
 
@@ -37,7 +49,10 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => UserController(service: UserService(api: apiService)),
+      () => UserController(
+        service: UserService(api: apiService),
+        storage: storage,
+      ),
       fenix: true,
     );
     Get.lazyPut(
@@ -45,10 +60,20 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () =>
-          NotificationController(service: NotificationService(api: apiService)),
+      () => ScanReceiptController(service: ScanReceiptService(api: apiService)),
       fenix: true,
     );
+    Get.lazyPut(
+      () => PendingTransactionController(
+        service: PendingTransactionService(api: apiService),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut(
+      () => AdminController(adminService: AdminService(api: apiService)),
+      fenix: true,
+    );
+    Get.lazyPut(() => FilterController(), fenix: true);
   }
 
   String _resolveBaseUrl() {

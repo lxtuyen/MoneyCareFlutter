@@ -67,7 +67,7 @@ class _TransactionSectionState extends State<TransactionSection> {
               ),
             )
           else
-            ...currentList.map(
+            ...currentList.take(5).map(
               (item) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 child: TransactionItem(

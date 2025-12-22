@@ -11,9 +11,9 @@ class ProfileUpdateDto {
 
   Map<String, dynamic> toJson() {
     return {
-      'firstName': firstName,
-      'lastName': lastName,
-      'monthlyIncome': monthlyIncome
+      'first_name': firstName,
+      'last_name': lastName,
+      'monthly_income': monthlyIncome
     };
   }
 }

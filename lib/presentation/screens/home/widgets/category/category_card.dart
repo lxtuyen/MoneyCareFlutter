@@ -13,7 +13,7 @@ class CategoryCard extends StatelessWidget {
   });
 
   final String title;
-  final String amount;
+  final int amount;
   final String percent;
   final Color? color;
 
@@ -45,10 +45,10 @@ class CategoryCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  AppHelperFunction.formatCurrency(amount),
+                  AppHelperFunction.formatAmount(amount.toDouble(), 'VND'),
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: AppSizes.fontSizeMd,
+                    fontSize: 14,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

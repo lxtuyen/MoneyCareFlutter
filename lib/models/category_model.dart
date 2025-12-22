@@ -1,14 +1,18 @@
+import 'dart:ui';
+
 class CategoryModel {
   final int? id;
   final String name;
   int percentage;
   final String icon;
+  Color? color;
 
   CategoryModel({
     this.id,
     required this.name,
     this.percentage = 0,
     required this.icon,
+    this.color,
   });
 
   factory CategoryModel.fromJson(Map<String, dynamic> json) {

@@ -54,7 +54,7 @@ class TransactionItem extends StatelessWidget {
                       item.category?.name ?? 'Không có danh mục',
                       style: const TextStyle(
                         fontSize: 12,
-                        color: AppColors.text5,
+                        color: AppColors.text4,
                       ),
                     ),
                   ],
@@ -66,14 +66,14 @@ class TransactionItem extends StatelessWidget {
                 children: [
                   if (isShowDate)
                     Text(
-                      _formatDate(item.transactionDate),
-                      style: const TextStyle(
+                      AppHelperFunction.formatDateTime(item.transactionDate!),
+                      style: TextStyle(
                         fontSize: 12,
-                        color: AppColors.text5,
+                        color: AppColors.text4,
                       ),
                     ),
                   Text(
-                    AppHelperFunction.formatCurrency(item.amount.toString()),
+                    AppHelperFunction.formatAmount(item.amount.toDouble(), 'VND'),
                     style: const TextStyle(
                       fontSize: AppSizes.fontSizeMd,
                       fontWeight: FontWeight.w600,
@@ -94,15 +94,5 @@ class TransactionItem extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  static String _formatDate(DateTime? date) {
-    final now = DateTime.now();
-    if (date!.year == now.year &&
-        date.month == now.month &&
-        date.day == now.day) {
-      return 'Hôm nay';
-    }
-    return '${date.day}/${date.month}/${date.year}';
   }
 }

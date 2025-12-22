@@ -7,7 +7,7 @@ import 'package:money_care/core/utils/Helper/helper_functions.dart';
 
 class SpendingLimitCard extends StatelessWidget {
   final String title;
-  final int limit;
+  final double limit;
   final int spent;
   final String iconPath;
 
@@ -22,10 +22,9 @@ class SpendingLimitCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    String limitText = AppHelperFunction.formatCurrency(limit.toString());
-    String spentText = AppHelperFunction.formatCurrency(spent.toString());
+    String limitText = AppHelperFunction.formatAmount(limit, 'VND');
+    String spentText = AppHelperFunction.formatAmount(spent.toDouble(), 'VND');
     bool isOverLimit = spent >= limit;
-
     return GestureDetector(
       onTap:
           () => showDialog(

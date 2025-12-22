@@ -56,9 +56,11 @@ class _CategorySheetState extends State<CategorySheet> {
 
                           return GestureDetector(
                             onTap: () {
+                              if (item.percentage == 0) return;
                               setState(() => selectedCategory = item);
                               Navigator.pop(context, item);
                             },
+
                             child: CategoryItem(
                               title: item.name,
                               percentage: item.percentage,

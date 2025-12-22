@@ -1,6 +1,5 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/icon_string.dart';
 import 'package:money_care/core/constants/sizes.dart';
@@ -11,7 +10,7 @@ import 'package:money_care/presentation/widgets/icon/rounded_icon.dart';
 class SpendingOverviewCard extends StatelessWidget {
   final DateTime? startDate;
   final DateTime? endDate;
-  final String amountSpent;
+  final double amountSpent;
   final List<TotalByDate> totals;
 
   const SpendingOverviewCard({
@@ -39,6 +38,23 @@ class SpendingOverviewCard extends StatelessWidget {
       days.add(d);
     }
     return days;
+  }
+
+  String formatCurrencyShort(int value) {
+    if (value >= 1000000) {
+      double val = value / 1000000;
+      if (val == val.roundToDouble()) {
+        return '${val.toInt()}M';
+      }
+      return '${val.toStringAsFixed(1)}M';
+    } else if (value >= 1000) {
+      double val = value / 1000;
+      if (val == val.roundToDouble()) {
+        return '${val.toInt()}K';
+      }
+      return '${val.toStringAsFixed(1)}K';
+    }
+    return value.toString();
   }
 
   @override
@@ -75,7 +91,7 @@ class SpendingOverviewCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  AppHelperFunction.formatCurrency(amountSpent),
+                  AppHelperFunction.formatAmount(amountSpent.toDouble(), 'VND'),
                   style: const TextStyle(
                     fontSize: AppSizes.lg,
                     fontWeight: FontWeight.bold,
@@ -124,7 +140,9 @@ class SpendingOverviewCard extends StatelessWidget {
                           final index = value.toInt();
                           if (index >= 0 && index < dateRange.length) {
                             final date = dateRange[index];
-                            final label = DateFormat('dd/MM').format(date);
+                            final label = AppHelperFunction.formatDayMonth(
+                              date,
+                            );
                             return Text(
                               label,
                               style: const TextStyle(
@@ -140,12 +158,10 @@ class SpendingOverviewCard extends StatelessWidget {
                     leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
-                        interval: 1000000,
                         reservedSize: 32,
                         getTitlesWidget: (value, meta) {
-                          if (value == 0) return const Text("0");
                           return Text(
-                            "${(value ~/ 1000000)}M",
+                            formatCurrencyShort(value.toInt()),
                             style: const TextStyle(
                               fontSize: 10,
                               color: AppColors.text4,
@@ -188,7 +204,7 @@ class SpendingOverviewCard extends StatelessWidget {
                       getTooltipItems: (touchedSpots) {
                         return touchedSpots.map((barSpot) {
                           return LineTooltipItem(
-                            "${DateFormat('dd/MM').format(dateRange[barSpot.x.toInt()])}\n${AppHelperFunction.formatCurrency(barSpot.y.toString())}",
+                            "${AppHelperFunction.getFormattedDate(dateRange[barSpot.x.toInt()])}\n${AppHelperFunction.formatAmount(barSpot.y, 'VND')}",
                             const TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
