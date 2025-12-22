@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/navigation/nav_controller.dart';
+import 'package:money_care/presentation/screens/chatbotAi/Chatbotmini.dart';
 import 'package:money_care/presentation/screens/home/home.dart';
 import 'package:money_care/presentation/screens/profile/profile.dart';
 import 'package:money_care/presentation/screens/statistics/statistics.dart';
@@ -28,7 +29,42 @@ class ScaffoldWithNavBar extends StatelessWidget {
 
       return Scaffold(
         body: SafeArea(
-          child: IndexedStack(index: currentIndex, children: screens),
+          child: Stack(
+            children: [
+              IndexedStack(index: currentIndex, children: screens),
+
+              Positioned(
+                right: 16,
+                bottom: 90, // 88 là height bottom bar, + thêm cho thoáng
+                child: GestureDetector(
+                  onTap: () {
+                    // mở trang chat full màn
+                    Get.to(
+                      () => const ChatbotPage(),
+                    ); // hoặc Get.toNamed('/chatbot')
+                  },
+                  child: Material(
+                    elevation: 8,
+                    shape: const CircleBorder(),
+                    child: ClipOval(
+                      child: Container(
+                        width: 61,
+                        height: 61,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 1),
+                        ),
+                        child: Image.asset(
+                          'assets/images/ai.gif',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => _showTransactionOptions(context),
@@ -39,10 +75,10 @@ class ScaffoldWithNavBar extends StatelessWidget {
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: NavigationBarTheme(
           data: NavigationBarThemeData(
-            labelTextStyle: MaterialStateProperty.resolveWith<TextStyle>((
+            labelTextStyle: WidgetStateProperty.resolveWith<TextStyle>((
               states,
             ) {
-              if (states.contains(MaterialState.selected)) {
+              if (states.contains(WidgetState.selected)) {
                 return const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,

@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_care/controllers/auth_controller.dart';
@@ -20,7 +23,7 @@ class AppBinding extends Bindings {
 
   @override
   void dependencies() {
-    final apiService = ApiService(baseUrl: dotenv.env['API_BASE_URL'] ?? '');
+    final apiService = ApiService(baseUrl: _resolveBaseUrl());
 
     final authService = AuthService(api: apiService);
 
@@ -46,5 +49,16 @@ class AppBinding extends Bindings {
           NotificationController(service: NotificationService(api: apiService)),
       fenix: true,
     );
+  }
+
+  String _resolveBaseUrl() {
+    final envUrl = dotenv.env['API_BASE_URL'] ?? '';
+    if (envUrl.isEmpty) return '';
+
+    if (kIsWeb) return envUrl; // web dùng localhost ok
+    if (Platform.isAndroid && envUrl.contains('localhost')) {
+      return envUrl.replaceFirst('localhost', '10.0.2.2');
+    }
+    return envUrl;
   }
 }
