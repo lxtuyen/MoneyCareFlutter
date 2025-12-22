@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/models/chat_msg.dart';
 import 'package:money_care/models/dto/chat_dto.dart';
 import 'package:money_care/services/chat_service.dart';
@@ -12,6 +13,8 @@ class ChatController extends GetxController {
   final errorMessage = RxnString();
 
   final RxList<ChatMsg> messages = <ChatMsg>[].obs;
+  final TransactionController transactionController =
+      Get.find<TransactionController>();
 
   Future<String> send(String text, int userId) async {
     try {
@@ -20,7 +23,7 @@ class ChatController extends GetxController {
 
       final dto = ChatDto(message: text, userId: userId);
       final reply = await chatService.sendToChatbot(dto);
-
+      await transactionController.refreshAllData(userId);
       messages.add(ChatMsg(isUser: false, text: reply));
       return reply;
     } catch (e) {

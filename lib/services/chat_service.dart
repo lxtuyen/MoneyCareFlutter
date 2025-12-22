@@ -13,10 +13,10 @@ class ChatService {
       body: dto.toJson(),
     );
 
-    if (!res.success || res.data == null) {
+    if (!res.success) {
       throw Exception(res.message);
     }
 
-    return res.data!;
+    return res.message;
   }
 }
