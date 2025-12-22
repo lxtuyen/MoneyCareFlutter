@@ -106,9 +106,9 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     Obx(() {
                       final user = authController.user.value;
 
-                      if (user == null || user.isVip == true) {
+                      /*if (user == null || user.isVip == true) {
                         return const SizedBox.shrink();
-                      }
+                      }*/
 
                       return BuildMenuItem(
                         icon: Icons.insert_chart_outlined,
@@ -127,9 +127,9 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     Obx(() {
                       final user = authController.user.value;
 
-                      if (user == null || user.isVip == false) {
+                      /*if (user == null || user.isVip == false) {
                         return const SizedBox.shrink();
-                      }
+                      }*/
 
                       return BuildMenuItem(
                         icon: Icons.account_balance_wallet_outlined,

@@ -5,7 +5,7 @@ class UserModel {
   final int id;
   final String email;
   final String role;
-  final bool isVip;
+  final bool? isVip;
   final String? accessToken;
   final UserProfileModel profile;
   final SavingFundModel? savingFund;
@@ -14,7 +14,7 @@ class UserModel {
     required this.id,
     required this.email,
     required this.role,
-    required this.isVip,
+    this.isVip,
     required this.profile,
     this.accessToken,
     this.savingFund,

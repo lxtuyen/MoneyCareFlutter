@@ -1,11 +1,9 @@
 import 'package:flutter/foundation.dart';
-import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:money_care/controllers/admin_controller.dart';
 import 'package:money_care/controllers/auth_controller.dart';
+import 'package:money_care/controllers/chat_controller.dart';
 import 'package:money_care/controllers/filter_controller.dart';
 import 'package:money_care/controllers/pending_transaction_controller.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
@@ -15,6 +13,7 @@ import 'package:money_care/controllers/user_controller.dart';
 import 'package:money_care/services/admin_service.dart';
 import 'package:money_care/services/api_service.dart';
 import 'package:money_care/services/auth_services.dart';
+import 'package:money_care/services/chat_service.dart';
 import 'package:money_care/services/pending_transaction_service.dart';
 import 'package:money_care/services/saving_fund_service.dart';
 import 'package:money_care/data/storage_service.dart';
@@ -32,9 +31,6 @@ class AppBinding extends Bindings {
     final apiService = ApiService(
       baseUrl: dotenv.env[kIsWeb ? 'API_LOCALHOST_URL' : 'API_BASE_URL'] ?? '',
     );
-    final apiService = ApiService(baseUrl: _resolveBaseUrl());
-
-    final authService = AuthService(api: apiService);
 
     Get.lazyPut(
       () => AuthController(
@@ -73,17 +69,10 @@ class AppBinding extends Bindings {
       () => AdminController(adminService: AdminService(api: apiService)),
       fenix: true,
     );
+    Get.lazyPut(
+      () => ChatController(chatService: ChatService(api: apiService)),
+      fenix: true,
+    );
     Get.lazyPut(() => FilterController(), fenix: true);
-  }
-
-  String _resolveBaseUrl() {
-    final envUrl = dotenv.env['API_BASE_URL'] ?? '';
-    if (envUrl.isEmpty) return '';
-
-    if (kIsWeb) return envUrl; // web dùng localhost ok
-    if (Platform.isAndroid && envUrl.contains('localhost')) {
-      return envUrl.replaceFirst('localhost', '10.0.2.2');
-    }
-    return envUrl;
   }
 }

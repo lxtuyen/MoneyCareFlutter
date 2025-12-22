@@ -29,4 +29,7 @@ class ApiRoutes {
 
   // --- Scan Receipt ---
   static const scanReceipt = 'receipt/scan';
+
+    // --- Chat bot ---
+  static const chatbot = 'chatbot';
 }

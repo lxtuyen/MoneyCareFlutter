@@ -3,6 +3,7 @@ import 'package:money_care/core/navigation/navigation_menu.dart';
 import 'package:money_care/presentation/screens/admin/admin_dashboard.dart';
 import 'package:money_care/presentation/screens/admin/dashboard_content.dart';
 import 'package:money_care/presentation/screens/admin/user_content.dart';
+import 'package:money_care/presentation/screens/chatbot/chatbot.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_expense_management.dart';
@@ -64,6 +65,7 @@ final List<GetPage> appPages = [
     name: '/pending_transaction',
     page: () => const PendingTransactionsScreen(),
   ),
+  GetPage(name: '/chatbot', page: () => const ChatbotScreen()),
 
   GetPage(
     name: '/admin/home',
