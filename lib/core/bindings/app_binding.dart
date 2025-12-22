@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:money_care/controllers/admin_controller.dart';
 import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/controllers/filter_controller.dart';
 import 'package:money_care/controllers/pending_transaction_controller.dart';
@@ -8,6 +9,7 @@ import 'package:money_care/controllers/saving_fund_controller.dart';
 import 'package:money_care/controllers/scan_receipt_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/controllers/user_controller.dart';
+import 'package:money_care/services/admin_service.dart';
 import 'package:money_care/services/api_service.dart';
 import 'package:money_care/services/auth_services.dart';
 import 'package:money_care/services/pending_transaction_service.dart';
@@ -55,7 +57,13 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => PendingTransactionController(service: PendingTransactionService(api: apiService)),
+      () => PendingTransactionController(
+        service: PendingTransactionService(api: apiService),
+      ),
+      fenix: true,
+    );
+    Get.lazyPut(
+      () => AdminController(adminService: AdminService(api: apiService)),
       fenix: true,
     );
     Get.lazyPut(() => FilterController(), fenix: true);

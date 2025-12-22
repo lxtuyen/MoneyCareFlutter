@@ -5,7 +5,6 @@ class StatCard extends StatelessWidget {
   final String value;
   final IconData icon;
   final Color color;
-  final String change;
 
   const StatCard({
     Key? key,
@@ -13,7 +12,6 @@ class StatCard extends StatelessWidget {
     required this.value,
     required this.icon,
     required this.color,
-    required this.change,
   }) : super(key: key);
 
   @override
@@ -49,15 +47,6 @@ class StatCard extends StatelessWidget {
           Text(
             value,
             style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            change,
-            style: TextStyle(
-              fontSize: 12,
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
           ),
         ],
       ),

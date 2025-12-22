@@ -1,0 +1,279 @@
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:money_care/controllers/admin_controller.dart';
+import 'package:money_care/presentation/screens/admin/widgets/stat_card.dart';
+
+class DashboardContent extends StatefulWidget {
+  const DashboardContent({Key? key}) : super(key: key);
+
+  @override
+  State<DashboardContent> createState() => _DashboardContentState();
+}
+
+class _DashboardContentState extends State<DashboardContent> {
+  final AdminController adminController = Get.find<AdminController>();
+
+  @override
+  void initState() {
+    super.initState();
+    adminController.fetchAdminUserStats();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Dashboard',
+              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 24),
+            Obx(() {
+              if (adminController.isLoadingStats.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (adminController.adminUserStats.value == null) {
+                return const Center(child: Text('Không có dữ liệu'));
+              }
+              final stats = adminController.adminUserStats.value;
+              return GridView.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  StatCard(
+                    title: 'Tổng Doanh Thu',
+                    value: '₫ 125.5M',
+                    icon: Icons.money,
+                    color: Colors.green,
+                  ),
+                  StatCard(
+                    title: 'Người Dùng hiện tại',
+                    value: stats!.totalUsers.toString(),
+                    icon: Icons.people,
+                    color: Colors.purple,
+                  ),
+                  StatCard(
+                    title: 'Người dùng mới tháng này',
+                    value: stats.newUsersThisMonth.toString(),
+                    icon: Icons.trending_down,
+                    color: Colors.red,
+                  ),
+                ],
+              );
+            }),
+
+            const SizedBox(height: 32),
+
+            Row(
+              children: [
+                Expanded(flex: 2, child: _buildLineChart()),
+                const SizedBox(width: 16),
+                Obx(() {
+                  if (adminController.isLoadingStats.value) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (adminController.adminUserStats.value == null) {
+                    return const Center(child: Text('Không có dữ liệu'));
+                  }
+                  final stats = adminController.adminUserStats.value;
+                  return Expanded(
+                    flex: 1,
+                    child: _buildPieChart(stats!.freePercent, stats.vipPercent),
+                  );
+                }),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLineChart() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Doanh Thu Theo Tháng',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 250,
+            child: LineChart(
+              LineChartData(
+                gridData: FlGridData(show: true, drawVerticalLine: false),
+                titlesData: FlTitlesData(
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        const months = [
+                          'T1',
+                          'T2',
+                          'T3',
+                          'T4',
+                          'T5',
+                          'T6',
+                          'T7',
+                          'T8',
+                          'T9',
+                          'T10',
+                          'T11',
+                          'T12',
+                        ];
+                        return value.toInt() < months.length
+                            ? Text(months[value.toInt()])
+                            : const SizedBox.shrink();
+                      },
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: true),
+                  ),
+                ),
+                lineBarsData: [
+                  LineChartBarData(
+                    spots: const [
+                      FlSpot(0, 3),
+                      FlSpot(1, 4),
+                      FlSpot(2, 3.5),
+                      FlSpot(3, 5),
+                      FlSpot(4, 6),
+                      FlSpot(5, 5.5),
+                      FlSpot(6, 3),
+                      FlSpot(7, 4),
+                      FlSpot(8, 3.5),
+                      FlSpot(9, 5),
+                      FlSpot(10, 6),
+                      FlSpot(11, 5.5),
+                    ],
+                    isCurved: true,
+                    color: Colors.blue,
+                    barWidth: 3,
+                    dotData: FlDotData(show: true),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPieChart(double freePercent, double vipPercent) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Loại người dùng',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 16),
+          Column(
+            children: [
+              SizedBox(
+                height: 220,
+                width: 200,
+                child: PieChart(
+                  PieChartData(
+                    sections: [
+                      PieChartSectionData(
+                        value: freePercent,
+                        title: '${freePercent.toStringAsFixed(1)}%',
+                        color: Colors.blue,
+                        radius: 60,
+                        titleStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        titlePositionPercentageOffset: 0.6,
+                      ),
+
+                      PieChartSectionData(
+                        value: vipPercent,
+                        title: '${vipPercent.toStringAsFixed(1)}%',
+                        color: Colors.green,
+                        radius: 60,
+                        titleStyle: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        titlePositionPercentageOffset: 0.6,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(width: 30),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildLegendItem(
+                    color: Colors.blue,
+                    title: 'FREE',
+                    value: freePercent,
+                  ),
+                  _buildLegendItem(
+                    color: Colors.green,
+                    title: 'VIP',
+                    value: vipPercent,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+Widget _buildLegendItem({
+  required Color color,
+  required String title,
+  required double value,
+}) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Container(
+        width: 10,
+        height: 10,
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      ),
+      const SizedBox(width: 8),
+      Text(
+        '$title (${value.toStringAsFixed(1)}%)',
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
+    ],
+  );
+}

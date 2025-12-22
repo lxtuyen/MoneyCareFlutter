@@ -20,7 +20,7 @@ class UserModel {
     this.savingFund,
   });
 
-  factory UserModel.fromJson(Map<String, dynamic> json, String token) =>
+  factory UserModel.fromJson(Map<String, dynamic> json, String? token) =>
       UserModel(
         id: json['id'],
         email: json['email'],

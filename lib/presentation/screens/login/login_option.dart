@@ -55,7 +55,7 @@ class LoginOptionScreen extends StatelessWidget {
                     }
 
                     if (user.role == 'admin') {
-                      Get.offAllNamed('/admin_dashboard');
+                      Get.offAllNamed('/admin/home');
                       return;
                     }
                   },

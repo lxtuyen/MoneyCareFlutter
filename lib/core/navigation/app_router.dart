@@ -1,5 +1,8 @@
 import 'package:get/get.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/presentation/screens/admin/admin_dashboard.dart';
+import 'package:money_care/presentation/screens/admin/dashboard_content.dart';
+import 'package:money_care/presentation/screens/admin/user_content.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_expense_management.dart';
@@ -57,7 +60,20 @@ final List<GetPage> appPages = [
   GetPage(name: '/expense', page: () => const ExpenseScreen()),
   GetPage(name: '/income', page: () => const IncomeScreen()),
   GetPage(name: '/profile', page: () => const ProfileScreen()),
-  GetPage(name: '/pending_transaction', page: () => const PendingTransactionsScreen()),
+  GetPage(
+    name: '/pending_transaction',
+    page: () => const PendingTransactionsScreen(),
+  ),
+
+  GetPage(
+    name: '/admin/home',
+    page: () => const AdminDashboard(child: DashboardContent()),
+  ),
+
+  GetPage(
+    name: '/admin/users',
+    page: () => const AdminDashboard(child: UsersContent()),
+  ),
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];

@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
         }
 
         if (user.role == 'admin') {
-          Get.offAllNamed('/admin_dashboard');
+          Get.offAllNamed('/admin/home');
           return;
         }
       }

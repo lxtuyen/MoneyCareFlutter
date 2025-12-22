@@ -15,6 +15,8 @@ class ApiRoutes {
 
   // --- User proflie ---
   static const userProfile = 'user-profile/me';
+  static const users = 'users';
+  static const stats = 'users/admin/stats';
 
   // --- Transaction ---
   static const transaction = 'transactions';
