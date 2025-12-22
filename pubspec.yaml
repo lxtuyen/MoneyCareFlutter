@@ -23,7 +23,7 @@ dependencies:
   percent_indicator: ^4.2.3 
   video_player: ^2.9.1
   speech_to_text: ^7.3.0
-
+  pay: ^3.3.0
   # icons
   iconsax_flutter: ^1.0.0
 

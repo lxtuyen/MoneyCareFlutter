@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/presentation/screens/PaymentGPAP/paymentscreen.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_expense_management.dart';
@@ -63,6 +64,11 @@ final List<GetPage> appPages = [
     name: '/income',
     page: () => const IncomeScreen(),
   ),
+  GetPage(
+    name: '/payment_plan',
+    page: () => const PlanPaywallPage(),
+  ),
+
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];

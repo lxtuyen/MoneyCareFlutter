@@ -120,7 +120,6 @@ class _TransactionFormState extends State<TransactionForm> {
     await _scanBill(source);
   }
 
-  // Quét hoá đơn -> call API -> auto-fill form
   Future<void> _scanBill(ImageSource source) async {
     final image = await _picker.pickImage(source: source, imageQuality: 80);
     if (image == null) return;

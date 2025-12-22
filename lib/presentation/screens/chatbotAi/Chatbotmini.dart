@@ -2,7 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
+import 'package:money_care/controllers/auth_controller.dart';
+import 'package:money_care/data/storage_service.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
 class ChatbotPage extends StatefulWidget {
@@ -26,6 +30,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
   @override
   void initState() {
     super.initState();
+
     _initSpeech();
   }
 
@@ -50,26 +55,23 @@ class _ChatbotPageState extends State<ChatbotPage> {
   }
 
   String get _chatbotUrl {
-    // Android emulator -> localhost PC
     if (defaultTargetPlatform == TargetPlatform.android) {
       return 'http://10.0.2.2:3000/chatbot';
     }
-    // iOS simulator / desktop
     return 'http://127.0.0.1:3000/chatbot';
-
-    // Máy thật: dùng IP LAN của PC
-    // return 'http://192.168.1.10:3000/chatbot';
   }
 
   Future<String> _sendToChatbot(String message) async {
     final uri = Uri.parse(_chatbotUrl);
 
+  final userInfo = StorageService().getUserInfo();
+  final userId = userInfo?['id'];
     final res = await http
         .post(
           uri,
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode({
-            'userId': 3, // TODO: lấy userId thật
+            'userId': userId,
             'message': message,
           }),
         )
@@ -183,9 +185,10 @@ class _ChatbotPageState extends State<ChatbotPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor:  Colors.white, 
       appBar: AppBar(
         backgroundColor: Colors.white,
-        surfaceTintColor: Colors.white, // tránh Material3 ám màu
+        surfaceTintColor: Colors.white, 
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.blueAccent),
 
@@ -206,6 +209,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
       ),
 
       body: SafeArea(
+        
         child: Column(
           children: [
             SizedBox(height: 0),
@@ -219,6 +223,7 @@ class _ChatbotPageState extends State<ChatbotPage> {
                         onTapSend: _sendTemplate,
                       )
                       : ListView.builder(
+                        
                         controller: _scroll,
                         padding: const EdgeInsets.all(12),
                         itemCount: _messages.length,

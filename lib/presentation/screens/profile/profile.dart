@@ -72,6 +72,13 @@ class ProfileScreen extends StatelessWidget {
                       title: AppTexts.reportOfTheYear,
                       onTap: () {},
                     ),
+                      BuildMenuItem(
+                      icon: Icons.lock,
+                      title: AppTexts.unlockPremium,
+                      onTap: () {
+                        Get.toNamed('/payment_plan');
+                      },
+                    ),
                     BuildMenuItem(
                       icon: Icons.category_outlined,
                       title: AppTexts.savingFunds,
