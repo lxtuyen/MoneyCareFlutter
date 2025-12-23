@@ -6,6 +6,7 @@ class AppTexts {
       'Chúng tôi sẽ gửi cho bạn mã OTP.';
   static const String emailLabel = 'Email';
   static const String rememberPassword = 'Nhớ mật khẩu? ';
+  static const String unlockPremium = 'Mở khóa Premium';
 
   // --- OTP ---
   static const String getOtp = 'Nhận mã OTP';

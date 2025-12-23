@@ -32,4 +32,6 @@ class ApiRoutes {
 
     // --- Chat bot ---
   static const chatbot = 'chatbot';
+
+  static const paymentconfirm = 'vip-payments/confirm';
 }
