@@ -8,14 +8,14 @@ import 'package:money_care/models/dto/payment_dto.dart';
 import 'package:money_care/presentation/screens/payment/payment_configs.dart';
 import 'package:pay/pay.dart';
 
-class PlanPaywallPage extends StatefulWidget {
-  const PlanPaywallPage({super.key});
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({super.key});
 
   @override
-  State<PlanPaywallPage> createState() => _PlanPaywallPageState();
+  State<PaymentScreen> createState() => _PaymentScreenState();
 }
 
-class _PlanPaywallPageState extends State<PlanPaywallPage> {
+class _PaymentScreenState extends State<PaymentScreen> {
   final paymentController = Get.find<PaymentController>();
 
   bool _isPlanUnlocked = false;

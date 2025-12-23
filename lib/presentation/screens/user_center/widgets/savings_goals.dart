@@ -11,7 +11,7 @@ class SavingsGoals extends StatelessWidget {
   const SavingsGoals({
     super.key,
     required this.currentSaving,
-    required this.targetSaving,
+    this.targetSaving = 0,
   });
 
   @override

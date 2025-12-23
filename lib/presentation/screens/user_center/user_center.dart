@@ -75,10 +75,9 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     Obx(() {
                       final data = transactionController.totalByType.value;
                       final monthlyIncome =
-                          userController.userProfile.value!.monthlyIncome;
+                          userController.userProfile.value?.monthlyIncome ?? 0;
 
-                      if (transactionController.isLoading.value ||
-                          monthlyIncome == null) {
+                      if (transactionController.isLoading.value) {
                         return const SizedBox(
                           height: 120,
                           child: Center(child: CircularProgressIndicator()),
@@ -124,19 +123,13 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       title: AppTexts.savingFunds,
                       onTap: () => Get.toNamed('/select_saving_fund'),
                     ),
-                    Obx(() {
-                      final user = authController.user.value;
-
-                      if (user == null || user.isVip == false) {
-                        return const SizedBox.shrink();
-                      }
-
-                      return BuildMenuItem(
+                    BuildMenuItem(
                         icon: Icons.account_balance_wallet_outlined,
                         title: 'Đăng ký VIP',
-                        onTap: () {},
-                      );
-                    }),
+                        onTap: () {
+                          Get.toNamed('/payment');
+                        },
+                      ),
                     BuildMenuItem(
                       icon: Icons.exit_to_app,
                       title: AppTexts.logout,

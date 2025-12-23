@@ -77,7 +77,7 @@ final List<GetPage> appPages = [
     name: '/admin/users',
     page: () => const AdminDashboard(child: UsersContent()),
   ),
-  GetPage(name: '/payment_plan', page: () => const PlanPaywallPage()),
+  GetPage(name: '/payment', page: () => const PaymentScreen()),
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];
