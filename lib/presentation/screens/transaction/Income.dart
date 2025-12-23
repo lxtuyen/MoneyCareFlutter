@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:money_care/presentation/widgets/dialog/success_dialog.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
 
 class IncomeScreen extends StatefulWidget {
@@ -16,23 +14,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
     return TransactionForm(
       title: "Tiền Thu",
       showCategory: false,
-      onSubmit: () {
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder:
-              (context) => SuccessDialog(
-                message: 'Giao dịch đã được lưu thành công',
-                onBack: () {
-                  Get.back();
-                },
-                onCreateNew: () {
-                  Get.back();
-                },
-                isShowButton: true,
-              ),
-        );
-      },
     );
   }
 }

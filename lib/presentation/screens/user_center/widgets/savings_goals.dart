@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money_care/core/constants/colors.dart';
 import 'package:money_care/core/constants/text_string.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
-import 'package:intl/intl.dart';
 
 class SavingsGoals extends StatelessWidget {
   final double currentSaving;
@@ -16,8 +16,27 @@ class SavingsGoals extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double percent = currentSaving / targetSaving;
-    final formatter = NumberFormat.decimalPattern('vi');
+    double percent = 0;
+
+    if (targetSaving > 0) {
+      percent = currentSaving / targetSaving;
+    }
+
+    percent = percent.clamp(0.0, 1.0);
+
+    String getStatus(double percent) {
+      if (percent < 0.3) return "Kém";
+      if (percent < 0.6) return "Trung bình";
+      if (percent < 1.0) return "Tốt";
+      return "Xuất sắc";
+    }
+
+    Color getStatusColor(double percent) {
+      if (percent < 0.3) return Colors.red;
+      if (percent < 0.6) return Colors.orange;
+      if (percent < 1.0) return Colors.blue;
+      return Colors.green;
+    }
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -37,10 +56,7 @@ class SavingsGoals extends StatelessWidget {
         children: [
           const Text(
             AppTexts.targetTitle,
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 10),
           LinearProgressIndicator(
@@ -55,14 +71,14 @@ class SavingsGoals extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                formatter.format(currentSaving),
+                AppHelperFunction.formatAmount(currentSaving, 'VND'),
                 style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               Text(
-                formatter.format(targetSaving),
+                AppHelperFunction.formatAmount(targetSaving, 'VND'),
                 style: const TextStyle(color: Colors.grey),
               ),
             ],
@@ -77,22 +93,20 @@ class SavingsGoals extends StatelessWidget {
               center: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    "Tài khoản",
-                    style: TextStyle(fontSize: 14),
-                  ),
+                  const Text("Tài khoản", style: TextStyle(fontSize: 14)),
                   Text(
-                    formatter.format(currentSaving),
+                    AppHelperFunction.formatAmount(currentSaving, 'VND'),
                     style: const TextStyle(
-                      fontSize: 22,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
-                    "Tốt",
+                  Text(
+                    getStatus(percent),
                     style: TextStyle(
-                      color: Colors.green,
+                      color: getStatusColor(percent),
                       fontSize: 14,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],

@@ -8,7 +8,6 @@ class StorageService {
 
   late SharedPreferences _prefs;
 
-  // Khởi tạo SharedPreferences trước khi dùng
   Future<void> init() async {
     _prefs = await SharedPreferences.getInstance();
   }

@@ -84,16 +84,16 @@ class SpendingSummary extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppHelperFunction.formatCurrency(expenseTotal.toString()),
+                    AppHelperFunction.formatAmount(expenseTotal.toDouble(),'VND'),
                     style: const TextStyle(
                       color: AppColors.secondaryOrange,
                       fontWeight: FontWeight.bold,
-                      fontSize: 28,
+                      fontSize: 22,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Số dư: ${AppHelperFunction.formatCurrency(AppHelperFunction.clampZero(incomeTotal - expenseTotal).toString())}',
+                    'Số dư: ${AppHelperFunction.formatAmount(AppHelperFunction.clampZero(incomeTotal - expenseTotal).toDouble(),'VND')}',
                     style: const TextStyle(
                       color: AppColors.text3,
                       fontSize: 12,

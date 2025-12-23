@@ -9,8 +9,8 @@ class TotalByType {
 
   factory TotalByType.fromJson(Map<String, dynamic> json) {
     return TotalByType(
-      incomeTotal: (json['income_total'] ?? 0).toDouble(),
-      expenseTotal: (json['expense_total'] ?? 0).toDouble(),
+      incomeTotal: (json['income_total'] ?? 0),
+      expenseTotal: (json['expense_total'] ?? 0),
     );
   }
 }

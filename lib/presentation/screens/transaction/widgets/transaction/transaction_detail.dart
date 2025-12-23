@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
+import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/models/transaction_model.dart';
 import 'package:money_care/presentation/screens/home/widgets/transaction/transaction_item.dart';
 import 'package:money_care/presentation/screens/transaction/widgets/transaction/transaction_form.dart';
@@ -9,17 +11,19 @@ import 'package:get/get.dart';
 
 class TransactionDetail extends StatelessWidget {
   final TransactionModel item;
+  final bool isExpense;
+  final int userId;
 
   const TransactionDetail({
     super.key,
     required this.item,
-    required this.isExpense,
+    required this.isExpense, required this.userId,
   });
-
-  final bool isExpense;
 
   @override
   Widget build(BuildContext context) {
+      final TransactionController transactionController =
+      Get.find<TransactionController>();
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
@@ -36,6 +40,7 @@ class TransactionDetail extends StatelessWidget {
             const SizedBox(height: 16),
 
             TransactionItem(
+              color: AppHelperFunction.getRandomColor(),
               item: item,
               isShowDate: true,
               isShowDivider: false,
@@ -60,9 +65,6 @@ class TransactionDetail extends StatelessWidget {
                                   isExpense ? "Chỉnh sửa chi" : "Chỉnh sửa thu",
                               item: item,
                               showCategory: isExpense ? true : false,
-                              onSubmit: () {
-                                print("cập nhật thành công");
-                              },
                             ),
                       ),
                     );
@@ -74,13 +76,13 @@ class TransactionDetail extends StatelessWidget {
 
                   icon: const Icon(
                     Icons.edit_outlined,
-                    color: AppColors.text4,
+                    color: AppColors.text3,
                     size: 22,
                   ),
                   label: const Text(
                     "Chỉnh sửa",
                     style: TextStyle(
-                      color: AppColors.text4,
+                      color: AppColors.text3,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),
@@ -108,6 +110,7 @@ class TransactionDetail extends StatelessWidget {
                             onConfirm: () {
                               Get.back();
                               Get.back();
+                              transactionController.deleteTransaction(item.id!, userId);
                               showDialog(
                                 context: context,
                                 builder:
@@ -124,13 +127,13 @@ class TransactionDetail extends StatelessWidget {
                   },
                   icon: const Icon(
                     Icons.delete_outline,
-                    color: AppColors.text4,
+                    color: AppColors.text3,
                     size: 22,
                   ),
                   label: const Text(
                     "Xóa",
                     style: TextStyle(
-                      color: AppColors.text4,
+                      color: AppColors.text3,
                       fontSize: 16,
                       fontWeight: FontWeight.w500,
                     ),

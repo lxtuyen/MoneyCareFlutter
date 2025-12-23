@@ -115,7 +115,7 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
                         child: Row(
                           children: [
                             SvgPicture.asset(
-                              'icons/${cat.icon}.svg',
+                              'assets/icons/${cat.icon}.svg',
                               width: 32,
                               height: 32,
                             ),
@@ -159,7 +159,7 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
               Obx(() {
                 return ElevatedButton(
                   onPressed:
-                      _controller.isLoading.value ? null : _createSavingFund,
+                      _controller.isLoadingFunds.value ? null : _createSavingFund,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     backgroundColor: AppColors.primary,
@@ -168,7 +168,7 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
                     ),
                   ),
                   child:
-                      _controller.isLoading.value
+                      _controller.isLoadingFunds.value
                           ? const CircularProgressIndicator(color: Colors.white)
                           : const Text(
                             'Tạo quỹ',

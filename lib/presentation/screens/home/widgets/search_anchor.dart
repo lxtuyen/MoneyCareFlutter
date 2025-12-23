@@ -20,8 +20,8 @@ class _SearchAnchorCustomState extends State<SearchAnchorCustom> {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: SearchAnchor.bar(
-        barHintText: 'Enter transaction name',
-        viewHintText: 'Search transactions',
+        barHintText: 'Nhập tên giao dịch',
+        viewHintText: 'Tìm kiếm giao dịch',
         searchController: _searchController,
         suggestionsBuilder: (context, controller) {
           final query = controller.text.toLowerCase();
@@ -35,7 +35,7 @@ class _SearchAnchorCustomState extends State<SearchAnchorCustom> {
             return [
               SizedBox(
                 height: 100,
-                child: Center(child: Text('No transactions found')),
+                child: Center(child: Text('Không tìm thấy giao dịch nào')),
               ),
             ];
           }
@@ -53,6 +53,7 @@ class _SearchAnchorCustomState extends State<SearchAnchorCustom> {
 
           return [
             Material(
+              color: Colors.white, 
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,

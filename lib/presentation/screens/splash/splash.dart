@@ -33,7 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else if (!hasSeenWelcome) {
       Get.offAllNamed('/onboarding_welcome');
     } else {
-      Get.offAllNamed('/home');
+      Get.offAllNamed('/main');
     }
   }
 

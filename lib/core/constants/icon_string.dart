@@ -1,20 +1,20 @@
 class AppIcons{
   // Home
-  static const String notification = "icons/notification.svg";
-  static const String search = "icons/search.svg";
-  static const String chart2 = "icons/chart2.svg";
-  static const String emptyFolder = "icons/empty-folder.svg";
-  static const String analysis = "icons/analysis.svg";
+  static const String notification = "assets/icons/notification.svg";
+  static const String search = "assets/icons/search.svg";
+  static const String chart2 = "assets/icons/chart2.svg";
+  static const String emptyFolder = "assets/icons/empty-folder.svg";
+  static const String analysis = "assets/icons/analysis.svg";
 
 
   // Budget Categories Icons
-  static const String freedom = "icons/freedom_icon.svg";
-  static const String charity = "icons/charity_icon.svg";
-  static const String savings = "icons/savings_icon.svg";
-  static const String pleasure = "icons/pleasure_icon.svg";
-  static const String education = "icons/education_icon.svg";
-  static const String essential = "icons/essential_icon.svg";
+  static const String freedom = "assets/icons/freedom_icon.svg";
+  static const String charity = "assets/icons/charity_icon.svg";
+  static const String savings = "assets/icons/savings_icon.svg";
+  static const String pleasure = "assets/icons/pleasure_icon.svg";
+  static const String education = "assets/icons/education_icon.svg";
+  static const String essential = "assets/icons/essential_icon.svg";
 
-  static const String filter = "icons/filter.svg";
+  static const String filter = "assets/icons/filter.svg";
 
 }

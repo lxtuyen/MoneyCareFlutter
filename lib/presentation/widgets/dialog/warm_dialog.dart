@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money_care/core/constants/colors.dart'; // nếu có AppColors của bạn
+import 'package:money_care/core/constants/colors.dart';
 
 class WarningDialog extends StatelessWidget {
   final String message;

@@ -19,7 +19,7 @@ class OtpScreen extends StatefulWidget {
 class _OtpScreenState extends State<OtpScreen> {
   final TextEditingController otpController = TextEditingController();
   final AuthController authController = Get.find<AuthController>();
-  var secondsRemaining = 60.obs; // biến đếm ngược
+  var secondsRemaining = 60.obs;
   Timer? countdownTimer;
 
   @override

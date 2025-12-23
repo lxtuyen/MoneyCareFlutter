@@ -10,65 +10,114 @@ class SavingFundController extends GetxController {
 
   RxList<SavingFundModel> savingFunds = <SavingFundModel>[].obs;
   Rxn<SavingFundModel> currentFund = Rxn<SavingFundModel>();
-  RxBool isLoading = false.obs;
+  RxBool isLoadingFunds = false.obs;
+  RxBool isLoadingCurrent = false.obs;
+  RxString? errorMessage = RxString('');
+  var fundId = 0.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    ever(fundId, (_) {
+      if (fundId.value > 0) {
+        loadFundById();
+      }
+    });
+  }
+
+  void updateFundId(int id) {
+    fundId.value = id;
+  }
 
   Future<void> loadFunds(int userId) async {
     try {
-      isLoading.value = true;
+      isLoadingFunds.value = true;
       final list = await service.getSavingFundsByUser(userId);
       savingFunds.assignAll(list);
+    } catch (e) {
+      errorMessage?.value = e.toString();
     } finally {
-      isLoading.value = false;
+      isLoadingFunds.value = false;
     }
   }
 
-  Future<void> loadFundById(int id) async {
+  Future<void> loadFundById() async {
     try {
-      isLoading.value = true;
-      currentFund.value = await service.getSavingFund(id);
+      isLoadingCurrent.value = true;
+      currentFund.value = await service.getSavingFund(fundId.value);
+    } catch (e) {
+      errorMessage?.value = e.toString();
     } finally {
-      isLoading.value = false;
+      isLoadingCurrent.value = false;
     }
   }
 
   Future<void> selectSavingFund(int userId, int id) async {
     try {
-      isLoading.value = true;
+      isLoadingCurrent.value = true;
 
       final selected = await service.selectSavingFund(userId, id);
+      updateFundId(id);
 
-      savingFunds.value =
-          savingFunds.map((f) {
-            f.isSelected = f.id == selected.id;
-            return f;
-          }).toList();
+      for (var f in savingFunds) {
+        f.isSelected = f.id == selected.id;
+      }
+      savingFunds.refresh();
+
+      currentFund.value = selected;
+    } catch (e) {
+      errorMessage?.value = e.toString();
     } finally {
-      isLoading.value = false;
+      isLoadingCurrent.value = false;
     }
   }
 
   Future<void> createFund(SavingFundDto dto) async {
-    final fund = await service.createSavingFund(dto);
-
-    savingFunds.add(fund);
+    try {
+      final fund = await service.createSavingFund(dto);
+      savingFunds.add(fund);
+      savingFunds.refresh();
+    } catch (e) {
+      errorMessage?.value = e.toString();
+    }
   }
 
-  Future<void> updateFund(
-  SavingFundDto dto
-  ) async {
-    final updated = await service.updateSavingFund(dto);
+  Future<void> updateFund(SavingFundDto dto) async {
+    try {
+      final updated = await service.updateSavingFund(dto);
 
-    final index = savingFunds.indexWhere((f) => f.id == dto.id);
-    if (index != -1) {
-      savingFunds[index] = updated;
-      savingFunds.refresh();
+      final index = savingFunds.indexWhere((f) => f.id == dto.id);
+      if (index != -1) {
+        savingFunds[index] = updated;
+        savingFunds.refresh();
+      }
+
+      if (currentFund.value?.id == dto.id) {
+        currentFund.value = updated;
+      }
+    } catch (e) {
+      errorMessage?.value = e.toString();
     }
   }
 
   Future<void> deleteFund(int id) async {
-    final ok = await service.deleteSavingFund(id);
-    if (ok) {
-      savingFunds.removeWhere((f) => f.id == id);
+    try {
+      final ok = await service.deleteSavingFund(id);
+      if (ok) {
+        savingFunds.removeWhere((f) => f.id == id);
+        savingFunds.refresh();
+
+        if (currentFund.value?.id == id) {
+          currentFund.value = null;
+          fundId.value = 0;
+        }
+      }
+    } catch (e) {
+      errorMessage?.value = e.toString();
     }
   }
+
+  int get currentFundId => fundId.value;
+
+  SavingFundModel? get selectedFund => currentFund.value;
 }

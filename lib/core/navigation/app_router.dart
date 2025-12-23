@@ -1,5 +1,9 @@
 import 'package:get/get.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
+import 'package:money_care/presentation/screens/admin/admin_dashboard.dart';
+import 'package:money_care/presentation/screens/admin/dashboard_content.dart';
+import 'package:money_care/presentation/screens/admin/user_content.dart';
+import 'package:money_care/presentation/screens/chatbot/chatbot.dart';
 import 'package:money_care/presentation/screens/payment/payment_screen.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
@@ -11,12 +15,14 @@ import 'package:money_care/presentation/screens/login/login_option.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_income.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_welcome.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_saving_rule.dart';
+import 'package:money_care/presentation/screens/pending_transaction/pending_transaction.dart';
 import 'package:money_care/presentation/screens/register/register.dart';
 import 'package:money_care/presentation/screens/select_saving_fund/create_saving_fund.dart';
 import 'package:money_care/presentation/screens/select_saving_fund/select_saving_fund.dart';
 import 'package:money_care/presentation/screens/splash/splash.dart';
 import 'package:money_care/presentation/screens/transaction/Income.dart';
 import 'package:money_care/presentation/screens/transaction/expense.dart';
+import 'package:money_care/presentation/screens/user_center/profile.dart';
 
 final List<GetPage> appPages = [
   GetPage(name: '/splash', page: () => const SplashScreen()),
@@ -44,7 +50,7 @@ final List<GetPage> appPages = [
     name: '/onboarding_saving_rule',
     page: () => const OnboardingSavingRuleScreen(),
   ),
-    GetPage(
+  GetPage(
     name: '/onboarding_income',
     page: () => const OnboardingIncomeScreen(),
   ),
@@ -52,23 +58,26 @@ final List<GetPage> appPages = [
     name: '/select_saving_fund',
     page: () => const SelectSavingFundScreen(),
   ),
+  GetPage(name: '/create_saving_fund', page: () => const CreateSavingFund()),
+  GetPage(name: '/expense', page: () => const ExpenseScreen()),
+  GetPage(name: '/income', page: () => const IncomeScreen()),
+  GetPage(name: '/profile', page: () => const ProfileScreen()),
   GetPage(
-    name: '/create_saving_fund',
-    page: () => const CreateSavingFund(),
+    name: '/pending_transaction',
+    page: () => const PendingTransactionsScreen(),
   ),
+  GetPage(name: '/chatbot', page: () => const ChatbotScreen()),
+
   GetPage(
-    name: '/expense',
-    page: () => const ExpenseScreen(),
-  ),
-    GetPage(
-    name: '/income',
-    page: () => const IncomeScreen(),
-  ),
-  GetPage(
-    name: '/payment_plan',
-    page: () => const PlanPaywallPage(),
+    name: '/admin/home',
+    page: () => const AdminDashboard(child: DashboardContent()),
   ),
 
+  GetPage(
+    name: '/admin/users',
+    page: () => const AdminDashboard(child: UsersContent()),
+  ),
+  GetPage(name: '/payment_plan', page: () => const PlanPaywallPage()),
 
   GetPage(name: '/main', page: () => const ScaffoldWithNavBar()),
 ];
