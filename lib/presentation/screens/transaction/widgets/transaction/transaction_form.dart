@@ -181,44 +181,65 @@ class _TransactionFormState extends State<TransactionForm> {
   }
 
   Future<void> _createTransaction() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final dto = TransactionCreateDto(
-          amount: double.tryParse(_amountController.text)?.toInt() ?? 0,
-          type: widget.showCategory ? "expense" : "income",
-          note: _noteController.text.trim(),
-          categoryId: selectedCategoryId,
-          transactionDate: selectedDate,
-          userId: userId,
-        );
-        await transactionController.createTransaction(dto);
-        Get.back();
-        AppHelperFunction.showSnackBar('Tạo giao dịch thành công');
-      } catch (e) {
-        AppHelperFunction.showSnackBar(e.toString());
-      }
+  if (_formKey.currentState!.validate()) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final picked = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+    if (picked.isAfter(today)) {
+      AppHelperFunction.showAlert('Lỗi', 'Ngày vượt quá giới hạn. Vui lòng chọn lại ngày hợp lệ!');
+      return;
+    }
+
+    try {
+      final dto = TransactionCreateDto(
+        amount: int.tryParse(_amountController.text) ?? 0,
+        type: widget.showCategory ? "expense" : "income",
+        note: _noteController.text.trim(),
+        categoryId: selectedCategoryId,
+        transactionDate: selectedDate,
+        userId: userId,
+      );
+
+      await transactionController.createTransaction(dto);
+      Get.back();
+      AppHelperFunction.showSnackBar('Tạo giao dịch thành công');
+    } catch (e) {
+      AppHelperFunction.showSnackBar(e.toString());
     }
   }
+}
+
 
   Future<void> _updateTransaction() async {
-    if (_formKey.currentState!.validate()) {
-      try {
-        final dto = TransactionCreateDto(
-          amount: double.parse(_amountController.text).toInt(),
-          type: widget.showCategory ? "expense" : "income",
-          note: _noteController.text.trim(),
-          categoryId: selectedCategoryId,
-          transactionDate: selectedDate,
-          userId: userId,
-        );
-        await transactionController.updateTransaction(dto, widget.item!.id!);
-        Get.back();
-        AppHelperFunction.showSnackBar('Cập nhật giao dịch thành công');
-      } catch (e) {
-        AppHelperFunction.showSnackBar(e.toString());
-      }
+  if (_formKey.currentState!.validate()) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final picked = DateTime(selectedDate.year, selectedDate.month, selectedDate.day);
+
+    if (picked.isAfter(today)) {
+      AppHelperFunction.showAlert('Lỗi', 'Ngày vượt quá giới hạn. Vui lòng chọn lại ngày hợp lệ!');
+      return;
+    }
+
+    try {
+      final dto = TransactionCreateDto(
+        amount: int.tryParse(_amountController.text) ?? 0,
+        type: widget.showCategory ? "expense" : "income",
+        note: _noteController.text.trim(),
+        categoryId: selectedCategoryId,
+        transactionDate: selectedDate,
+        userId: userId,
+      );
+
+      await transactionController.updateTransaction(dto, widget.item!.id!);
+      Get.back();
+      AppHelperFunction.showSnackBar('Cập nhật giao dịch thành công');
+    } catch (e) {
+      AppHelperFunction.showSnackBar(e.toString());
     }
   }
+}
 
   @override
   Widget build(BuildContext context) {
