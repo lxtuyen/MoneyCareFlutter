@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/controllers/pending_transaction_controller.dart';
@@ -18,6 +20,10 @@ class PendingTransactionsScreen extends StatefulWidget {
 
 class _PendingTransactionsScreenState extends State<PendingTransactionsScreen> {
   late final PendingTransactionController controller;
+  Timer? _timer;
+  late int userId;
+
+  static const Duration _pollingInterval = Duration(minutes: 1);
 
   @override
   void initState() {
@@ -36,7 +42,25 @@ class _PendingTransactionsScreenState extends State<PendingTransactionsScreen> {
     }
 
     final user = UserModel.fromJson(userInfoJson, '');
-    await controller.fetchPendingTransactions(user.id);
+    userId = user.id;
+
+    await controller.fetchPendingTransactions(userId);
+
+    _startPolling();
+  }
+
+  void _startPolling() {
+    _timer?.cancel();
+
+    _timer = Timer.periodic(_pollingInterval, (_) {
+      controller.fetchPendingTransactions(userId);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   void _confirmTransaction(
@@ -218,7 +242,9 @@ class _PendingTransactionsScreenState extends State<PendingTransactionsScreen> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        AppHelperFunction.formatDateTime(transaction.transactionTime),
+                        AppHelperFunction.formatDateTime(
+                          transaction.transactionTime,
+                        ),
                         style: const TextStyle(
                           fontSize: 12,
                           color: Colors.grey,
