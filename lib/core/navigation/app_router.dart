@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:money_care/core/navigation/navigation_menu.dart';
-import 'package:money_care/presentation/screens/PaymentGPAP/paymentscreen.dart';
+import 'package:money_care/presentation/screens/payment/payment_screen.dart';
 import 'package:money_care/presentation/screens/forgot_password/otp.dart';
 import 'package:money_care/presentation/screens/forgot_password/reset_password.dart';
 import 'package:money_care/presentation/screens/onboarding/onboarding_expense_management.dart';

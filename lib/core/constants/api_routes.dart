@@ -22,4 +22,6 @@ class ApiRoutes {
   // --- Notification ---
   static const getNotificationsByUser = 'notifications/me';
   static const notification = 'notifications';
+
+  static const paymentconfirm = 'vip-payments/confirm';
 }

@@ -1,11 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:http/http.dart' as http;
-import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/data/storage_service.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 
