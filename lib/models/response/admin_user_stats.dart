@@ -3,12 +3,14 @@ class AdminUserStats {
   final int newUsersThisMonth;
   final double freePercent;
   final double vipPercent;
+  final double monthlyRevenue;
 
   AdminUserStats({
     required this.totalUsers,
     required this.newUsersThisMonth,
     required this.freePercent,
     required this.vipPercent,
+    required this.monthlyRevenue,
   });
 
   factory AdminUserStats.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,7 @@ class AdminUserStats {
       newUsersThisMonth: json['newUsersThisMonth'] as int,
       freePercent: (json['freePercent'] as num).toDouble(),
       vipPercent: (json['vipPercent'] as num).toDouble(),
+      monthlyRevenue: (json['monthlyRevenue'] as num).toDouble(),
     );
   }
 
@@ -26,6 +29,7 @@ class AdminUserStats {
       'newUsersThisMonth': newUsersThisMonth,
       'freePercent': freePercent,
       'vipPercent': vipPercent,
+      'monthlyRevenue': monthlyRevenue,
     };
   }
 }

@@ -50,14 +50,14 @@ class _DashboardContentState extends State<DashboardContent> {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   StatCard(
-                    title: 'Tổng Doanh Thu',
-                    value: '₫ 125.5M',
+                    title: 'Tổng Doanh Thu tháng này',
+                    value: stats!.monthlyRevenue.toString(),
                     icon: Icons.money,
                     color: Colors.green,
                   ),
                   StatCard(
                     title: 'Người Dùng hiện tại',
-                    value: stats!.totalUsers.toString(),
+                    value: stats.totalUsers.toString(),
                     icon: Icons.people,
                     color: Colors.purple,
                   ),
