@@ -5,6 +5,7 @@ import 'package:money_care/controllers/admin_controller.dart';
 import 'package:money_care/controllers/auth_controller.dart';
 import 'package:money_care/controllers/chat_controller.dart';
 import 'package:money_care/controllers/filter_controller.dart';
+import 'package:money_care/controllers/payment_controller.dart';
 import 'package:money_care/controllers/pending_transaction_controller.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
 import 'package:money_care/controllers/scan_receipt_controller.dart';
@@ -14,6 +15,7 @@ import 'package:money_care/services/admin_service.dart';
 import 'package:money_care/services/api_service.dart';
 import 'package:money_care/services/auth_services.dart';
 import 'package:money_care/services/chat_service.dart';
+import 'package:money_care/services/payment_service.dart';
 import 'package:money_care/services/pending_transaction_service.dart';
 import 'package:money_care/services/saving_fund_service.dart';
 import 'package:money_care/data/storage_service.dart';
@@ -71,6 +73,10 @@ class AppBinding extends Bindings {
     );
     Get.lazyPut(
       () => ChatController(chatService: ChatService(api: apiService)),
+      fenix: true,
+    );
+    Get.lazyPut(
+      () => PaymentController(service: PayMentService(api: apiService)),
       fenix: true,
     );
     Get.lazyPut(() => FilterController(), fenix: true);

@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/controllers/admin_controller.dart';
+import 'package:money_care/controllers/payment_controller.dart';
 import 'package:money_care/presentation/screens/admin/widgets/stat_card.dart';
 
 class DashboardContent extends StatefulWidget {
@@ -13,11 +14,13 @@ class DashboardContent extends StatefulWidget {
 
 class _DashboardContentState extends State<DashboardContent> {
   final AdminController adminController = Get.find<AdminController>();
+  final PaymentController paymentController = Get.find<PaymentController>();
 
   @override
   void initState() {
     super.initState();
     adminController.fetchAdminUserStats();
+    paymentController.getMonthlyRevenue();
   }
 
   @override
@@ -100,160 +103,174 @@ class _DashboardContentState extends State<DashboardContent> {
   }
 
   Widget _buildLineChart() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Doanh Thu Theo Tháng',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          SizedBox(
-            height: 250,
-            child: LineChart(
-              LineChartData(
-                gridData: FlGridData(show: true, drawVerticalLine: false),
-                titlesData: FlTitlesData(
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        const months = [
-                          'T1',
-                          'T2',
-                          'T3',
-                          'T4',
-                          'T5',
-                          'T6',
-                          'T7',
-                          'T8',
-                          'T9',
-                          'T10',
-                          'T11',
-                          'T12',
-                        ];
-                        return value.toInt() < months.length
-                            ? Text(months[value.toInt()])
-                            : const SizedBox.shrink();
-                      },
+    return Obx(() {
+      if (paymentController.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      final data = paymentController.monthlyRevenue;
+
+      if (data.length != 12) {
+        return const Center(child: Text('Chưa có dữ liệu doanh thu'));
+      }
+
+      final spots = List.generate(
+        12,
+        (index) => FlSpot(index.toDouble(), data[index].total / 1000000),
+      );
+
+      return Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Doanh Thu Theo Tháng (triệu VND)',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              height: 250,
+              child: LineChart(
+                LineChartData(
+                  minX: 0,
+                  maxX: 11,
+                  gridData: FlGridData(show: true, drawVerticalLine: false),
+                  titlesData: FlTitlesData(
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          const months = [
+                            'T1',
+                            'T2',
+                            'T3',
+                            'T4',
+                            'T5',
+                            'T6',
+                            'T7',
+                            'T8',
+                            'T9',
+                            'T10',
+                            'T11',
+                            'T12',
+                          ];
+                          final index = value.toInt();
+                          return index >= 0 && index < 12
+                              ? Text(months[index])
+                              : const SizedBox.shrink();
+                        },
+                      ),
+                    ),
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        reservedSize: 40,
+                      ),
                     ),
                   ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(showTitles: true),
-                  ),
+                  lineBarsData: [
+                    LineChartBarData(
+                      spots: spots,
+                      isCurved: true,
+                      color: Colors.blue,
+                      barWidth: 3,
+                      dotData: FlDotData(show: true),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: Colors.blue.withOpacity(0.15),
+                      ),
+                    ),
+                  ],
                 ),
-                lineBarsData: [
-                  LineChartBarData(
-                    spots: const [
-                      FlSpot(0, 3),
-                      FlSpot(1, 4),
-                      FlSpot(2, 3.5),
-                      FlSpot(3, 5),
-                      FlSpot(4, 6),
-                      FlSpot(5, 5.5),
-                      FlSpot(6, 3),
-                      FlSpot(7, 4),
-                      FlSpot(8, 3.5),
-                      FlSpot(9, 5),
-                      FlSpot(10, 6),
-                      FlSpot(11, 5.5),
-                    ],
-                    isCurved: true,
-                    color: Colors.blue,
-                    barWidth: 3,
-                    dotData: FlDotData(show: true),
-                  ),
-                ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
+}
 
-  Widget _buildPieChart(double freePercent, double vipPercent) {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            'Loại người dùng',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const SizedBox(height: 16),
-          Column(
-            children: [
-              SizedBox(
-                height: 220,
-                width: 200,
-                child: PieChart(
-                  PieChartData(
-                    sections: [
-                      PieChartSectionData(
-                        value: freePercent,
-                        title: '${freePercent.toStringAsFixed(1)}%',
-                        color: Colors.blue,
-                        radius: 60,
-                        titleStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        titlePositionPercentageOffset: 0.6,
+Widget _buildPieChart(double freePercent, double vipPercent) {
+  return Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
+    ),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Loại người dùng',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        Column(
+          children: [
+            SizedBox(
+              height: 220,
+              width: 200,
+              child: PieChart(
+                PieChartData(
+                  sections: [
+                    PieChartSectionData(
+                      value: freePercent,
+                      title: '${freePercent.toStringAsFixed(1)}%',
+                      color: Colors.blue,
+                      radius: 60,
+                      titleStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
+                      titlePositionPercentageOffset: 0.6,
+                    ),
 
-                      PieChartSectionData(
-                        value: vipPercent,
-                        title: '${vipPercent.toStringAsFixed(1)}%',
-                        color: Colors.green,
-                        radius: 60,
-                        titleStyle: const TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        titlePositionPercentageOffset: 0.6,
+                    PieChartSectionData(
+                      value: vipPercent,
+                      title: '${vipPercent.toStringAsFixed(1)}%',
+                      color: Colors.green,
+                      radius: 60,
+                      titleStyle: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       ),
-                    ],
-                  ),
+                      titlePositionPercentageOffset: 0.6,
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(width: 30),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildLegendItem(
-                    color: Colors.blue,
-                    title: 'FREE',
-                    value: freePercent,
-                  ),
-                  _buildLegendItem(
-                    color: Colors.green,
-                    title: 'VIP',
-                    value: vipPercent,
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
+            ),
+            const SizedBox(width: 30),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildLegendItem(
+                  color: Colors.blue,
+                  title: 'FREE',
+                  value: freePercent,
+                ),
+                _buildLegendItem(
+                  color: Colors.green,
+                  title: 'VIP',
+                  value: vipPercent,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _buildLegendItem({
