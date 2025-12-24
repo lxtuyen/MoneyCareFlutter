@@ -47,10 +47,7 @@ class AppBinding extends Bindings {
       fenix: true,
     );
     Get.lazyPut(
-      () => UserController(
-        service: UserService(api: apiService),
-        storage: storage,
-      ),
+      () => UserController(service: UserService(api: apiService)),
       fenix: true,
     );
     Get.lazyPut(

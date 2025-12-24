@@ -58,8 +58,12 @@ class _HomeScreenState extends State<HomeScreen> {
       userId = user.id;
     });
     loadData();
-    userController.currentProlife(user.profile);
-    savingFundController.updateFundId(user.savingFund!.id);
+    if (userController.userProfile.value == null) {
+      userController.currentProlife(user.profile);
+    }
+    if(savingFundController.fundId.value == 0){
+      savingFundController.updateFundId(user.savingFund!.id);
+    }
   }
 
   Future<void> loadData() async {

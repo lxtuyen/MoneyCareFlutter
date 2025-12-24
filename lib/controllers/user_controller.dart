@@ -1,14 +1,12 @@
 import 'package:get/get.dart';
-import 'package:money_care/data/storage_service.dart';
 import 'package:money_care/models/dto/profile_update_dto.dart';
 import 'package:money_care/models/user_profile.dart';
 import 'package:money_care/services/user_service.dart';
 
 class UserController extends GetxController {
   final UserService service;
-  final StorageService storage;
 
-  UserController({required this.service, required this.storage});
+  UserController({required this.service});
 
   var userProfile = Rxn<UserProfileModel>();
   var isLoading = false.obs;
@@ -18,8 +16,7 @@ class UserController extends GetxController {
       isLoading.value = true;
 
       final updated = await service.updateMyProfile(dto);
-      await storage.saveUserInfo(updated.toJson());
-      userProfile.value = updated.profile;
+      userProfile.value = updated;
     } finally {
       isLoading.value = false;
     }

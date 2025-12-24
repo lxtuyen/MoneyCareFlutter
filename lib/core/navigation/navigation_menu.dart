@@ -43,6 +43,17 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
       final currentIndex = controller.selectedIndex.value;
 
       return Scaffold(
+        floatingActionButton:
+            isWeb
+                ? null
+                : FloatingActionButton(
+                  onPressed: () => _showTransactionOptions(context),
+                  shape: const CircleBorder(),
+                  backgroundColor: AppColors.primary,
+                  child: const Icon(Icons.add, size: 32, color: Colors.white),
+                ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
         body: SafeArea(
           child: Row(
             children: [
@@ -98,30 +109,33 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                tileColor: isActive
-                                    ? AppColors.primary.withOpacity(0.08)
-                                    : null,
+                                tileColor:
+                                    isActive
+                                        ? AppColors.primary.withOpacity(0.08)
+                                        : null,
                                 leading: SvgPicture.asset(
                                   isActive
                                       ? 'assets/icons/${navItems[index]['icon']}-active.svg'
                                       : 'assets/icons/${navItems[index]['icon']}.svg',
                                   width: 24,
                                 ),
-                                title: _isSidebarExpanded
-                                    ? Text(
-                                        navItems[index]['label']!,
-                                        style: TextStyle(
-                                          color: isActive
-                                              ? AppColors.primary
-                                              : AppColors.text4,
-                                          fontWeight: isActive
-                                              ? FontWeight.w600
-                                              : FontWeight.w400,
-                                        ),
-                                      )
-                                    : null,
-                                onTap: () =>
-                                    controller.changeTab(index),
+                                title:
+                                    _isSidebarExpanded
+                                        ? Text(
+                                          navItems[index]['label']!,
+                                          style: TextStyle(
+                                            color:
+                                                isActive
+                                                    ? AppColors.primary
+                                                    : AppColors.text4,
+                                            fontWeight:
+                                                isActive
+                                                    ? FontWeight.w600
+                                                    : FontWeight.w400,
+                                          ),
+                                        )
+                                        : null,
+                                onTap: () => controller.changeTab(index),
                               ),
                             );
                           },
@@ -135,10 +149,7 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
               Expanded(
                 child: Stack(
                   children: [
-                    IndexedStack(
-                      index: currentIndex,
-                      children: screens,
-                    ),
+                    IndexedStack(index: currentIndex, children: screens),
 
                     // ====================== CHATBOT FLOATING ======================
                     Positioned(
@@ -177,23 +188,57 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
         ),
 
         // ====================== BOTTOM NAV (MOBILE) ======================
-        bottomNavigationBar: isWeb
-            ? null
-            : NavigationBar(
-                height: 80,
-                selectedIndex: currentIndex,
-                onDestinationSelected: controller.changeTab,
-                destinations: navItems.map((item) {
-                  return NavigationDestination(
-                    icon: SvgPicture.asset(
-                      'assets/icons/${item['icon']}.svg',
-                      width: 24,
-                    ),
-                    label: item['label']!,
-                  );
-                }).toList(),
-              ),
+        bottomNavigationBar:
+            isWeb
+                ? null
+                : NavigationBar(
+                  height: 80,
+                  selectedIndex: currentIndex,
+                  onDestinationSelected: controller.changeTab,
+                  destinations:
+                      navItems.map((item) {
+                        return NavigationDestination(
+                          icon: SvgPicture.asset(
+                            'assets/icons/${item['icon']}.svg',
+                            width: 24,
+                          ),
+                          label: item['label']!,
+                        );
+                      }).toList(),
+                ),
       );
     });
+  }
+
+  void _showTransactionOptions(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoActionSheet(
+          title: const Text('Chọn loại giao dịch'),
+          actions: <CupertinoActionSheetAction>[
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                Get.toNamed('/income');
+              },
+              child: const Text('Tạo thu'),
+            ),
+            CupertinoActionSheetAction(
+              onPressed: () {
+                Navigator.pop(context);
+                Get.toNamed('/expense');
+              },
+              child: const Text('Tạo chi'),
+            ),
+          ],
+          cancelButton: CupertinoActionSheetAction(
+            isDestructiveAction: true,
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Hủy bỏ'),
+          ),
+        );
+      },
+    );
   }
 }

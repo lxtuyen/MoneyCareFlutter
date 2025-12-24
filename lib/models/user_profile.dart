@@ -1,11 +1,11 @@
 class UserProfileModel {
-  final int id;
+  final int? id;
   final String firstName;
   final String lastName;
   final int? monthlyIncome;
 
   UserProfileModel({
-    required this.id,
+    this.id,
     required this.firstName,
     required this.lastName,
     this.monthlyIncome,
@@ -15,7 +15,7 @@ class UserProfileModel {
 
   factory UserProfileModel.fromJson(Map<String, dynamic> json) =>
       UserProfileModel(
-        id: json['id'],
+        id: json['id'] ?? 0,
         firstName: json['first_name'] ?? '',
         lastName: json['last_name'] ?? '',
         monthlyIncome:
