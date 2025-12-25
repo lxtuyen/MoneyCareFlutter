@@ -22,12 +22,17 @@ class UserService {
     return res.data!;
   }
 
-  Future<String> addMonthlyIncome(int monthlyIncome) async {
-    final res = await api.patch<void>(
-      ApiRoutes.userProfile,
-      body: {'monthlyIncome': monthlyIncome},
+  Future<UserProfileModel> addMonthlyIncome(int monthlyIncome) async {
+    final res = await api.patch<UserProfileModel>(
+      ApiRoutes.monthlyIncome,
+      body: {'monthly_income': monthlyIncome},
+      fromJsonT: (json) => UserProfileModel.fromJson(json),
     );
 
-    return res.message;
+    if (!res.success || res.data == null) {
+      throw Exception(res.message);
+    }
+
+    return res.data!;
   }
 }

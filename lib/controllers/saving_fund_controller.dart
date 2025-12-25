@@ -57,7 +57,7 @@ class SavingFundController extends GetxController {
       isLoadingCurrent.value = true;
 
       final selected = await service.selectSavingFund(userId, id);
-      updateFundId(id);
+      fundId.value = id;
 
       for (var f in savingFunds) {
         f.isSelected = f.id == selected.id;
@@ -65,6 +65,8 @@ class SavingFundController extends GetxController {
       savingFunds.refresh();
 
       currentFund.value = selected;
+      print(currentFund.value);
+      print(123);
     } catch (e) {
       errorMessage?.value = e.toString();
     } finally {

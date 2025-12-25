@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:money_care/controllers/filter_controller.dart';
 import 'package:money_care/controllers/saving_fund_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
+import 'package:money_care/controllers/user_controller.dart';
 import 'package:money_care/core/constants/text_string.dart';
 import 'package:money_care/core/utils/Helper/helper_functions.dart';
 import 'package:money_care/data/storage_service.dart';
@@ -45,13 +46,13 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
   late DateTime monthStartDate = DateTime(now.year, now.month, 1);
 
   late int userId;
-  late int? monthlyIncome;
 
   final TransactionController transactionController =
       Get.find<TransactionController>();
   final SavingFundController savingFundController =
       Get.find<SavingFundController>();
   final FilterController filterController = Get.find<FilterController>();
+  final UserController userController = Get.find<UserController>();
 
   @override
   void initState() {
@@ -64,7 +65,6 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
     UserModel user = UserModel.fromJson(userInfoJson, '');
     setState(() {
       userId = user.id;
-      monthlyIncome = user.profile.monthlyIncome;
     });
     loadData();
   }
@@ -292,21 +292,31 @@ class _StatisticsScreenState extends State<StatisticsScreen> {
                       horizontal: 16,
                       vertical: 8,
                     ),
-                    child: Row(
-                      children: [
-                        const SizedBox(width: 12),
-
-                        ...categories.map(
-                          (item) => ChartCard(
-                            title: item.categoryName,
-                            amount: item.total,
-                            limit:
-                                ((item.percentage) * (monthlyIncome ?? 0)) /
-                                100,
-                            percent: item.percentage.toString(),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          const SizedBox(width: 12),
+                          ...categories.map(
+                            (item) => Padding(
+                              padding: const EdgeInsets.only(right: 12),
+                              child: ChartCard(
+                                title: item.categoryName,
+                                amount: item.total,
+                                limit:
+                                    ((item.percentage) *
+                                        (userController
+                                                .userProfile
+                                                .value
+                                                ?.monthlyIncome ??
+                                            0)) /
+                                    100,
+                                percent: item.percentage.toStringAsFixed(1),
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );

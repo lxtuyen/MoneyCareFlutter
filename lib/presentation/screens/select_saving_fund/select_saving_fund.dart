@@ -18,7 +18,6 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
   final UserController userController = Get.find<UserController>();
   int selectedIndex = 0;
   late int userId;
-  int? monthlyIncome;
 
   @override
   void initState() {
@@ -32,7 +31,6 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
     await controller.loadFunds(user.id);
     setState(() {
       userId = user.id;
-      monthlyIncome = user.profile.monthlyIncome;
       selectedIndex = controller.savingFunds.indexWhere(
         (f) => f.id == controller.fundId.value,
       );
@@ -173,15 +171,20 @@ class _SelectSavingFundScreenState extends State<SelectSavingFundScreen> {
                         final selectedFund =
                             controller.savingFunds[selectedIndex];
 
-                        await controller.selectSavingFund(
-                          userId,
-                          selectedFund.id,
-                        );
+                        try {
+                          await controller.selectSavingFund(
+                            userId,
+                            selectedFund.id,
+                          );
 
-                        if (monthlyIncome == null) {
-                          Get.offAllNamed('/onboarding_income');
-                        } else {
-                          Get.offAllNamed('/main');
+                          if (userController.userProfile.value?.monthlyIncome ==
+                              null) {
+                            Get.toNamed('/onboarding_income');
+                          } else {
+                            Get.toNamed('/main');
+                          }
+                        } catch (e) {
+                          Get.snackbar('Lỗi', 'Không thể lưu quỹ tiết kiệm');
                         }
                       }
                     },

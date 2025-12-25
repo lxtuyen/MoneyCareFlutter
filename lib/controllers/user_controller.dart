@@ -26,20 +26,12 @@ class UserController extends GetxController {
     userProfile.value = profile;
   }
 
-  Future<String> addMonthlyIncome(int monthlyIncome) async {
+  Future<void> addMonthlyIncome(int monthlyIncome) async {
     try {
       isLoading.value = true;
 
-      final message = await service.addMonthlyIncome(monthlyIncome);
-
-      if (userProfile.value != null) {
-        userProfile.value = userProfile.value!.copyWith(
-          monthlyIncome: monthlyIncome,
-        );
-        userProfile.refresh();
-      }
-
-      return message;
+      final updated = await service.addMonthlyIncome(monthlyIncome);
+      currentProlife(updated);
     } finally {
       isLoading.value = false;
     }

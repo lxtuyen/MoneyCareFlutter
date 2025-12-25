@@ -24,10 +24,10 @@ class _OnboardingIncomeScreenState extends State<OnboardingIncomeScreen> {
       if (_formKey.currentState!.validate()) {
         try {
           final income = int.parse(incomeController.text.replaceAll(',', ''));
-          final message = await userController.addMonthlyIncome(income);
+          await userController.addMonthlyIncome(income);
 
-          Get.offAllNamed('/main');
-          AppHelperFunction.showSnackBar(message);
+          Get.toNamed('/main');
+          AppHelperFunction.showSnackBar('Thêm thành công');
         } catch (e) {
           AppHelperFunction.showSnackBar(e.toString());
         }

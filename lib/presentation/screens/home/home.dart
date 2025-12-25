@@ -61,7 +61,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (userController.userProfile.value == null) {
       userController.currentProlife(user.profile);
     }
-    if(savingFundController.fundId.value == 0){
+    if (savingFundController.fundId.value == 0 && user.savingFund != null) {
       savingFundController.updateFundId(user.savingFund!.id);
     }
   }

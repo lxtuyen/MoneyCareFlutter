@@ -159,7 +159,9 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
               Obx(() {
                 return ElevatedButton(
                   onPressed:
-                      _controller.isLoadingFunds.value ? null : _createSavingFund,
+                      _controller.isLoadingFunds.value
+                          ? null
+                          : _createSavingFund,
                   style: ElevatedButton.styleFrom(
                     minimumSize: const Size.fromHeight(50),
                     backgroundColor: AppColors.primary,
@@ -183,4 +185,3 @@ class _CreateSavingFundState extends State<CreateSavingFund> {
     );
   }
 }
-  

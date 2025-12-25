@@ -141,6 +141,30 @@ class _ScaffoldWithNavBarState extends State<ScaffoldWithNavBar> {
                           },
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton.icon(
+                            onPressed: () => _showTransactionOptions(context),
+                            icon: const Icon(Icons.add, color: Colors.white),
+                            label:
+                                _isSidebarExpanded
+                                    ? const Text(
+                                      'Thêm giao dịch',
+                                      style: TextStyle(color: Colors.white),
+                                    )
+                                    : const SizedBox.shrink(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              padding: const EdgeInsets.symmetric(vertical: 14),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
