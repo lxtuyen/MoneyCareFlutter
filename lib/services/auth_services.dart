@@ -140,7 +140,6 @@ class AuthService {
     await _gmailSignIn.signOut();
 
     final account = await _gmailSignIn.signIn();
-    print(account?.serverAuthCode);
     if (account == null) {
       throw Exception('User cancelled Gmail connect');
     }
@@ -156,6 +155,6 @@ class AuthService {
       body: {'code': serverAuthCode},
     );
 
-    Get.offAllNamed('/main');
+    Get.toNamed('/main');
   }
 }

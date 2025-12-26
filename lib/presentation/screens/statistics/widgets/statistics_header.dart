@@ -90,7 +90,14 @@ class StatisticsHeader extends StatelessWidget {
             color: isWeb ? Colors.white : const Color(0xFF1976D2),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(
-              color: isActive ? const Color(0xFF1976D2) : Colors.grey.shade300,
+              color:
+                  isWeb
+                      ? (isActive
+                          ? const Color(0xFF1976D2)
+                          : Colors.grey.shade300)
+                      : (isActive
+                          ? Colors.grey.shade300
+                          : const Color(0xFF1976D2)),
               width: 2,
             ),
             boxShadow:

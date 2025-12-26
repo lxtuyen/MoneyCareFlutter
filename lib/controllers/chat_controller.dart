@@ -38,10 +38,6 @@ class ChatController extends GetxController {
     messages.add(ChatMsg(isUser: true, text: text));
   }
 
-  void addTyping() {
-    messages.add(ChatMsg(isUser: false, text: 'Đang trả lời...'));
-  }
-
   void replaceLastBotMessage(String text) {
     if (messages.isNotEmpty) {
       messages[messages.length - 1] =

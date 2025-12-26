@@ -9,6 +9,7 @@ class PaymentController extends GetxController {
   PaymentController({required this.service});
 
   var isLoading = false.obs;
+  var payment = false.obs;
   RxList<MonthlyRevenue> monthlyRevenue = <MonthlyRevenue>[].obs;
 
   Future<bool> confirm(PaymentRequest dto) async {
@@ -16,7 +17,7 @@ class PaymentController extends GetxController {
       isLoading.value = true;
 
       final isSuccess = await service.confirm(dto);
-
+      payment.value = true;
       return isSuccess;
     } finally {
       isLoading.value = false;

@@ -35,7 +35,7 @@ class SpendingSummary extends StatelessWidget {
               const Text(
                 'Số tiền bạn chi trong tháng',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: AppColors.text2,
                 ),
@@ -84,11 +84,11 @@ class SpendingSummary extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    AppHelperFunction.formatAmount(expenseTotal.toDouble(),'VND'),
+                    AppHelperFunction.formatAmount(expenseTotal.toDouble(),''),
                     style: const TextStyle(
                       color: AppColors.secondaryOrange,
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 18,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -96,7 +96,7 @@ class SpendingSummary extends StatelessWidget {
                     'Số dư: ${AppHelperFunction.formatAmount(AppHelperFunction.clampZero(incomeTotal - expenseTotal).toDouble(),'VND')}',
                     style: const TextStyle(
                       color: AppColors.text3,
-                      fontSize: 12,
+                      fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),
                   ),

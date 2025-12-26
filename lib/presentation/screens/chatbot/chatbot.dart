@@ -119,9 +119,6 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
     _controller.clear();
     _scrollToBottom();
 
-    chatController.addTyping();
-    _scrollToBottom();
-
     try {
       final reply = await chatController.send(text, userId);
       chatController.replaceLastBotMessage(reply);

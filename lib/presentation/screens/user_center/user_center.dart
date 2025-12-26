@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money_care/controllers/auth_controller.dart';
+import 'package:money_care/controllers/payment_controller.dart';
 import 'package:money_care/controllers/transaction_controller.dart';
 import 'package:money_care/controllers/user_controller.dart';
 import 'package:money_care/core/constants/colors.dart';
@@ -21,6 +22,7 @@ class UserCenterScreen extends StatefulWidget {
 class _UserCenterScreenState extends State<UserCenterScreen> {
   final AuthController authController = Get.find<AuthController>();
   final UserController userController = Get.find<UserController>();
+  final PaymentController paymentController = Get.find<PaymentController>();
 
   final TransactionController transactionController =
       Get.find<TransactionController>();
@@ -123,13 +125,19 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       title: AppTexts.savingFunds,
                       onTap: () => Get.toNamed('/select_saving_fund'),
                     ),
-                    BuildMenuItem(
+                    Obx((){
+                      if(paymentController.payment.value == true) {
+                        return SizedBox.shrink();
+                      }
+                      return                     BuildMenuItem(
                         icon: Icons.account_balance_wallet_outlined,
                         title: 'Đăng ký VIP',
                         onTap: () {
                           Get.toNamed('/payment');
                         },
-                      ),
+                      );
+                    }),
+
                     BuildMenuItem(
                       icon: Icons.exit_to_app,
                       title: AppTexts.logout,
