@@ -4,7 +4,6 @@
 - Tự động ghi nhận thu/chi
 - Hỗ trợ bằng **chat & voice**
 - Scan bill
-- Tự động đọc biên lai từ email cho người dùng VIP
 
 ---
 
@@ -22,6 +21,7 @@ MoneyCareFlutter là ứng dụng đa nền tảng được xây dựng bằng *
 - Phân loại chi tiêu theo danh mục
 - Xem lịch sử giao dịch
 - Tổng hợp thu – chi theo ngày / tháng / năm
+- So sánh thu - chi với tháng trước
 
 ### 🤖 Tích hợp AI
 1. **Scan Bill**
@@ -39,7 +39,6 @@ MoneyCareFlutter là ứng dụng đa nền tảng được xây dựng bằng *
 ### 💎 Gói VIP
 - Mở khoá tính năng đọc email biên lai
 - Đồng bộ hóa tự động
-- Ưu tiên hỗ trợ
 
 ---
 
@@ -48,9 +47,55 @@ MoneyCareFlutter là ứng dụng đa nền tảng được xây dựng bằng *
 | Phần | Công nghệ |
 |------|-----------|
 | Frontend | Flutter (Android / iOS / Web / Desktop) |
-| Backend | Nest.js / Postgesql |
+| Backend | NestJS / PostgeSQL |
 | Quản lý trạng thái | GetX |
 
 ---
-├── pubspec.yaml
-└── README.md
+
+## 📸 Screenshots
+
+### 🏠 Home
+<p align="center">
+  <img src="screenshots/Picture1.png" width="250"/>
+  <img src="screenshots/Picture2.png" width="250"/>
+</p>
+
+---
+
+### 🔐 Login & Register
+<p align="center">
+  <img src="screenshots/Picture3.png" width="250"/>
+  <img src="screenshots/Picture4.png" width="250"/>
+  <img src="screenshots/Picture5.png" width="250"/>
+</p>
+
+---
+
+### 💸 Transaction
+<p align="center">
+  <img src="screenshots/Picture10.png" width="250"/>
+  <img src="screenshots/Picture11.png" width="250"/>
+  <img src="screenshots/Picture12.png" width="250"/>
+</p>
+
+---
+
+### 🤖 ChatBot (AI Assistant)
+<p align="center">
+  <img src="screenshots/Picture13.png" width="250"/>
+</p>
+
+---
+
+### 📊 Statistics
+<p align="center">
+  <img src="screenshots/Picture14.png" width="250"/>
+  <img src="screenshots/Picture16.jpg" width="250"/>
+</p>
+
+---
+
+### 👤 User Center
+<p align="center">
+  <img src="screenshots/Picture15.png" width="250"/>
+</p>
