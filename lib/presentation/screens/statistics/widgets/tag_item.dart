@@ -18,7 +18,7 @@ class TagItem extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
-            '${category.percentage.toStringAsFixed(0)}%',
+            '${category.percentage.toStringAsFixed(1)}%',
             style: TextStyle(
               color: category.color,
               fontSize: 13,

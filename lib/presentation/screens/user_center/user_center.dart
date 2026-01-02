@@ -107,7 +107,7 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                     Obx(() {
                       final user = authController.user.value;
 
-                      if (user == null || user.isVip == true) {
+                      if (user == null || user.isVip == true || paymentController.payment.value == true) {
                         return const SizedBox.shrink();
                       }
 
@@ -125,11 +125,12 @@ class _UserCenterScreenState extends State<UserCenterScreen> {
                       title: AppTexts.savingFunds,
                       onTap: () => Get.toNamed('/select_saving_fund'),
                     ),
-                    Obx((){
-                      if(paymentController.payment.value == true) {
+                    Obx(() {
+                      final user = authController.user.value;
+                      if (paymentController.payment.value == true && user?.isVip == false) {
                         return SizedBox.shrink();
                       }
-                      return                     BuildMenuItem(
+                      return BuildMenuItem(
                         icon: Icons.account_balance_wallet_outlined,
                         title: 'Đăng ký VIP',
                         onTap: () {
